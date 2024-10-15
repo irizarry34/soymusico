@@ -17,8 +17,9 @@ body {
 }
 
 .logo img {
-  width: 50px;
-  height: 50px;
+  width: 100px;
+  height: 100px;
+  filter: drop-shadow( 2px 2px 4px rgba(176, 39, 201, 0.979))
 }
 
 nav ul {
@@ -41,25 +42,26 @@ nav ul li a:hover {
 
 /* Hero Section */
 .hero {
-  position: relative; /* Permite el posicionamiento absoluto de los elementos hijos */
+  position: relative;
   display: flex;
   align-items: center;
-  justify-content: center; /* Centra verticalmente el texto */
+  justify-content: center;
   background-color: #1f1f1f;
   padding: 50px;
-  flex-direction: column; /* Cambiado a columna para alinear elementos verticalmente */
+  flex-direction: column;
 }
 
 .hero-image {
-  position: relative; /* Cambiado a relativo para que se ajuste al flujo del documento */
-  z-index: 0; /* Asegura que la imagen esté detrás del texto */
+  position: relative;
+  z-index: 0;
 }
 
 .hero-image img {
   width: 100%;
-  max-width: 800px;
-  border-radius: 8px;
-  object-fit: cover; /* Asegura que la imagen cubra el contenedor */
+  max-width: 850px;
+  border-radius: 100px;
+  object-fit: cover;
+  filter: drop-shadow( 2px 2px 4px rgba(176, 39, 201, 0.979))
 }
 
 .hero-text {
@@ -69,30 +71,31 @@ nav ul li a:hover {
   transform: translate(-50%, -50%);
   z-index: 1;
   text-align: center;
-  color: #9E25E4; /* O puedes cambiar a #fff para mayor contraste */
-  padding: .5px;
-  background-color: rgba(0, 0, 0, 0); /* Fondo negro semitransparente */
-  border-radius: 8px; /* Bordes redondeados opcionales */
-  text-shadow: 2px 2px 4px rgba(200, 55, 236, 0.706); /* Sombra del texto */
+  color: #9E25E4;
+  padding: 100px;
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 8px;
+  text-shadow: 2px 2px 4px rgba(255, 255, 255, 0.979);
+  font-size: 200px;
 }
 
 .hero-text1 {
+  font-size: 15px;
   position: absolute;
-  top: 45%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
   text-align: center;
-  color: #ffffff; /* O puedes cambiar a #fff para mayor contraste */
+  color: #ffffff;
   padding: 10px;
-  background-color: rgba(0, 0, 0, 0); /* Fondo negro semitransparente */
-  border-radius: 8px; /* Bordes redondeados opcionales */
-  text-shadow: 2px 2px 4px rgba(181, 23, 209, 0.545); /* Sombra del texto */
+  background-color: rgba(0, 0, 0, 0);
+  border-radius: 8px;
+  text-shadow: 2px 2px 4px rgb(176, 39, 201);
 }
 
-
 .hero-text h1 {
-  font-size: 48px;
+  font-size: 68px;
   margin-bottom: 10px;
 }
 
@@ -106,16 +109,42 @@ nav ul li a:hover {
   display: flex;
   justify-content: space-around;
   margin: 40px 0;
+  flex-wrap: wrap; /* Permite que las imágenes se ajusten en varias filas si es necesario */
 }
 
 .feature {
-  flex: 1; /* Asegura que las imágenes de los músicos se distribuyan uniformemente */
-  margin: 0 10px; /* Añadir margen lateral entre las características */
+  flex: 1;
+  margin: 0 10px;
+  max-width: 40%; /* Limita el ancho máximo de cada feature */
+  box-sizing: border-box;
 }
 
 .feature img {
   width: 100%;
-  border-radius: 8px;
+  max-width: 550px;
+  border-radius: 50px;
+  object-fit: cover;
+  filter: drop-shadow( 2px 2px 4px rgba(176, 39, 201, 0.979))
+}
+
+/* Responsive: Pantallas pequeñas */
+@media (max-width: 768px) {
+  .feature {
+    max-width: 45%; /* Cambia a dos columnas en pantallas medianas */
+    margin: 10px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .features {
+    flex-direction: column; /* Cambia a una columna en pantallas pequeñas */
+    align-items: center;
+  }
+
+  .feature {
+    max-width: 100%; /* Ocupa todo el ancho disponible */
+    margin: 10px 0;
+  }
 }
 
 /* Services Section */
@@ -142,6 +171,7 @@ nav ul li a:hover {
 }
 
 .service p {
+  font-size: 20px;
   color: #bbb;
 }
 
@@ -149,7 +179,7 @@ nav ul li a:hover {
 .icon-search,
 .icon-profile,
 .icon-chat {
-  font-size: 40px;
+  font-size: 24px;
   margin-bottom: 15px;
   color: #F38FFF;
 }
@@ -163,7 +193,7 @@ footer {
 
 .social-media a {
   margin: 0 15px;
-  font-size: 30px;
+  font-size: 24px;
   color: #F38FFF;
   transition: color 0.3s ease;
 }

@@ -3,18 +3,19 @@ import React from 'react';
 function LandingPage() {
   return (
     <div className="LandingPage">
-      {/* Header Section */}
+      {/* Sección de Encabezado */}
       <header>
         <div className="navbar">
           <div className="logo">
-            <img src="logo.png" alt="SoyMusico Logo" />
+            <img src="Subject.png" alt="Logo SoyMusico" className="responsive-img" />
           </div>
           <nav>
             <ul>
-              <li><a href="#">Community</a></li>
-              <li><a href="#">Contact</a></li>
-              <li><a href="#" className="sign-in">Sign In</a></li>
-              <li><a href="#" className="register">Register</a></li>
+              <li><a href="#">Busqueda</a></li>
+              <li><a href="#">Comunidad</a></li>
+              <li><a href="#">Contacto</a></li>
+              <li><a href="#" className="sign-in">Iniciar Sesión</a></li>
+              <li><a href="#" className="register">Registrarse</a></li>
             </ul>
           </nav>
         </div>
@@ -22,23 +23,23 @@ function LandingPage() {
           <div className="hero-text">
             <h1>SoyMúsico</h1>
           </div>
-            <div className="hero-text1">
-              <h2>Conecta con músicos</h2>
-            </div>
+          <div className="hero-text1">
+            <h2>Conecta con músicos...</h2>
+          </div>
           <div className="hero-image">
-            <img src="monkey1.jpg" alt="Musicians working together" />
+            <img src="monkey2.jpg" alt="Músicos trabajando juntos" className="responsive-img" />
           </div>
         </div>
       </header>
 
-      {/* Main Section */}
+      {/* Sección Principal */}
       <main>
         <section className="features">
           <div className="feature">
-            <img src="musican1.jpg" alt="Musician 1" />
+            <img src="musican1.jpg" alt="Músico 1" className="responsive-img" />
           </div>
           <div className="feature">
-            <img src="musican2.jpg" alt="Musician 2" />
+            <img src="musican2.jpg" alt="Músico 2" className="responsive-img" />
           </div>
         </section>
 
@@ -53,13 +54,13 @@ function LandingPage() {
             <p>Cada músico puede crear un perfil con información sobre sus habilidades, experiencia y ejemplos de su trabajo.</p>
           </div>
           <div className="service">
-            <h3>Conexión y Chat</h3>
-            <p>Función de mensajería instantánea integrada para facilitar la conexión y coordinación entre usuarios.</p>
+            <h3>Conexión</h3>
+            <p>Contacta a los músicos directamente desde sus perfiles para coordinar proyectos y colaborar en música.</p>
           </div>
         </section>
       </main>
 
-      {/* Footer Section */}
+      {/* Sección de Pie de Página */}
       <footer>
         <div className="social-media">
           <a href="#"><i className="icon-instagram"></i></a>
