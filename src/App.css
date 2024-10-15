@@ -1,38 +1,173 @@
-.App {
+/* Global Styles */
+body {
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #2d2d2d;
+  color: #fff;
+}
+
+/* Header */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1f1f1f;
+  padding: 10px 20px;
+}
+
+.logo img {
+  width: 50px;
+  height: 50px;
+}
+
+nav ul {
+  list-style-type: none;
+  display: flex;
+  gap: 20px;
+}
+
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 5px 10px;
+  transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: #F38FFF;
+}
+
+/* Hero Section */
+.hero {
+  position: relative; /* Permite el posicionamiento absoluto de los elementos hijos */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centra verticalmente el texto */
+  background-color: #1f1f1f;
+  padding: 50px;
+  flex-direction: column; /* Cambiado a columna para alinear elementos verticalmente */
+}
+
+.hero-image {
+  position: relative; /* Cambiado a relativo para que se ajuste al flujo del documento */
+  z-index: 0; /* Asegura que la imagen esté detrás del texto */
+}
+
+.hero-image img {
+  width: 100%;
+  max-width: 800px;
+  border-radius: 8px;
+  object-fit: cover; /* Asegura que la imagen cubra el contenedor */
+}
+
+.hero-text {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  text-align: center;
+  color: #9E25E4; /* O puedes cambiar a #fff para mayor contraste */
+  padding: .5px;
+  background-color: rgba(0, 0, 0, 0); /* Fondo negro semitransparente */
+  border-radius: 8px; /* Bordes redondeados opcionales */
+  text-shadow: 2px 2px 4px rgba(200, 55, 236, 0.706); /* Sombra del texto */
+}
+
+.hero-text1 {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  text-align: center;
+  color: #ffffff; /* O puedes cambiar a #fff para mayor contraste */
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0); /* Fondo negro semitransparente */
+  border-radius: 8px; /* Bordes redondeados opcionales */
+  text-shadow: 2px 2px 4px rgba(181, 23, 209, 0.545); /* Sombra del texto */
+}
+
+
+.hero-text h1 {
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.hero-text p {
+  font-size: 24px;
+  color: #F38FFF;
+}
+
+/* Features Section */
+.features {
+  display: flex;
+  justify-content: space-around;
+  margin: 40px 0;
+}
+
+.feature {
+  flex: 1; /* Asegura que las imágenes de los músicos se distribuyan uniformemente */
+  margin: 0 10px; /* Añadir margen lateral entre las características */
+}
+
+.feature img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+/* Services Section */
+.services {
+  text-align: center;
+  padding: 50px 0;
+  background-color: #333;
+}
+
+.services h2 {
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+.service {
+  display: inline-block;
+  width: 30%;
+  margin: 0 2%;
+}
+
+.service h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.service p {
+  color: #bbb;
+}
+
+/* Icons (Add these styles if you're using icon fonts) */
+.icon-search,
+.icon-profile,
+.icon-chat {
+  font-size: 40px;
+  margin-bottom: 15px;
+  color: #F38FFF;
+}
+
+/* Footer */
+footer {
+  background-color: #1f1f1f;
+  padding: 20px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.social-media a {
+  margin: 0 15px;
+  font-size: 30px;
+  color: #F38FFF;
+  transition: color 0.3s ease;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.social-media a:hover {
+  color: #fff;
 }
