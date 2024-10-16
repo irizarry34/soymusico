@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Importa Link para navegación interna
 
 function LandingPage() {
   return (
@@ -11,11 +12,11 @@ function LandingPage() {
           </div>
           <nav>
             <ul>
-              <li><a href="#">Busqueda</a></li>
-              <li><a href="#">Comunidad</a></li>
-              <li><a href="#">Contacto</a></li>
-              <li><a href="#" className="sign-in">Iniciar Sesión</a></li>
-              <li><a href="#" className="register">Registrarse</a></li>
+              <li><Link to="/search">Búsqueda</Link></li>
+              <li><Link to="/community">Comunidad</Link></li>
+              <li><Link to="/contact">Contacto</Link></li>
+              <li><Link to="/login" className="sign-in">Iniciar Sesión</Link></li>
+              <li><Link to="/register" className="register">Registrarse</Link></li> {/* Redirige al registro */}
             </ul>
           </nav>
         </div>
@@ -27,7 +28,7 @@ function LandingPage() {
             <h2>Conecta con músicos...</h2>
           </div>
           <div className="hero-image">
-            <img src="monkey2.jpg" alt="Músicos trabajando juntos" className="responsive-img" />
+            <img src="banner2.jpg" alt="Músicos trabajando juntos" className="responsive-img" />
           </div>
         </div>
       </header>
@@ -36,7 +37,7 @@ function LandingPage() {
       <main>
         <section className="features">
           <div className="feature">
-            <img src="musican1.jpg" alt="Músico 1" className="responsive-img" />
+            <img src="musican3.jpg" alt="Músico 1" className="responsive-img" />
           </div>
           <div className="feature">
             <img src="musican2.jpg" alt="Músico 2" className="responsive-img" />
@@ -63,9 +64,9 @@ function LandingPage() {
       {/* Sección de Pie de Página */}
       <footer>
         <div className="social-media">
-          <a href="#"><i className="icon-instagram"></i></a>
-          <a href="#"><i className="icon-youtube"></i></a>
-          <a href="#"><i className="icon-linkedin"></i></a>
+          <a href="https://instagram.com"><i className="icon-instagram"></i></a>
+          <a href="https://youtube.com"><i className="icon-youtube"></i></a>
+          <a href="https://linkedin.com"><i className="icon-linkedin"></i></a>
         </div>
       </footer>
     </div>

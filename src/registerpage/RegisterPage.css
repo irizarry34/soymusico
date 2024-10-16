@@ -1,0 +1,215 @@
+/* src/registerpage/RegisterPage.css */
+
+/* Importar Google Fonts para la tipografía */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Variables de CSS para mantener la consistencia en colores y fuentes */
+:root {
+  --primary-color: #F38FFF; /* Color principal (rosa vibrante) */
+  --secondary-color: #1f1f1f; /* Color secundario (gris oscuro) */
+  --background-color: #2d2d2d; /* Fondo oscuro */
+  --text-color: #ffffff; /* Texto blanco */
+  --input-background: #3a3a3a; /* Fondo de inputs */
+  --input-border: #555555; /* Bordes de inputs */
+  --button-hover: #F06FFF; /* Hover del botón */
+  --font-family: 'Roboto', sans-serif;
+}
+
+/* Estilos globales */
+body {
+  font-family: var(--font-family);
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* Contenedor principal de la página de registro */
+.register-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+  background-color: var(--background-color);
+}
+
+/* Contenedor del formulario de registro */
+.register-container {
+  background-color: var(--secondary-color);
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(255, 56, 255, 0.2);
+  width: 100%;
+  max-width: 500px;
+  transition: box-shadow 0.3s ease;
+}
+
+.register-container:hover {
+  box-shadow: 0 12px 24px rgba(255, 56, 255, 0.3);
+}
+
+/* Título del formulario */
+.register-container h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--primary-color);
+  font-weight: 700;
+  font-size: 28px;
+}
+
+/* Estilos del formulario */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilos de las etiquetas */
+label {
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+/* Estilos de los inputs y selects */
+input,
+select {
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border: 1px solid var(--input-border);
+  border-radius: 5px;
+  font-size: 16px;
+  background-color: var(--input-background);
+  color: var(--text-color);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input::placeholder,
+select::placeholder {
+  color: #cccccc;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 5px rgba(243, 143, 255, 0.5);
+}
+
+/* Contenedor de opciones de instrumentos */
+.instrument-options {
+  display: flex;
+  flex-direction: column;
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #3a3a3a;
+  border-radius: 5px;
+}
+
+.instrument-category {
+  margin-bottom: 20px;
+}
+
+.instrument-category h4 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.instrument-category label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  font-weight: 400;
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.instrument-category input[type="checkbox"] {
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary-color);
+}
+
+/* Estilos del botón de envío */
+button {
+  padding: 12px;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 700;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: var(--button-hover);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Enlace para volver a la página principal */
+.back-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.back-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.back-link a:hover {
+  color: var(--button-hover);
+}
+
+/* Scrollbar personalizada para el contenedor de instrumentos */
+.instrument-options::-webkit-scrollbar {
+  width: 8px;
+}
+
+.instrument-options::-webkit-scrollbar-track {
+  background: #2d2d2d;
+  border-radius: 5px;
+}
+
+.instrument-options::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 5px;
+}
+
+@media (max-width: 600px) {
+  .register-container {
+    padding: 30px 20px;
+  }
+
+  .register-container h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  input,
+  select {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+
+  button {
+    font-size: 16px;
+    padding: 10px;
+  }
+
+  .instrument-category h4 {
+    font-size: 16px;
+  }
+}
