@@ -1,0 +1,62 @@
+/* src/perfilPage/PerfilPage.css */
+
+/* Estilos específicos de perfilPage */
+.perfil-page {
+  font-family: 'Roboto', sans-serif;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #2d2d2d;
+  color: #fff;
+}
+
+.perfil-page h1, .perfil-page h2, .perfil-page h3 {
+  color: #F38FFF;
+}
+
+.perfil-page .profile-photo-section, 
+.perfil-page .bio-section, 
+.perfil-page .talentos-section, 
+.perfil-page .reviews-section, 
+.perfil-page .tabs-section {
+  margin-bottom: 40px;
+  margin-top: 100px;
+}
+
+.perfil-page .profile-photo-section img {
+  max-width: 150px;
+  border-radius: 50%;
+}
+
+.perfil-page textarea, 
+.perfil-page input[type="text"], 
+.perfil-page input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  margin-top: 10px;
+  background-color: #3a3a3a;
+  color: #fff;
+}
+
+.perfil-page .tabs-section .tab {
+  background-color: #1f1f1f;
+  color: #fff;
+  padding: 10px;
+  margin: 5px;
+  display: inline-block;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.perfil-page .tabs-section .tab:hover {
+  background-color: #F38FFF;
+}
+
+.perfil-page .review {
+  background-color: #3a3a3a;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}

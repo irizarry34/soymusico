@@ -1,7 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'; // Importa Link para navegación interna
+import { supabase } from '../supabaseClient'; // Importa supabase para verificar la autenticación
 
 function LandingPage() {
+  const [user, setUser] = useState(null);
+
+  // Verificar si hay un usuario autenticado
+  useEffect(() => {
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user); // Establece el usuario si está autenticado
+    };
+    checkUser();
+  }, []);
+
+  // Manejar el cierre de sesión y recargar la página
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    window.location.reload(); // Recarga la página después de cerrar sesión
+  };
+
   return (
     <div className="LandingPage">
       {/* Sección de Encabezado */}
@@ -15,8 +33,20 @@ function LandingPage() {
               <li><Link to="/search">Búsqueda</Link></li>
               <li><Link to="/community">Comunidad</Link></li>
               <li><Link to="/contact">Contacto</Link></li>
-              <li><Link to="/login" className="sign-in">Iniciar Sesión</Link></li>
-              <li><Link to="/register" className="register">Registrarse</Link></li> {/* Redirige al registro */}
+
+              {/* Mostrar enlace "Perfil" si el usuario está autenticado */}
+              {user ? (
+                <>
+                  <li><Link to="/profile">Perfil</Link></li> {/* Enlace al perfil si el usuario ha iniciado sesión */}
+                  <li><button className="logout-btn" onClick={handleLogout}>Cerrar Sesión</button></li>
+
+                </>
+              ) : (
+                <>
+                  <li><Link to="/login">Iniciar Sesión</Link></li> {/* Aquí el link hacia la página de login */}
+                  <li><Link to="/register" className="register">Registrarse</Link></li> {/* Redirige al registro */}
+                </>
+              )}
             </ul>
           </nav>
         </div>

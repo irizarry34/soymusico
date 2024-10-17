@@ -17,8 +17,8 @@ body {
 }
 
 .logo img {
-  width: 120px;
-  height: 120px;
+  width: 90px;
+  height: 90px;
   filter: drop-shadow( 2px 2px 4px rgba(255, 200, 100, 1))
 }
 
@@ -49,6 +49,7 @@ nav ul li a:hover {
   background-color: #1f1f1f;
   padding: 50px;
   flex-direction: column;
+  margin-top: 80px; /* Añadimos margen para compensar la altura del navbar */
   
 }
 
@@ -99,6 +100,10 @@ nav ul li a:hover {
 .hero-text h1 {
   font-size: 108px;
   margin-bottom: 20px;
+  color: #FFFFFF;
+  background-color: rgba(255, 201, 100, 0.101);
+  text-shadow: 4px 4px 8px rgb(0, 0, 0, 0.8);
+  
 }
 
 .hero-text p {
@@ -204,4 +209,21 @@ footer {
 
 .social-media a:hover {
   color: #fff;
+}
+
+/* Estilos específicos para el botón de Cerrar Sesión */
+.logout-btn {
+  padding: 8px 12px;
+  font-size: 16px;
+  background-color: #eb36ff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: -30px;
+}
+
+.logout-btn:hover {
+  background-color: #f06fff;
 }

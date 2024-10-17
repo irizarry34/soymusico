@@ -1,7 +1,7 @@
-// src/registerpage/registerPage.js
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient'; // Ruta correcta a supabaseClient.js
 import './RegisterPage.css'; // Asegúrate de que el nombre del archivo CSS coincida
+import { Link, useNavigate } from 'react-router-dom'; // Añadir useNavigate para manejar la redirección
 
 function RegisterPage() {
   const [profileType, setProfileType] = useState('Musician');
@@ -12,10 +12,25 @@ function RegisterPage() {
   const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const [instruments, setInstruments] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const navigate = useNavigate(); // Hook para redirigir al usuario
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { data, error } = await supabase
+
+    const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+      email: email,
+      password: password
+    });
+
+    if (signUpError) {
+      setErrorMessage(`Error al registrar usuario: ${signUpError.message}`);
+      return;
+    }
+
+    // Verifica que el ID esté siendo insertado correctamente
+    const { error: userError } = await supabase
       .from('users')
       .insert([
         { 
@@ -24,120 +39,50 @@ function RegisterPage() {
           last_name: lastName,
           email: email,
           username: username,
-          password: password,
           phone: phone,
-          instruments: instruments.join(', ') // Almacena como una cadena separada por comas
+          instruments: instruments.join(', '), // Almacenar instrumentos como una cadena separada por comas
+          id: signUpData.user.id // Asegurarse que coincida con el auth.uid()
         }
       ]);
-    
-    if (error) {
-      console.error(error);
-      alert(`Error al registrar usuario: ${error.message}`);
+
+    if (userError) {
+      setErrorMessage(`Error al guardar datos del usuario: ${userError.message}`);
     } else {
-      console.log('Usuario registrado:', data);
-      alert('Usuario registrado exitosamente');
-      // Opcional: Limpiar el formulario o redirigir al usuario
-      setProfileType('Musician');
-      setFirstName('');
-      setLastName('');
-      setEmail('');
-      setUsername('');
-      setPassword('');
-      setPhone('');
-      setInstruments([]);
+      // Redirigir al perfil del usuario después de un registro exitoso
+      navigate('/profile'); // Redirige a la página de perfil
     }
   };
 
   const instrumentOptions = {
     "Cuerdas": [
-      "Violín",
-      "Viola",
-      "Violonchelo",
-      "Contrabajo",
-      "Guitarra acústica",
-      "Guitarra eléctrica",
-      "Bajo eléctrico",
-      "Arpa",
-      "Banjo",
-      "Mandolina",
-      "Ukulele",
-      "Cítara",
-      "Laúd",
-      "Sitar",
-      "Koto",
-      "Guzheng"
+      "Violín", "Viola", "Violonchelo", "Contrabajo", "Guitarra acústica", 
+      "Guitarra eléctrica", "Bajo eléctrico", "Arpa", "Banjo", "Mandolina",
+      "Ukulele", "Cítara", "Laúd", "Sitar", "Koto", "Guzheng"
     ],
     "Viento Madera": [
-      "Flauta transversal",
-      "Flauta dulce",
-      "Clarinete",
-      "Oboe",
-      "Fagot",
-      "Saxofón",
-      "Piccolo",
-      "Contrafagot"
+      "Flauta transversal", "Flauta dulce", "Clarinete", "Oboe", "Fagot", 
+      "Saxofón", "Piccolo", "Contrafagot"
     ],
     "Viento Metal": [
-      "Trompeta",
-      "Trombón",
-      "Trompa",
-      "Tubo",
-      "Corneta",
-      "Trompa francesa"
+      "Trompeta", "Trombón", "Trompa", "Tuba", "Corneta", "Trompa francesa"
     ],
     "Percusión": [
-      "Batería",
-      "Tambores",
-      "Platillos",
-      "Congas",
-      "Bongos",
-      "Djembé",
-      "Cajón",
-      "Xilófono",
-      "Marimba",
-      "Vibrafón",
-      "Glockenspiel",
-      "Timpani",
-      "Campanas tubulares"
+      "Batería", "Tambores", "Platillos", "Congas", "Bongos", "Djembé", "Cajón", 
+      "Xilófono", "Marimba", "Vibrafón", "Glockenspiel", "Timpani", "Campanas tubulares"
     ],
     "Teclado": [
-      "Piano acústico",
-      "Piano eléctrico",
-      "Teclado electrónico",
-      "Órgano",
-      "Sintetizador",
-      "Clavicordio",
-      "Accordeón",
-      "Melódica"
+      "Piano acústico", "Piano eléctrico", "Teclado electrónico", "Órgano", 
+      "Sintetizador", "Clavicordio", "Accordeón", "Melódica"
     ],
     "Electrónicos": [
-      "Sintetizador",
-      "Secuenciador",
-      "Sampler",
-      "Drum machine",
-      "Theremin",
-      "Controlador MIDI"
+      "Sintetizador", "Secuenciador", "Sampler", "Drum machine", "Theremin", "Controlador MIDI"
     ],
     "Tradicionales y Étnicos": [
-      "Didgeridoo",
-      "Shamisen",
-      "Balalaika",
-      "Kora",
-      "Erhu",
-      "Bagpipes",
-      "Tabla",
-      "Oud",
-      "Maracas",
-      "Guiro",
-      "Charango",
-      "Panflute"
+      "Didgeridoo", "Shamisen", "Balalaika", "Kora", "Erhu", "Bagpipes", 
+      "Tabla", "Oud", "Maracas", "Guiro", "Charango", "Panflute"
     ],
     "Otros": [
-      "Harmónica",
-      "Melódica",
-      "Kalimba",
-      "Steel drums",
-      "Electro-acústicos"
+      "Harmónica", "Melódica", "Kalimba", "Steel drums", "Electro-acústicos"
     ]
   };
 
@@ -152,8 +97,30 @@ function RegisterPage() {
 
   return (
     <div className="register-page">
+      {/* Barra de navegación */}
+      <div className="navbar">
+        <div className="logo">
+          <img src="Subject.png" alt="Logo" />
+        </div>
+        <nav>
+          <ul>
+            <li><Link to="/">Inicio</Link></li>
+            <li><Link to="/search">Búsqueda</Link></li>
+            <li><Link to="/community">Comunidad</Link></li>
+            <li><Link to="/contact">Contacto</Link></li>
+            <li><Link to="/login">Iniciar Sesión</Link></li>
+            <li><Link to="/register">Registrarse</Link></li>
+          </ul>
+        </nav>
+      </div>
+
+      <div className="register-image">
+        <img src="registerPage2.jpg" alt="Music Concept" /> {/* Ruta desde public */}
+      </div>
+
       <div className="register-container">
         <h1>Registro de Usuario</h1>
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
         <form onSubmit={handleSubmit}>
           <label>Tipo de Perfil:</label>
           <select value={profileType} onChange={(e) => setProfileType(e.target.value)}>

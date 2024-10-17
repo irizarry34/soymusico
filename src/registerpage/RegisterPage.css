@@ -1,18 +1,19 @@
-/* src/registerpage/RegisterPage.css */
-
 /* Importar Google Fonts para la tipografía */
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-/* Variables de CSS para mantener la consistencia en colores y fuentes */
+/* Variables de CSS */
 :root {
-  --primary-color: #F38FFF; /* Color principal (rosa vibrante) */
-  --secondary-color: #1f1f1f; /* Color secundario (gris oscuro) */
-  --background-color: #2d2d2d; /* Fondo oscuro */
-  --text-color: #ffffff; /* Texto blanco */
-  --input-background: #3a3a3a; /* Fondo de inputs */
-  --input-border: #555555; /* Bordes de inputs */
-  --button-hover: #F06FFF; /* Hover del botón */
+  --primary-color: #F38FFF;
+  --secondary-color: #1f1f1f;
+  --background-color: #2d2d2d;
+  --text-color: #eb36ff;
+  --input-background: #3a3a3a;
+  --input-border: #555555;
+  --button-hover: #F06FFF;
   --font-family: 'Roboto', sans-serif;
+  --font-size-large: 18px; /* Tamaño de letra para inputs */
+  --font-size-label: 20px; /* Tamaño de letra para etiquetas */
+  --font-size-title: 28px; /* Tamaño de letra para títulos */
 }
 
 /* Estilos globales */
@@ -27,35 +28,41 @@ body {
 /* Contenedor principal de la página de registro */
 .register-page {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  padding: 40px 20px;
+  padding-top: 80px;
   min-height: 100vh;
   background-color: var(--background-color);
+  padding: 20px;
 }
 
 /* Contenedor del formulario de registro */
 .register-container {
-  background-color: var(--secondary-color);
-  padding: 40px;
+  background-color: rgba(31, 31, 31, 0.8);
+  padding: 50px;
   border-radius: 10px;
   box-shadow: 0 8px 20px rgba(255, 56, 255, 0.2);
-  width: 100%;
-  max-width: 500px;
-  transition: box-shadow 0.3s ease;
+  width: 50%;
+  max-width: 550px;
+  text-align: left; /* Alineación del contenido a la izquierda */
+  margin-top: 90px;
+  margin-right: 100px;
 }
+.register-container label {
+  color: #F38FFF; /* O el color que prefieras */
+}
+
 
 .register-container:hover {
   box-shadow: 0 12px 24px rgba(255, 56, 255, 0.3);
 }
 
-/* Título del formulario */
 .register-container h1 {
-  text-align: center;
-  margin-bottom: 30px;
   color: var(--primary-color);
   font-weight: 700;
-  font-size: 28px;
+  font-size: var(--font-size-title);
+  margin-bottom: 20px;
+  text-align: center; /* Centramos el título */
 }
 
 /* Estilos del formulario */
@@ -64,23 +71,25 @@ form {
   flex-direction: column;
 }
 
-/* Estilos de las etiquetas */
+/* Estilos de las etiquetas (labels) */
 label {
   margin-bottom: 8px;
   font-weight: 700;
   color: var(--text-color);
+  text-align: left; /* Alineación a la izquierda */
+  font-size: var(--font-size-label); /* Tamaño de letra mayor */
 }
 
-/* Estilos de los inputs y selects */
+/* Inputs y select */
 input,
 select {
-  padding: 12px 15px;
+  padding: 14px;
   margin-bottom: 20px;
+  background-color: var(--input-background);
   border: 1px solid var(--input-border);
   border-radius: 5px;
-  font-size: 16px;
-  background-color: var(--input-background);
   color: var(--text-color);
+  font-size: var(--font-size-large); /* Aumentar el tamaño del texto */
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -113,7 +122,7 @@ select:focus {
 
 .instrument-category h4 {
   margin-bottom: 10px;
-  font-size: 18px;
+  font-size: var(--font-size-label);
   color: var(--primary-color);
   font-weight: 700;
 }
@@ -125,6 +134,7 @@ select:focus {
   font-weight: 400;
   cursor: pointer;
   color: var(--text-color);
+  font-size: var(--font-size-large);
 }
 
 .instrument-category input[type="checkbox"] {
@@ -134,15 +144,15 @@ select:focus {
   accent-color: var(--primary-color);
 }
 
-/* Estilos del botón de envío */
+/* Botón de envío */
 button {
-  padding: 12px;
+  padding: 14px;
   background-color: var(--primary-color);
   color: var(--secondary-color);
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: var(--font-size-large);
   font-weight: 700;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
@@ -158,8 +168,8 @@ button:active {
 
 /* Enlace para volver a la página principal */
 .back-link {
-  text-align: center;
   margin-top: 20px;
+  text-align: center; /* Centramos el enlace */
 }
 
 .back-link a {
@@ -171,6 +181,25 @@ button:active {
 
 .back-link a:hover {
   color: var(--button-hover);
+}
+
+/* Imagen en la página de registro */
+.register-image {
+  width: 45%;  /* Ajuste del tamaño de la imagen */
+  display: flex;
+  justify-content: center;
+}
+
+.register-image img {
+  width: 100%;
+  max-width: 1200px;
+  height: 50%;
+  object-fit: cover;
+  border-radius: 20px;
+  margin-top: 110px;
+  margin-left: -150px;
+  margin-right: -200px;
+  box-shadow: 0 8px 20px rgba(255, 56, 255, 0.2);
 }
 
 /* Scrollbar personalizada para el contenedor de instrumentos */
@@ -188,28 +217,25 @@ button:active {
   border-radius: 5px;
 }
 
-@media (max-width: 600px) {
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .register-page {
+    flex-direction: column;
+    padding-top: 100px;
+  }
+
   .register-container {
-    padding: 30px 20px;
-  }
-
-  .register-container h1 {
-    font-size: 24px;
+    width: 90%;
+    max-width: 450px;
     margin-bottom: 20px;
+    margin-right: 0;
   }
 
-  input,
-  select {
-    font-size: 14px;
-    padding: 10px 12px;
+  .register-image {
+    width: 90%;
   }
 
-  button {
-    font-size: 16px;
-    padding: 10px;
-  }
-
-  .instrument-category h4 {
-    font-size: 16px;
+  .register-image img {
+    max-width: 100%;
   }
 }

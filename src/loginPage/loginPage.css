@@ -1,0 +1,181 @@
+/* src/loginpage/LoginPage.css */
+
+/* Importar Google Fonts para la tipografía */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Variables de CSS */
+:root {
+  --primary-color: #F38FFF;
+  --secondary-color: #1f1f1f;
+  --background-color: #2d2d2d;
+  --text-color: #ffffff;
+  --input-background: #3a3a3a;
+  --input-border: #555555;
+  --button-hover: #F06FFF;
+  --font-family: 'Roboto', sans-serif;
+}
+
+/* Estilos globales */
+body {
+  font-family: var(--font-family);
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* Barra de navegación */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--secondary-color);
+  padding: 5px 10px;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+.logo img {
+  width: 100px;
+  height: 100px;
+  filter: drop-shadow(2px 2px 4px rgba(255, 200, 100, 1));
+}
+
+nav ul {
+  list-style-type: none;
+  display: flex;
+  gap: 10px;
+  margin-right: 20px;
+}
+
+nav ul li a {
+  color: var(--text-color);
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 5px 10px;
+  transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+  color: var(--primary-color);
+}
+
+/* Contenedor principal de la página de login */
+.login-page {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 80px;
+  min-height: 100vh;
+  background-color: var(--background-color);
+  padding: 20px;
+}
+
+/* Contenedor del formulario de login */
+.login-container {
+  background-color: rgba(31, 31, 31, 0.8);
+  padding: 50px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(255, 56, 255, 0.2);
+  width: 50%;
+  max-width: 550px;
+  text-align: center;
+  margin-right: 50px;  /* Desplaza un poco el formulario hacia la derecha */
+  margin-left: 80px;
+}
+
+.login-container h1 {
+  color: var(--primary-color);
+  font-weight: 700;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+input {
+  padding: 12px;
+  margin-bottom: 15px;
+  background-color: var(--input-background);
+  border: 1px solid var(--input-border);
+  border-radius: 5px;
+  color: var(--text-color);
+}
+
+button {
+  padding: 12px;
+  background-color: var(--primary-color);
+  color: var(--secondary-color);
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--button-hover);
+}
+
+.back-link {
+  margin-top: 20px;
+}
+
+.back-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+/* Imagen en la página de login */
+.login-image {
+  width: 55%;  /* Aumenta el tamaño de la imagen */
+  display: flex;
+  justify-content: center;
+}
+
+.login-image img {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 20px;
+  margin-top: 70px;
+  box-shadow: 3px 0px 20px 8px rgba(255, 56, 255, 0.2);
+}
+
+/* Estilos Responsivos */
+@media (max-width: 768px) {
+  .login-page {
+    flex-direction: column;
+    padding-top: 100px;
+  }
+
+  .login-container {
+    width: 90%;
+    max-width: 450px;
+    margin-bottom: 20px;
+    margin-right: 0;
+  }
+
+  .login-image {
+    width: 90%;
+  }
+
+  .login-image img {
+    max-width: 100%;
+  }
+}
