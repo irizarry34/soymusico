@@ -57,15 +57,14 @@
 }
 
 .perfil-page .profile-photo-section img {
-  width: 120px; /* Ajustado a 120px */
-  height: 120px; /* Ajustado a 120px */
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   display: block;
-  margin-left: auto;
-  margin-right: auto; /* Centrar la imagen */
+  margin-left: 0; /* Cambiado para mover la imagen a la izquierda */
 }
 
 .perfil-page .profile-photo-section input[type="file"] {
@@ -106,24 +105,24 @@
   background-color: #1f1f1f;
   padding: 15px;
   border-radius: 8px;
-  width: 48%;
+  width: 50%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   
 }
 
 .perfil-page .instruments ul, .perfil-page .genres input[type="text"] {
   background-color: #2a2a2a;
-  padding: 10px;
+  padding: 1px;
   border-radius: 5px;
   color: #fff;
   width: 100%;
-  margin-top: 100px;
+  margin-top: 0;
 }
 
 .perfil-page .instruments ul li, .perfil-page .genres input {
   list-style: none;
   font-size: 1.1em;
-  margin: 10px 0;
+  margin: 5px 0;
   
 }
 
