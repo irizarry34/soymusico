@@ -3,13 +3,13 @@ import React, { useState, useEffect } from 'react';
 import './perfilPage.css'; 
 import { supabase } from '../supabaseClient'; 
 import { useNavigate } from 'react-router-dom';
-import instrumentIcons from '../instrumentIcons'; // Ruta correcta de tu archivo
+import instrumentIcons from '../instrumentIcons'; 
 
 function PerfilPage() {
   const [user, setUser] = useState(null);
   const [bio, setBio] = useState('');
   const [genres, setGenres] = useState([]);
-  const [selectedGenres, setSelectedGenres] = useState([]); // Para almacenar los géneros seleccionados
+  const [selectedGenres, setSelectedGenres] = useState([]); 
   const [reviews, setReviews] = useState([]);
   const [photoUrl, setPhotoUrl] = useState(null); 
   const [selectedFile, setSelectedFile] = useState(null); 
@@ -17,34 +17,59 @@ function PerfilPage() {
   const [alertas, setAlertas] = useState([]);
   const navigate = useNavigate();
 
+  // Verifica si el usuario está autenticado cada vez que se carga la página
   useEffect(() => {
-    const fetchUserData = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        setUser(user);
-        const { data: userData, error } = await supabase
-          .from('users')
-          .select('bio, instruments, genres, photo_url') 
-          .eq('id', user.id) 
-          .single();
+    const checkUserSession = async () => {
+      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      
+      if (sessionError) {
+        console.error("Error obteniendo la sesión:", sessionError);
+        return;
+      }
 
-        if (error) {
-          console.error("Error fetching user data:", error);
-          return;
-        }
-
-        if (userData) {
-          setBio(userData.bio || '');
-          setInstruments(userData.instruments ? userData.instruments.split(', ') : []);
-          setGenres(userData.genres ? userData.genres.split(', ') : []);
-          setSelectedGenres(userData.genres ? userData.genres.split(', ') : []); // Inicializar con géneros existentes
-          setPhotoUrl(userData.photo_url || ''); 
-        }
+      if (sessionData?.session) {
+        setUser(sessionData.session.user); // Obtiene el usuario de la sesión
+        fetchUserData(sessionData.session.user.id); // Llama a fetchUserData con el user id
+      } else {
+        console.error("No hay una sesión activa.");
+        navigate('/login'); // Redirige al login si no hay sesión
       }
     };
 
-    fetchUserData();
-  }, []);
+    checkUserSession();
+  }, [navigate]);
+
+  const fetchUserData = async (userId) => {
+    const { data: userData, error: userFetchError } = await supabase
+      .from('users')
+      .select('bio, instruments, genres, photo_url') 
+      .eq('id', userId) 
+      .single();
+
+    if (userFetchError) {
+      console.error("Error obteniendo datos del usuario:", userFetchError);
+      return;
+    }
+
+    if (userData) {
+      setBio(userData.bio || '');
+      setInstruments(userData.instruments ? userData.instruments.split(', ') : []);
+      setGenres(userData.genres ? userData.genres.split(', ') : []);
+      setSelectedGenres(userData.genres ? userData.genres.split(', ') : []); 
+      setPhotoUrl(userData.photo_url || ''); 
+    }
+
+    const { data: reviewsData, error: reviewsError } = await supabase
+      .from('reviews')
+      .select('review_text, reviewer_user_id')
+      .eq('reviewed_user_id', userId);
+
+    if (reviewsError) {
+      console.error("Error obteniendo reseñas:", reviewsError);
+    } else {
+      setReviews(reviewsData);
+    }
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -69,7 +94,7 @@ function PerfilPage() {
     const fileName = `${user.id}.${fileExt}`; 
     const filePath = `profilephoto/${fileName}`;
 
-    const { data, error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from('profilephoto')
       .upload(filePath, selectedFile, {
         cacheControl: '3600',
@@ -81,11 +106,19 @@ function PerfilPage() {
       return;
     }
 
-    const publicURL = `https://your-supabase-url/storage/v1/object/public/profilephoto/${filePath}`;
+    const { data: publicUrlData, error: urlError } = supabase
+      .storage
+      .from('profilephoto')
+      .getPublicUrl(filePath);
+
+    if (urlError || !publicUrlData.publicUrl) {
+      console.error("Error obteniendo la URL pública:", urlError);
+      return;
+    }
 
     const { error: updateError } = await supabase
       .from('users')
-      .update({ photo_url: publicURL })
+      .update({ photo_url: publicUrlData.publicUrl })
       .eq('id', user.id);
 
     if (updateError) {
@@ -93,7 +126,7 @@ function PerfilPage() {
       return;
     }
 
-    setPhotoUrl(publicURL);
+    setPhotoUrl(publicUrlData.publicUrl);  
     setSelectedFile(null);
     alert('¡Foto de perfil actualizada correctamente!');
   };
@@ -110,28 +143,46 @@ function PerfilPage() {
   };
 
   const saveGenres = async () => {
-    const { error } = await supabase
-      .from('users')
-      .update({ genres: selectedGenres.join(', ') })
-      .eq('id', user.id);
+    if (!user) {
+      console.error("El usuario no está autenticado.");
+      return;
+    }
 
-    if (error) {
-      console.error('Error actualizando los géneros:', error);
-    } else {
+    try {
+      const { error: genresUpdateError } = await supabase
+        .from('users')
+        .update({ genres: selectedGenres.join(', ') })
+        .eq('id', user.id);
+
+      if (genresUpdateError) {
+        throw genresUpdateError;
+      }
+
       alert('¡Géneros musicales actualizados!');
+    } catch (error) {
+      console.error('Error actualizando los géneros:', error.message);
     }
   };
 
   const saveBio = async () => {
-    const { error } = await supabase
-      .from('users')
-      .update({ bio })
-      .eq('id', user.id);
+    if (!user) {
+      console.error("El usuario no está autenticado.");
+      return;
+    }
 
-    if (error) {
-      console.error('Error actualizando la autobiografía:', error);
-    } else {
+    try {
+      const { error: bioUpdateError } = await supabase
+        .from('users')
+        .update({ bio })
+        .eq('id', user.id);
+
+      if (bioUpdateError) {
+        throw bioUpdateError;
+      }
+
       alert('¡Autobiografía actualizada!');
+    } catch (error) {
+      console.error('Error actualizando la biografía:', error.message);
     }
   };
 
@@ -141,6 +192,7 @@ function PerfilPage() {
 
   return (
     <div className="perfil-page">
+      {/* Navbar */}
       <div className="navbar">
         <div className="logo">
           <img src="Subject.png" alt="Logo" />
@@ -148,8 +200,16 @@ function PerfilPage() {
         <nav>
           <ul>
             <li><a href="/">Inicio</a></li>
-            <li><button onClick={() => navigate('/publicProfile')}>Ver Perfil Público</button></li>
-            <li><button onClick={handleLogout}>Cerrar Sesión</button></li>
+            <li><a href="/search">Búsqueda</a></li>
+            <li><a href="/community">Comunidad</a></li>
+            <li><a href="/calendar">Calendario</a></li>
+            <li><a href="/contact">Contacto</a></li>
+            <li><a href="/inbox">Buzón de Entrada</a></li>
+            <li><a href="/alerts">Alertas ({alertas.length})</a></li>
+            <li><a href="/gallery">Galería</a></li>
+            <li><a href="/profile">{user ? user.email : 'Perfil'}</a></li>
+            <li><button className="logout-btn" onClick={handleLogout}>Cerrar Sesión</button></li>
+            <li><button className="logout-btn" onClick={() => navigate('/publicProfile')}>Perfil Público</button></li>
           </ul>
         </nav>
       </div>
@@ -206,7 +266,7 @@ function PerfilPage() {
             {reviews.length > 0 ? (
               reviews.map((review, index) => (
                 <div key={index} className="review">
-                  <p>{review}</p>
+                  <p>{review.review_text}</p>
                 </div>
               ))
             ) : (

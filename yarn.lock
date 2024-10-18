@@ -9646,6 +9646,11 @@ react-scripts@^3.0.1:
   optionalDependencies:
     fsevents "2.1.2"
 
+react-stars@^2.2.5:
+  version "2.2.5"
+  resolved "https://registry.npmjs.org/react-stars/-/react-stars-2.2.5.tgz"
+  integrity sha512-O//KS6Z9RZnUOU/r+3+wxCzNalVn/wEWIcbAQFRV3dw8WbV+ys/kgcpBPijqTiNpHGrcwZdtb/7wF/UVem20CQ==
+
 react@*, react@^18.0.0, react@^18.3.1, react@>=16.8:
   version "18.3.1"
   resolved "https://registry.npmjs.org/react/-/react-18.3.1.tgz"

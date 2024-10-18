@@ -1,0 +1,194 @@
+/* Mantiene la coherencia estética con perfilPage.css */
+.perfil-page {
+  font-family: 'Roboto', sans-serif;
+  padding: 20px;
+  max-width: 1300px;
+  margin: 0 auto;
+  background-color: #2d2d2d;
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  margin-top: 150px;
+  box-shadow: 3px 0px 20px 8px rgba(255, 56, 255, 0.2);
+}
+
+/* Estructura contenedora similar */
+.profile-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.left-section, .right-section {
+  flex: 1;
+  min-width: 300px;
+  background-color: #1f1f1f;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.left-section:hover, .right-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Foto de perfil */
+.profile-photo-section img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  display: block;
+  margin-left: 0;
+}
+
+/* Estilos de la biografía */
+.bio-section {
+  background-color: #1f1f1f;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  color: #ffffff;
+  font-size: 1.1em;
+  line-height: 1.6;
+  text-align: left;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Talentos musicales */
+.talentos-section {
+  background-color: #1f1f1f;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.instruments, .genres {
+  list-style: none;
+  padding: 0;
+}
+
+.instruments ul li, .genres ul li {
+  list-style: none;
+  font-size: 1.1em;
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+}
+
+.instruments ul li svg, .genres ul li svg {
+  margin-right: 10px;
+  color: #F38FFF;
+}
+
+/* Reseñas */
+.review-section {
+  background-color: #1f1f1f;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  color: #F38FFF;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.review-section textarea {
+  width: 100%;
+  padding: 10px;
+  background-color: #2d2d2d;
+  border: 2px solid #F38FFF;
+  border-radius: 5px;
+  color: #fff;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+}
+
+button {
+  background-color: #F38FFF;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #d12fe3;
+}
+
+/* Sección para dejar mensajes o enviar correo */
+.contact-section {
+  background-color: #1f1f1f;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  color: #F38FFF;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.contact-section textarea {
+  width: 100%;
+  padding: 10px;
+  background-color: #2d2d2d;
+  border: 2px solid #F38FFF;
+  border-radius: 5px;
+  color: #fff;
+  margin-bottom: 10px;
+  font-size: 1.1em;
+}
+
+/* Sistema de estrellas (si lo implementas) */
+.star-rating {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.star-rating span {
+  font-size: 2em;
+  color: #F38FFF;
+  cursor: pointer;
+}
+
+.star-rating span:hover,
+.star-rating span.active {
+  color: #FFD700;
+
+}
+
+
+/* Estilo para géneros musicales */
+
+.genres {
+  list-style: none;
+  padding: 0;
+
+}
+
+.genres ul {
+  list-style: none !important; /* Quita los puntos de la lista */
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  
+
+}
+
+.genres ul li {
+  display: flex !important;
+  align-items: center !important;
+  font-size: 1.1em !important;
+  margin: 5px 0 !important;
+}
+
+.genres ul li svg {
+  margin-right: 10px !important;
+  color: #F38FFF !important;
+}
