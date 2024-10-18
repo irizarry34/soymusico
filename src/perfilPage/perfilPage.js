@@ -201,7 +201,6 @@ function PerfilPage() {
           <ul>
             <li><a href="/">Inicio</a></li>
             <li><a href="/search">Búsqueda</a></li>
-            <li><a href="/community">Comunidad</a></li>
             <li><a href="/calendar">Calendario</a></li>
             <li><a href="/contact">Contacto</a></li>
             <li><a href="/inbox">Buzón de Entrada</a></li>
@@ -209,7 +208,7 @@ function PerfilPage() {
             <li><a href="/gallery">Galería</a></li>
             <li><a href="/profile">{user ? user.email : 'Perfil'}</a></li>
             <li><button className="logout-btn" onClick={handleLogout}>Cerrar Sesión</button></li>
-            <li><button className="logout-btn" onClick={() => navigate('/publicProfile')}>Perfil Público</button></li>
+            <li><button className="logout-btn" onClick={() => navigate(`/publicProfile/${user?.id}`)}>Perfil Público</button></li> {/* Ajuste aquí */}
           </ul>
         </nav>
       </div>

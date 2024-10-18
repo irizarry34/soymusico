@@ -19,7 +19,7 @@ body {
 .logo img {
   width: 90px;
   height: 90px;
-  filter: drop-shadow( 2px 2px 4px rgba(255, 200, 100, 1))
+  filter: drop-shadow(2px 2px 4px rgba(255, 200, 100, 1));
 }
 
 nav ul {
@@ -49,8 +49,7 @@ nav ul li a:hover {
   background-color: #1f1f1f;
   padding: 50px;
   flex-direction: column;
-  margin-top: 80px; /* Añadimos margen para compensar la altura del navbar */
-  
+  margin-top: 100px; /* Añadimos margen para compensar la altura del navbar */
 }
 
 .hero-image {
@@ -60,15 +59,15 @@ nav ul li a:hover {
 
 .hero-image img {
   width: 100%;
-  max-width: 1300px;
+  max-width: 1250px;
   height: 600px;
   border-radius: 50px;
   object-fit: cover;
-  filter: drop-shadow( 2px 2px 4px rgba(255, 200, 100, 1))
+  filter: drop-shadow(2px 2px 4px rgba(255, 200, 100, 1));
 }
 
 .hero-text {
-  font-size: 50px; /* Ajustado a un tamaño grande pero razonable */
+  font-size: 50px;
   position: absolute;
   top: 35%;
   left: 50%;
@@ -76,8 +75,8 @@ nav ul li a:hover {
   z-index: 1;
   text-align: center;
   color: #FFFFFF;
-  padding: 0px; /* Reduce el padding para evitar problemas de visibilidad */
-  background-color: rgba(255, 201, 100, 0.124);
+  padding: 0px;
+  background-color: rgba(255, 201, 100, 0.045);
   border-radius: 8px;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
@@ -92,7 +91,7 @@ nav ul li a:hover {
   text-align: center;
   color: #ffffff;
   padding: 10px;
-  background-color: rgba(255, 201, 100, 0.101);
+  background-color: rgba(255, 201, 100, 0.045);
   border-radius: 8px;
   text-shadow: 2px 2px 4px rgb(0, 0, 0, 0.8);
 }
@@ -103,7 +102,6 @@ nav ul li a:hover {
   color: #FFFFFF;
   background-color: rgba(255, 201, 100, 0.101);
   text-shadow: 4px 4px 8px rgb(0, 0, 0, 0.8);
-  
 }
 
 .hero-text p {
@@ -124,6 +122,7 @@ nav ul li a:hover {
   margin: 0 10px;
   max-width: 40%; /* Limita el ancho máximo de cada feature */
   box-sizing: border-box;
+  position: relative; /* Necesario para el posicionamiento del título */
 }
 
 .feature img {
@@ -131,7 +130,23 @@ nav ul li a:hover {
   max-width: 550px;
   border-radius: 50px;
   object-fit: cover;
-  filter: drop-shadow( 2px 2px 4px rgb(255, 200, 100, 1))
+  filter: drop-shadow(2px 2px 4px rgb(255, 200, 100, 1));
+}
+
+.image-title {
+  position: absolute;
+  top: 40%;  /* Posición vertical al 50% */
+  left: 50%;  /* Posición horizontal al 50% */
+  transform: translate(-50%, -50%);  /* Ajuste para centrar completamente */
+  color: #fff;
+  font-size: 24px;
+  font-weight: bold;
+  background-color: rgba(255, 56, 255, 0.063);  /* Fondo semitransparente */
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(255, 200, 100, 1);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  text-align: center;  /* Asegura que el texto dentro esté centrado */
 }
 
 /* Responsive: Pantallas pequeñas */

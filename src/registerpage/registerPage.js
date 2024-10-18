@@ -106,7 +106,6 @@ function RegisterPage() {
           <ul>
             <li><Link to="/">Inicio</Link></li>
             <li><Link to="/search">Búsqueda</Link></li>
-            <li><Link to="/community">Comunidad</Link></li>
             <li><Link to="/contact">Contacto</Link></li>
             <li><Link to="/login">Iniciar Sesión</Link></li>
             <li><Link to="/register">Registrarse</Link></li>

@@ -39,7 +39,6 @@ function LandingPage() {
                 <>
                   <li><Link to="/profile">Perfil</Link></li> {/* Enlace al perfil si el usuario ha iniciado sesión */}
                   <li><button className="logout-btn" onClick={handleLogout}>Cerrar Sesión</button></li>
-
                 </>
               ) : (
                 <>
@@ -66,11 +65,32 @@ function LandingPage() {
       {/* Sección Principal */}
       <main>
         <section className="features">
+          {/* Primera imagen - Búsqueda */}
           <div className="feature">
-            <img src="musican3.jpg" alt="Músico 1" className="responsive-img" />
+            <Link to="/search">
+              <div className="image-container">
+                <img src="musican3.jpg" alt="Músico 1" className="responsive-img" />
+                <div className="image-title">Búsqueda</div> {/* Título para la imagen */}
+              </div>
+            </Link>
           </div>
+          {/* Nueva imagen central - Registrarse */}
           <div className="feature">
-            <img src="musican2.jpg" alt="Músico 2" className="responsive-img" />
+            <Link to="/register">
+              <div className="image-container">
+                <img src="musican1.jpg" alt="Registrarse" className="responsive-img" />
+                <div className="image-title">Registrarse</div> {/* Título para la imagen */}
+              </div>
+            </Link>
+          </div>
+          {/* Segunda imagen - Contacto */}
+          <div className="feature">
+            <Link to="/contact">
+              <div className="image-container">
+                <img src="musican2.jpg" alt="Músico 2" className="responsive-img" />
+                <div className="image-title">Contacto</div> {/* Título para la imagen */}
+              </div>
+            </Link>
           </div>
         </section>
 
@@ -78,15 +98,15 @@ function LandingPage() {
           <h2>¿Qué ofrecemos?</h2>
           <div className="service">
             <h3>Búsqueda de músicos</h3>
-            <p>Los usuarios pueden buscar músicos filtrando por instrumento, género musical, experiencia y ubicación.</p>
+            <p>Busca músicos por instrumentos, género musical o información de contacto.</p>
           </div>
           <div className="service">
             <h3>Perfiles Personalizados</h3>
-            <p>Cada músico puede crear un perfil con información sobre sus habilidades, experiencia y ejemplos de su trabajo.</p>
+            <p>Crea un perfil con tus habilidades, experiencia y muestra tu talento al mundo.</p>
           </div>
           <div className="service">
-            <h3>Conexión</h3>
-            <p>Contacta a los músicos directamente desde sus perfiles para coordinar proyectos y colaborar en música.</p>
+            <h3>Conexión Directa</h3>
+            <p>Contacta a músicos desde sus perfiles y colabora fácilmente en proyectos musicales.</p>
           </div>
         </section>
       </main>
