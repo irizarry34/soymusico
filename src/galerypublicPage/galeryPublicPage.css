@@ -1,0 +1,40 @@
+.galery-public-page {
+  padding: 20px;
+  color: #fff;
+  background-color: #2d2d2d;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 36px;
+  color: #f38fff;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.media-gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.media-item {
+  margin: 15px;
+  background-color: #1f1f1f;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.media-item img {
+  width: 300px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.media-item p {
+  color: #f38fff;
+  text-align: center;
+  margin-top: 10px;
+}

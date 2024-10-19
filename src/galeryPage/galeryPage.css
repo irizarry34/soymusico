@@ -1,0 +1,205 @@
+/* Estilos generales */
+.galery-page {
+  font-family: 'Roboto', sans-serif;
+  color: #fff;
+  background-color: #2d2d2d;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1f1f1f;
+  padding: 10px 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.logo img {
+  width: 90px;
+  height: 90px;
+  filter: drop-shadow(2px 2px 6px rgba(255, 200, 100, 0.9));
+}
+
+nav ul {
+  list-style-type: none;
+  display: flex;
+  gap: 25px;
+}
+
+nav ul li a {
+  margin-right: 5px;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+nav ul li a:hover {
+  background-color: #F38FFF;
+  color: #fff;
+}
+
+.logout-btn {
+  padding: 8px 14px;
+  font-size: 16px;
+  background-color: #eb36ff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #f06fff;
+}
+
+/* Título de la página */
+h1 {
+  text-align: center;
+  color: #F38FFF;
+  margin-bottom: 30px;
+  font-size: 48px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* Sección de subida */
+.upload-section {
+  display: flex;
+  margin-top: 120px;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+  padding: 20px;
+  background-color: #1f1f1f;
+  border-radius: 15px;
+  box-shadow: 0 10px 20px 25px rgba(255, 56, 255, 0.2);
+}
+
+.upload-section input[type="file"] {
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.upload-section textarea {
+  width: 100%;
+  max-width: 500px;
+  padding: 15px;
+  border-radius: 8px;
+  border: none;
+  background-color: #333;
+  color: #fff;
+  margin-bottom: 20px;
+  resize: none;
+  transition: background-color 0.3s ease;
+}
+
+.upload-section textarea:focus {
+  background-color: #444;
+}
+
+.upload-section button {
+  padding: 12px 18px;
+  background-color: #F38FFF;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 18px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.upload-section button:hover {
+  background-color: #e36be0;
+  transform: translateY(-2px);
+}
+
+.upload-section button:active {
+  background-color: #c32abb;
+  transform: translateY(0);
+}
+
+/* Galería */
+.media-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+  padding: 20px;
+}
+
+.media-item {
+  text-align: center;
+  background-color: #1f1f1f;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.media-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  filter: drop-shadow(2px 2px 6px rgba(255, 200, 100, 0.7));
+}
+
+.media-item p {
+  font-size: 16px;
+  color: #ccc;
+}
+
+.media-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7);
+}
+
+/* Botón para la Galería Pública */
+.public-gallery-btn {
+  display: block;
+  margin: 5px 0;
+  padding: 8px 12px;
+  background-color: #F38FFF;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: -3px;
+  margin-right: 10px;
+}
+
+.public-gallery-btn:hover {
+  background-color: #e36be0;
+  transform: translateY(-3px);
+}
+
+.public-gallery-btn:active {
+  background-color: #c32abb;
+  transform: translateY(0);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .media-gallery {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+  .upload-section textarea {
+    max-width: 100%;
+  }
+
+  .upload-section button {
+    font-size: 16px;
+  }
+
+  .public-gallery-btn {
+    font-size: 16px;
+  }
+}

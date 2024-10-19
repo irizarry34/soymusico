@@ -5,10 +5,11 @@ import LandingPage from './landingPage/landingpage'; // Importa tu componente de
 import RegisterPage from './registerpage/registerPage'; // Importa el componente de registro
 import LoginPage from './loginPage/loginPage'; // Importa el componente de login
 import PerfilPage from './perfilPage/perfilPage'; // Importa el componente de perfil
-import PublicProfile from './publicprofile/publicProfile'; // Asegúrate de que coincida con la carpeta y archivo exactos
+import PublicProfile from './publicprofile/publicProfile'; // Importa el perfil público
 import instrumentIcons from './instrumentIcons'; // Asegúrate de usar la ruta correcta
-import SearchPage from './searchPage/searchPage'; // Ruta del componente SearchPage
-
+import SearchPage from './searchPage/searchPage'; // Importa el componente de búsqueda
+import GaleryPage from './galeryPage/galeryPage'; // Importa el componente de galería
+import GaleryPublicPage from './galerypublicPage/galeryPublicPage'; // Importa la galería pública
 
 function App() {
   return (
@@ -28,14 +29,16 @@ function App() {
           <Route path="/profile" element={<PerfilPage />} />
 
           {/* Ruta para la página de ver el perfil público */}
-          <Route path="/publicProfile" element={<PublicProfile />} /> {/* Corrige la ruta */}
+          <Route path="/publicProfile/:id" element={<PublicProfile />} /> {/* Ruta pública */}
           
-          {/* Ruta para la página de busqueda de musicos */}
+          {/* Ruta para la página de búsqueda */}
           <Route path="/search" element={<SearchPage />} />
-          
-          {/* Ruta para la los usuarios en la busqueda */}
-          <Route path="/publicProfile/:id" element={<PublicProfile />} />
-          
+
+          {/* Ruta para la página de galería privada */}
+          <Route path="/gallery" element={<GaleryPage />} />
+
+          {/* Ruta para la galería pública del usuario */}
+          <Route path="/galeryPublic/:id" element={<GaleryPublicPage />} />
         </Routes>
       </div>
     </Router>

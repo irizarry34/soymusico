@@ -179,7 +179,7 @@ function PublicProfile() {
             <li><a href="/calendar">Calendario</a></li>
             <li><a href="/contact">Contacto</a></li>
             <li><a href="/inbox">Buzón de Entrada</a></li>
-            <li><a href="/gallery">Galería</a></li>
+            <li><a href="/gallery">Galería</a></li> {/* Enlace agregado */}
             <li><a href="/profile">{currentUser ? currentUser.email : 'Perfil'}</a></li>
             <li><button className="logout-btn" onClick={() => navigate('/login')}>Cerrar Sesión</button></li>
           </ul>

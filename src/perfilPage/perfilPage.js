@@ -205,7 +205,7 @@ function PerfilPage() {
             <li><a href="/contact">Contacto</a></li>
             <li><a href="/inbox">Buzón de Entrada</a></li>
             <li><a href="/alerts">Alertas ({alertas.length})</a></li>
-            <li><a href="/gallery">Galería</a></li>
+            <li><a href="/gallery">Galería</a></li> {/* Enlace agregado */}
             <li><a href="/profile">{user ? user.email : 'Perfil'}</a></li>
             <li><button className="logout-btn" onClick={handleLogout}>Cerrar Sesión</button></li>
             <li><button className="logout-btn" onClick={() => navigate(`/publicProfile/${user?.id}`)}>Perfil Público</button></li> {/* Ajuste aquí */}
