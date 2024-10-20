@@ -18,8 +18,8 @@
 }
 
 .logo img {
-  width: 90px;
-  height: 90px;
+  width: 80px;
+  height: 80px;
   filter: drop-shadow(2px 2px 6px rgba(255, 200, 100, 0.9));
 }
 
@@ -156,7 +156,7 @@ h1 {
 
 .media-item:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 12px 24px rgba(255, 56, 255, 0.2);
 }
 
 /* Botón para la Galería Pública */

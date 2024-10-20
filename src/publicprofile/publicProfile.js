@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom'; // Agregado useNavigate
 import '../publicprofile/publicProfile.css';
 import { supabase } from '../supabaseClient';
-import { useNavigate } from 'react-router-dom';
 import ReactStars from 'react-stars';
 
 // Importa todos los iconos en una sola línea
@@ -70,6 +69,7 @@ function PublicProfile() {
   const [contactMessage, setContactMessage] = useState('');
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
+  const [gallery, setGallery] = useState([]); // Estado para la galería
 
   const navigate = useNavigate(); // Para redirigir
 
@@ -87,7 +87,7 @@ function PublicProfile() {
     fetchCurrentUser();
   }, []);
 
-  // Obtener los datos del perfil público (usuario seleccionado en la búsqueda)
+  // Obtener los datos del perfil público y la galería
   useEffect(() => {
     const fetchPublicUserData = async () => {
       const { data: userData, error } = await supabase
@@ -123,9 +123,23 @@ function PublicProfile() {
       }
     };
 
+    const fetchGallery = async () => {
+      const { data, error } = await supabase
+        .from('media')
+        .select('url, caption')
+        .eq('user_id', id); // Obtener las imágenes de la galería del usuario
+
+      if (error) {
+        console.error('Error al obtener la galería:', error);
+      } else {
+        setGallery(data); // Guardar las fotos en el estado
+      }
+    };
+
     if (id) {
       fetchPublicUserData();
       fetchReviews();
+      fetchGallery(); // Llamar a la función para obtener la galería
     }
   }, [id]);
 
@@ -199,6 +213,32 @@ function PublicProfile() {
           {/* Sección de la Autobiografía */}
           <div className="bio-section">
             <p>{bio}</p>
+          </div>
+
+          {/* Sección de la Galería */}
+          <div className="gallery-section">
+            <h3 style={{ cursor: 'pointer', color: '#F38FFF' }} onClick={() => navigate(`/galeryPublic/${id}`)}>
+              Galería
+            </h3>
+            {gallery.length > 0 ? (
+              <div className="gallery-grid">
+                {gallery.map((item, index) => (
+                  <div key={index} className="gallery-item">
+                    {item.url.endsWith('.mp4') || item.url.endsWith('.mov') ? (
+                      <video controls className="gallery-video">
+                        <source src={item.url} type="video/mp4" />
+                        Tu navegador no soporta videos.
+                      </video>
+                    ) : (
+                      <img src={item.url} alt={item.caption} className="gallery-image" />
+                    )}
+                    <div className="caption">{item.caption}</div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>No hay imágenes en la galería.</p>
+            )}
           </div>
 
           {/* Sección para dejar un mensaje o enviar un correo */}

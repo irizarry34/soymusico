@@ -38,3 +38,60 @@ h1 {
   text-align: center;
   margin-top: 10px;
 }
+/* Lightbox styles */
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.lightbox-content {
+  position: relative;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 90%;
+  max-height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.lightbox img, .lightbox video {
+  max-width: 100%;
+  max-height: 80vh; /* Limitar la altura para que no se salga del viewport */
+  width: auto;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain; /* Ajusta la imagen/video para mantener su proporción */
+}
+
+.lightbox p {
+  margin-top: 10px;
+  color: #333;
+  text-align: center;
+}
+
+.lightbox button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 10px 15px;
+  background-color: #F38FFF;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.lightbox button:hover {
+  background-color: #e36be0;
+}
