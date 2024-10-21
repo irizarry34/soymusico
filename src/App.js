@@ -1,15 +1,16 @@
 import React from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import LandingPage from './landingPage/landingpage'; // Importa tu componente de landing page
-import RegisterPage from './registerpage/registerPage'; // Importa el componente de registro
-import LoginPage from './loginPage/loginPage'; // Importa el componente de login
-import PerfilPage from './perfilPage/perfilPage'; // Importa el componente de perfil
-import PublicProfile from './publicprofile/publicProfile'; // Importa el perfil público
-import instrumentIcons from './instrumentIcons'; // Asegúrate de usar la ruta correcta
-import SearchPage from './searchPage/searchPage'; // Importa el componente de búsqueda
-import GaleryPage from './galeryPage/galeryPage'; // Importa el componente de galería
-import GaleryPublicPage from './galerypublicPage/galeryPublicPage'; // Importa la galería pública
+import LandingPage from './landingPage/landingpage';
+import RegisterPage from './registerpage/registerPage';
+import LoginPage from './loginPage/loginPage';
+import PerfilPage from './perfilPage/perfilPage';
+import PublicProfile from './publicprofile/publicProfile';
+import instrumentIcons from './instrumentIcons';
+import SearchPage from './searchPage/searchPage';
+import GaleryPage from './galeryPage/galeryPage';
+import GaleryPublicPage from './galerypublicPage/galeryPublicPage';
+import CalendarioPage from './calendarioPage/calendarioPage'; // Importa el componente del calendario
 
 function App() {
   return (
@@ -29,8 +30,8 @@ function App() {
           <Route path="/profile" element={<PerfilPage />} />
 
           {/* Ruta para la página de ver el perfil público */}
-          <Route path="/publicProfile/:id" element={<PublicProfile />} /> {/* Ruta pública */}
-          
+          <Route path="/publicProfile/:id" element={<PublicProfile />} />
+
           {/* Ruta para la página de búsqueda */}
           <Route path="/search" element={<SearchPage />} />
 
@@ -39,6 +40,9 @@ function App() {
 
           {/* Ruta para la galería pública del usuario */}
           <Route path="/galeryPublic/:id" element={<GaleryPublicPage />} />
+          
+          {/* Ruta para la página de calendario */}
+          <Route path="/calendario" element={<CalendarioPage />} /> {/* Añade la ruta del calendario */}
         </Routes>
       </div>
     </Router>

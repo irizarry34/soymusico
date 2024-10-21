@@ -1,0 +1,208 @@
+/* Estilo general del calendario, manteniendo coherencia con perfilPage.css */
+.calendario-page {
+  font-family: 'Roboto', sans-serif;
+  color: #fff;
+  background-color: #2d2d2d;
+  padding: 30px;
+  min-height: 100vh;
+  max-width: 1300px;
+  margin: 0 auto;
+  box-shadow: 3px 0px 20px 8px rgba(255, 56, 255, 0.2);
+  border-radius: 10px;
+  margin-top: 100px;
+}
+
+h1 {
+  text-align: center;
+  color: #F38FFF;
+  margin-bottom: 20px;
+  font-size: 42px;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+/* Contenedor principal */
+.calendario-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Sección izquierda (calendario) */
+.calendar-section {
+  background-color: #1f1f1f;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  color: white;
+  flex-basis: 40%;
+}
+
+.react-calendar {
+  background-color: #2d2d2d;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+.react-calendar__tile--active {
+  background-color: #F38FFF;
+  color: white;
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+
+.no-disponible {
+  background-color: #e36be0 !important;
+  color: white;
+}
+
+.tentativo {
+  background-color: #ffc107 !important;
+  color: white;
+}
+
+.disponible {
+  background-color: #7dffbe !important;
+  color: black;
+}
+
+/* Sección derecha (formulario y eventos) */
+.details-section {
+  flex-basis: 55%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Estilos para el formulario de eventos */
+.event-form {
+  background-color: #1f1f1f;
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.event-form h2 {
+  color: #F38FFF;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.event-form label {
+  display: block;
+  margin-bottom: 15px;
+}
+
+.event-form input,
+.event-form textarea,
+.event-form select {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 5px;
+  background-color: #333;
+  color: white;
+}
+
+.event-form input:focus,
+.event-form textarea:focus,
+.event-form select:focus {
+  background-color: #444;
+}
+
+button {
+  background-color: #F38FFF;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #e36be0;
+}
+
+button:active {
+  background-color: #d127c7;
+}
+
+/* Lista de eventos */
+.event-list {
+  background-color: #1f1f1f;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.event-list h2 {
+  color: #F38FFF;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.event-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.event-list li {
+  background-color: #2d2d2d;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.event-list li:hover {
+  transform: translateY(-5px);
+}
+
+.event-list p {
+  margin: 8px 0;
+  font-size: 16px;
+}
+
+.event-list button {
+  background-color: #F38FFF;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.event-list button:hover {
+  background-color: #e36be0;
+}
+
+.event-list button:active {
+  background-color: #d127c7;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .calendario-container {
+    flex-direction: column;
+  }
+
+  .calendar-section,
+  .details-section {
+    width: 100%;
+  }
+
+  .event-form,
+  .event-list {
+    width: 100%;
+  }
+}

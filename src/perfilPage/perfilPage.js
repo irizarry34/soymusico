@@ -201,7 +201,7 @@ function PerfilPage() {
           <ul>
             <li><a href="/">Inicio</a></li>
             <li><a href="/search">Búsqueda</a></li>
-            <li><a href="/calendar">Calendario</a></li>
+            <li><a href="/calendario">Calendario</a></li> {/* Enlace al calendario */}
             <li><a href="/contact">Contacto</a></li>
             <li><a href="/inbox">Buzón de Entrada</a></li>
             <li><a href="/alerts">Alertas ({alertas.length})</a></li>

@@ -71,7 +71,7 @@ h1 {
 /* Sección de subida */
 .upload-section {
   display: flex;
-  margin-top: 120px;
+  margin-top: 50px;
   flex-direction: column;
   align-items: center;
   margin-bottom: 40px;
@@ -203,3 +203,18 @@ h1 {
     font-size: 16px;
   }
 }
+/* Estilos para centrar el mensaje */
+.message {
+  text-align: center;
+  margin: 20px auto;
+  font-size: 18px;
+  font-weight: bold;
+  color: #F38FFF;
+  background-color: #2d2d2d;
+  padding: 10px 20px;
+  border-radius: 8px;
+  width: fit-content; /* Ajustar el tamaño del mensaje al contenido */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+
