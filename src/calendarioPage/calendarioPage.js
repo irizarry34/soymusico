@@ -1,37 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import interactionPlugin from '@fullcalendar/interaction';
 import './calendarioPage.css';
 import { supabase } from '../supabaseClient';
+import { useNavigate } from 'react-router-dom';
 
-// Función para generar un array con todas las fechas entre la fecha inicial y la fecha final
-const generateDateRange = (start, end) => {
-  const dateArray = [];
-  let currentDate = new Date(start);
-
-  while (currentDate <= end) {
-    dateArray.push(new Date(currentDate));
-    currentDate.setDate(currentDate.getDate() + 1); // Incrementar el día
-  }
-
-  return dateArray;
+// Función para calcular la duración entre dos horas
+const calculateDuration = (startTime, endTime) => {
+  const start = new Date(`1970-01-01T${startTime}:00`);
+  const end = new Date(`1970-01-01T${endTime}:00`);
+  const diff = end - start;
+  const hours = diff / (1000 * 60 * 60);
+  return hours > 0 ? hours : 0;
 };
 
 function CalendarioPage() {
   const [user, setUser] = useState(null);
-  const [events, setEvents] = useState([]); // Eventos con estados (disponible, no disponible, tentativo)
-  const [selectedDates, setSelectedDates] = useState([]); // Rango de fechas seleccionadas
+  const [events, setEvents] = useState([]);
+  const [selectedDates, setSelectedDates] = useState([]);
   const [formData, setFormData] = useState({
     status: 'disponible',
     event_details: '',
     client_name: '',
-    event_time: '', // Campo de hora del evento
+    start_time: '',
+    end_time: '',
     duration: '',
     earnings: ''
   });
-  const [message, setMessage] = useState(null); // Estado para mostrar mensajes
+  const [message, setMessage] = useState(null);
+  const navigate = useNavigate();
 
-  // Obtener los datos del usuario
   useEffect(() => {
     const fetchUserData = async () => {
       const { data, error } = await supabase.auth.getUser();
@@ -45,7 +44,6 @@ function CalendarioPage() {
     fetchUserData();
   }, []);
 
-  // Obtener eventos del usuario
   useEffect(() => {
     const fetchEvents = async () => {
       if (!user) return;
@@ -58,7 +56,21 @@ function CalendarioPage() {
       if (error) {
         console.error('Error al obtener los eventos:', error);
       } else {
-        setEvents(data);
+        const normalizedEvents = data.map(event => ({
+          id: event.id,
+          title: event.status || 'Disponible',
+          start: event.start_date,  // Cambiamos 'date' a 'start_date'
+          end: event.end_date,      // Agregamos el 'end_date'
+          extendedProps: {
+            event_details: event.event_details,
+            client_name: event.client_name,
+            start_time: event.start_time,
+            end_time: event.end_time,
+            duration: event.duration,
+            earnings: event.earnings
+          }
+        }));
+        setEvents(normalizedEvents);
       }
     };
 
@@ -67,148 +79,166 @@ function CalendarioPage() {
     }
   }, [user]);
 
-  // Manejar la selección de un rango de fechas
-  const handleDateSelect = (range) => {
-    setSelectedDates(range);
+  const handleDateSelect = (selectionInfo) => {
+    const start = new Date(selectionInfo.start);
+    const end = new Date(selectionInfo.end);
+
+    // Restar un día al valor de 'end' para evitar que incluya un día extra
+    end.setDate(end.getDate() - 1);
+
+    setSelectedDates([start, end]);
+
     const event = events.find(
-      (event) => new Date(event.date).toDateString() === range[0].toDateString()
+      (event) => new Date(event.start).toDateString() === start.toDateString()
     );
     if (event) {
       setFormData({
-        status: event.status || 'disponible',
-        event_details: event.event_details || '',
-        client_name: event.client_name || '',
-        event_time: event.event_time || '',
-        duration: event.duration || '',
-        earnings: event.earnings || ''
+        status: event.title || 'disponible',
+        event_details: event.extendedProps.event_details || '',
+        client_name: event.extendedProps.client_name || '',
+        start_time: event.extendedProps.start_time || '',
+        end_time: event.extendedProps.end_time || '',
+        duration: event.extendedProps.duration || '',
+        earnings: event.extendedProps.earnings || ''
       });
     } else {
-      // Restablecer el formulario si no hay datos para las fechas
       setFormData({
         status: 'disponible',
         event_details: '',
         client_name: '',
-        event_time: '',
+        start_time: '',
+        end_time: '',
         duration: '',
         earnings: ''
       });
     }
   };
 
-  // Guardar la disponibilidad y detalles del evento para todas las fechas seleccionadas
-  const handleSave = async () => {
-    const { status, event_details, client_name, event_time, duration, earnings } = formData;
-
-    // Validar si event_time está vacío o no
-    let formattedEventTime = event_time || null; // Si está vacío, lo dejamos como null
-
-    // Generar todas las fechas dentro del rango seleccionado
-    const datesToSave = generateDateRange(selectedDates[0], selectedDates[1]);
-
-    const savePromises = datesToSave.map(async (date) => {
-      const { error } = await supabase
-        .from('availability')
-        .upsert({
-          user_id: user.id,
-          date: date.toISOString().split('T')[0],
-          status,
-          event_details,
-          client_name,
-          event_time: formattedEventTime, // Asegurarse de que el campo no esté vacío
-          duration,
-          earnings
-        });
-
-      if (error) {
-        setMessage({ type: 'error', text: 'Error al guardar los detalles.' });
-        console.error('Error al guardar los detalles:', error);
-      } else {
-        setMessage({ type: 'success', text: 'Evento guardado con éxito.' });
-        // Actualizar los eventos locales
-        const updatedEvents = [...events];
-        const eventIndex = updatedEvents.findIndex(
-          (event) => new Date(event.date).toDateString() === date.toDateString()
-        );
-
-        const newEvent = {
-          user_id: user.id,
-          date: date.toISOString().split('T')[0],
-          status,
-          event_details,
-          client_name,
-          event_time: formattedEventTime,
-          duration,
-          earnings
-        };
-
-        if (eventIndex !== -1) {
-          updatedEvents[eventIndex] = newEvent;
-        } else {
-          updatedEvents.push(newEvent);
-        }
-
-        setEvents(updatedEvents);
-        setSelectedDates([]); // Cerrar el formulario después de guardar
-      }
+  const handleEventClick = (info) => {
+    const event = info.event;
+    setSelectedDates([new Date(event.start), new Date(event.end || event.start)]);
+    setFormData({
+      status: event.title || 'disponible',
+      event_details: event.extendedProps.event_details || '',
+      client_name: event.extendedProps.client_name || '',
+      start_time: event.extendedProps.start_time || '',
+      end_time: event.extendedProps.end_time || '',
+      duration: event.extendedProps.duration || '',
+      earnings: event.extendedProps.earnings || ''
     });
-
-    await Promise.all(savePromises);
-
-    // Limpiar mensaje después de 3 segundos
-    setTimeout(() => setMessage(null), 3000);
   };
 
-  // Manejar el borrado de un evento
-  const handleDelete = async (eventDate) => {
+  const handleSave = async () => {
+    const { status, event_details, client_name, start_time, end_time, earnings } = formData;
+
+    const duration = calculateDuration(start_time, end_time);
+
+    const [startDate, endDate] = selectedDates;
+
+    // Guardamos el evento en la base de datos como un solo rango de fechas
     const { error } = await supabase
       .from('availability')
-      .delete()
-      .eq('user_id', user.id)
-      .eq('date', eventDate.toISOString().split('T')[0]);
+      .upsert({
+        user_id: user.id,
+        start_date: startDate.toISOString().split('T')[0], // Guardamos la fecha de inicio
+        end_date: endDate.toISOString().split('T')[0],     // Guardamos la fecha de fin
+        status,
+        event_details,
+        client_name,
+        start_time,
+        end_time,
+        duration,
+        earnings
+      });
 
     if (error) {
-      setMessage({ type: 'error', text: 'Error al borrar el evento.' });
-      console.error('Error al borrar el evento:', error);
+      setMessage({ type: 'error', text: 'Error al guardar los detalles.' });
+      console.error('Error al guardar los detalles:', error);
     } else {
-      setEvents(events.filter(event => new Date(event.date).toDateString() !== eventDate.toDateString()));
-      setMessage({ type: 'success', text: 'Evento borrado con éxito.' });
+      setMessage({ type: 'success', text: 'Evento guardado con éxito.' });
+
+      const newEvent = {
+        title: status || 'Disponible',
+        start: startDate.toISOString().split('T')[0],
+        end: endDate.toISOString().split('T')[0],
+        extendedProps: {
+          event_details,
+          client_name,
+          start_time,
+          end_time,
+          duration,
+          earnings
+        }
+      };
+
+      setEvents(prevEvents => [...prevEvents, newEvent]);
     }
 
-    // Limpiar mensaje después de 3 segundos
+    setSelectedDates([]);
     setTimeout(() => setMessage(null), 3000);
   };
 
-  const tileClassName = ({ date, view }) => {
-    if (view === 'month') {
-      const event = events.find(
-        (event) => new Date(event.date).toDateString() === date.toDateString()
-      );
-      if (event) {
-        if (event.status === 'no disponible') {
-          return 'no-disponible';
-        }
-        if (event.status === 'tentativo') {
-          return 'tentativo';
-        }
-        return 'disponible';
+  const handleDelete = async () => {
+    if (selectedDates.length > 0) {
+      const [startDate] = selectedDates;
+      const { error } = await supabase
+        .from('availability')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('start_date', startDate.toISOString().split('T')[0]);
+
+      if (error) {
+        setMessage({ type: 'error', text: 'Error al borrar el evento.' });
+        console.error('Error al borrar el evento:', error);
+      } else {
+        setEvents(events.filter(event => new Date(event.start).toISOString().split('T')[0] !== startDate.toISOString().split('T')[0]));
+        setMessage({ type: 'success', text: 'Evento borrado con éxito.' });
       }
+
+      setTimeout(() => setMessage(null), 3000);
     }
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    navigate('/login');
   };
 
   return (
     <div className="calendario-page">
-      <h1>Disponibilidad del Músico</h1>
+      <div className="navbar">
+        <div className="logo">
+          <img src="Subject.png" alt="Logo" />
+        </div>
+        <nav>
+          <ul>
+            <li><a href="/">Inicio</a></li>
+            <li><a href="/search">Búsqueda</a></li>
+            <li><a href="/calendario">Calendario</a></li>
+            <li><a href="/contact">Contacto</a></li>
+            <li><a href="/inbox">Buzón de Entrada</a></li>
+            <li><a href="/gallery">Galería</a></li>
+            <li><a href="/profile">{user ? user.email : 'Perfil'}</a></li>
+            {/* Cambiamos el nombre de las clases de los botones */}
+            <li><button className="calendar-btn" onClick={handleLogout}>Cerrar Sesión</button></li>
+            <li><button className="calendar-btn" onClick={() => navigate(`/publicProfile/${user?.id}`)}>Perfil Público</button></li>
+          </ul>
+        </nav>
+      </div>
+
+      <h1>Mi Disponibilidad</h1>
       <div className="calendario-container">
-        {/* Columna izquierda: Calendario */}
         <div className="calendar-section">
-          <Calendar
-            selectRange={true} // Habilitar la selección de un rango
-            tileClassName={tileClassName} // Asignar clases de estilo según la disponibilidad
-            onChange={handleDateSelect} // Manejar la selección de fechas
+          <FullCalendar
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView="dayGridMonth"
+            events={events}
+            selectable={true}
+            select={handleDateSelect}
+            eventClick={handleEventClick}
           />
         </div>
 
-        {/* Columna derecha: Formulario y lista de eventos */}
         <div className="details-section">
           {message && (
             <div className={`message ${message.type}`}>
@@ -252,20 +282,20 @@ function CalendarioPage() {
               </label>
 
               <label>
-                Hora del Evento:
+                Hora de Inicio del Evento:
                 <input
                   type="time"
-                  value={formData.event_time}
-                  onChange={(e) => setFormData({ ...formData, event_time: e.target.value })}
+                  value={formData.start_time}
+                  onChange={(e) => setFormData({ ...formData, start_time: e.target.value })}
                 />
               </label>
 
               <label>
-                Duración (en horas):
+                Hora de Fin del Evento:
                 <input
-                  type="text"
-                  value={formData.duration}
-                  onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                  type="time"
+                  value={formData.end_time}
+                  onChange={(e) => setFormData({ ...formData, end_time: e.target.value })}
                 />
               </label>
 
@@ -278,25 +308,30 @@ function CalendarioPage() {
                 />
               </label>
 
-              <button onClick={handleSave}>Guardar</button>
+              {/* Aplicamos la clase 'calendar-btn' a estos botones también */}
+              <button className="calendar-btn" onClick={handleSave}>Guardar</button>
+              <button className="calendar-btn" onClick={handleDelete}>Eliminar</button>
             </div>
           )}
 
-          {/* Lista de eventos con opción de borrar */}
           {events.length > 0 && (
-            <div className="event-list">
-              <h2>Eventos Guardados</h2>
+            <div className="scheduled-events">
+              <h2>Eventos Agendados</h2>
               <ul>
-                {events.map((event, index) => (
-                  <li key={index}>
-                    <p>Fecha: {new Date(event.date).toDateString()}</p>
-                    <p>Estado: {event.status}</p>
-                    <p>Detalles: {event.event_details}</p>
-                    <p>Cliente: {event.client_name}</p>
-                    <p>Hora: {event.event_time || 'No especificada'}</p>
-                    <p>Duración: {event.duration || 'No especificada'}</p>
-                    <p>Ganancia: {event.earnings || 'No especificada'}</p>
-                    <button onClick={() => handleDelete(new Date(event.date))}>Cancelar</button>
+                {events.map(event => (
+                  <li key={event.id}>
+                    <p>
+                      <strong>{event.start}</strong>
+                      {event.start !== event.end && <span> - {event.end}</span>}
+                    </p>
+                    <div className="event-details">
+                      <p>Estado: {event.title}</p>
+                      <p>Detalles: {event.extendedProps.event_details}</p>
+                      <p>Cliente: {event.extendedProps.client_name}</p>
+                      <p>Hora de Inicio: {event.extendedProps.start_time}</p>
+                      <p>Hora de Fin: {event.extendedProps.end_time}</p>
+                      <p>Ganancia: {event.extendedProps.earnings}</p>
+                    </div>
                   </li>
                 ))}
               </ul>

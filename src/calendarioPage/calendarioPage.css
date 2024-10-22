@@ -1,193 +1,238 @@
-/* Estilo general del calendario, manteniendo coherencia con perfilPage.css */
+/* Estilos generales para CalendarioPage */
 .calendario-page {
   font-family: 'Roboto', sans-serif;
-  color: #fff;
-  background-color: #2d2d2d;
+  color: #FFFFFF;
+  background-color: #222831;
   padding: 30px;
   min-height: 100vh;
-  max-width: 1300px;
+  max-width: 1200px;
   margin: 0 auto;
-  box-shadow: 3px 0px 20px 8px rgba(255, 56, 255, 0.2);
-  border-radius: 10px;
-  margin-top: 100px;
+  border-radius: 15px;
+  margin-top: 130px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
 }
 
+/* Título principal */
 h1 {
   text-align: center;
-  color: #F38FFF;
+  color: #f6c90e;
+  
+  
+  font-size: 48px;
   margin-bottom: 20px;
-  font-size: 42px;
-  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7);
+  font-weight: 700;
 }
 
 /* Contenedor principal */
 .calendario-container {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
-  margin-top: 20px;
+  gap: 30px;
+  margin-top: 30px;
 }
 
-/* Sección izquierda (calendario) */
+/* Sección izquierda: Calendario */
 .calendar-section {
-  background-color: #1f1f1f;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
-  color: white;
+  background-color: #393e46;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(255, 153, 0, 0.5);
+  color: #eeeeee;
   flex-basis: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .react-calendar {
-  background-color: #2d2d2d;
+  background-color: #222831;
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
-  color: white;
+  color: #eeeeee;
 }
 
 .react-calendar__tile--active {
-  background-color: #F38FFF;
-  color: white;
+  background-color: #f6c90e;
+  color: #393e46;
   transform: scale(1.05);
   transition: transform 0.2s ease;
 }
 
 .no-disponible {
-  background-color: #e36be0 !important;
+  background-color: #ff2e63 !important;
   color: white;
 }
 
 .tentativo {
-  background-color: #ffc107 !important;
-  color: white;
+  background-color: #f6c90e !important;
+  color: #222831;
 }
 
 .disponible {
-  background-color: #7dffbe !important;
-  color: black;
+  background-color: #00adb5 !important;
+  color: white;
 }
 
-/* Sección derecha (formulario y eventos) */
+/* Sección derecha: Detalles de eventos */
 .details-section {
   flex-basis: 55%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 30px;
 }
 
-/* Estilos para el formulario de eventos */
 .event-form {
-  background-color: #1f1f1f;
-  padding: 20px;
-  border-radius: 10px;
-  color: white;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+  background-color: #393e46;
+  padding: 25px;
+  border-radius: 15px;
+  color: #eeeeee;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
 }
 
 .event-form h2 {
-  color: #F38FFF;
+  color: #f6c90e;
   text-align: center;
   margin-bottom: 20px;
+  font-size: 32px;
 }
 
 .event-form label {
   display: block;
   margin-bottom: 15px;
+  color: #f6c90e;
 }
 
 .event-form input,
 .event-form textarea,
 .event-form select {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: none;
   border-radius: 8px;
   margin-top: 5px;
-  background-color: #333;
-  color: white;
+  background-color: #222831;
+  color: #eeeeee;
+  font-size: 16px;
 }
 
 .event-form input:focus,
 .event-form textarea:focus,
 .event-form select:focus {
-  background-color: #444;
+  background-color: #333;
 }
 
-button {
-  background-color: #F38FFF;
+/* Estilo de los botones */
+.calendar-btn {
+  background-color: #f6c90e;
   padding: 12px;
   border: none;
   border-radius: 8px;
-  color: white;
+  color: #222831;
   cursor: pointer;
-  width: 100%;
-  font-size: 16px;
+  width: auto;
+  font-size: 18px;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-button:hover {
-  background-color: #e36be0;
+.calendar-btn:hover {
+  background-color: #f4b800;
+  box-shadow: 0 6px 8px rgba(255, 153, 0, 0.5), 0 3px 5px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada al hacer hover */
 }
 
-button:active {
-  background-color: #d127c7;
+.calendar-btn:active {
+  background-color: #f4b800;
+  transform: translateY(2px);
 }
 
-/* Lista de eventos */
-.event-list {
-  background-color: #1f1f1f;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+/* Sección de eventos guardados */
+.scheduled-events {
+  background: linear-gradient(135deg, #222831 0%, #393e46 100%);
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(255, 153, 0, 0.5);
+  color: #eeeeee;
+  margin-top: 20px;
+  transition: all 0.3s ease;
 }
 
-.event-list h2 {
-  color: #F38FFF;
+.scheduled-events:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.8);
+}
+
+.scheduled-events h2 {
+  color: #f6c90e;
   text-align: center;
   margin-bottom: 20px;
+  font-size: 28px;
 }
 
-.event-list ul {
+.scheduled-events ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.event-list li {
-  background-color: #2d2d2d;
-  padding: 15px;
-  border-radius: 10px;
+.scheduled-events li {
+  background: linear-gradient(135deg, #2d2d2d 0%, #3b3b3b 100%);
+  padding: 20px;
+  border-radius: 15px;
   margin-bottom: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  transition: all 0.3s ease;
 }
 
-.event-list li:hover {
-  transform: translateY(-5px);
+.scheduled-events li:hover {
+  transform: translateY(-10px);
 }
 
-.event-list p {
+.scheduled-events p {
   margin: 8px 0;
   font-size: 16px;
+  color: #f0f0f0;
 }
 
-.event-list button {
-  background-color: #F38FFF;
+.scheduled-events strong {
+  color: #f6c90e;
+  font-size: 18px;
+}
+
+.scheduled-events .event-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.scheduled-events .event-details p {
+  font-size: 15px;
+}
+
+.scheduled-events .event-icon {
+  font-size: 20px;
+  color: #f6c90e;
+  margin-right: 10px;
+}
+
+/* Botones de eventos agendados */
+.scheduled-events .calendar-btn {
+  background-color: #f6c90e;
   border: none;
   padding: 10px 15px;
   border-radius: 8px;
   cursor: pointer;
-  color: white;
+  color: #222831;
   font-size: 16px;
   transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.event-list button:hover {
-  background-color: #e36be0;
+.scheduled-events .calendar-btn:hover {
+  background-color: #f4b800;
 }
 
-.event-list button:active {
-  background-color: #d127c7;
+.scheduled-events .calendar-btn:active {
+  background-color: #f4b800;
+  transform: translateY(2px);
 }
 
 /* Responsive Design */
@@ -202,7 +247,7 @@ button:active {
   }
 
   .event-form,
-  .event-list {
+  .scheduled-events {
     width: 100%;
   }
 }

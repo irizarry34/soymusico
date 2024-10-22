@@ -271,7 +271,7 @@ function GaleryPage() {
           value={caption}
           onChange={(e) => setCaption(e.target.value)}
         />
-        <button onClick={handleUpload}>Subir</button>
+        <button onClick={handleUpload}>Cargar</button>
 
         {/* Mostrar progreso de carga */}
         {progress > 0 && <p>Subiendo: {progress}%</p>}
