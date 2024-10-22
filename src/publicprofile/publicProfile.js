@@ -190,7 +190,7 @@ function PublicProfile() {
           <ul>
             <li><a href="/">Inicio</a></li>
             <li><a href="/search">Búsqueda</a></li>
-            <li><a href="/calendar">Calendario</a></li>
+            <li><a href="/">Calendario</a></li> {/* Enlace al calendario */}
             <li><a href="/contact">Contacto</a></li>
             <li><a href="/inbox">Buzón de Entrada</a></li>
             <li><a href="/gallery">Galería</a></li> {/* Enlace agregado */}
@@ -217,8 +217,8 @@ function PublicProfile() {
 
           {/* Sección de la Galería */}
           <div className="gallery-section">
-            <h3 style={{ cursor: 'pointer', color: '#F38FFF' }} onClick={() => navigate(`/galeryPublic/${id}`)}>
-              Galería
+            <h3 style={{ cursor: 'pointer', color: '#f6c90e' }} onClick={() => navigate(`/galeryPublic/${id}`)}>
+              Galería:
             </h3>
             {gallery.length > 0 ? (
               <div className="gallery-grid">
@@ -243,7 +243,7 @@ function PublicProfile() {
 
           {/* Sección para dejar un mensaje o enviar un correo */}
           <div className="contact-section">
-            <h3>Deja un mensaje o envía un correo</h3>
+            <h3>Deja un mensaje:</h3>
             <input 
               type="email" 
               placeholder="Tu correo electrónico" 
@@ -269,10 +269,10 @@ function PublicProfile() {
         {/* Sección de Talentos Musicales y Géneros */}
         <div className="right-section">
           <div className="talentos-section">
-            <h3>Talentos Musicales</h3>
+            <h3>Talentos Musicales:</h3>
             <div className="instruments-genres">
               <div className="instruments">
-                <h3>Instrumentos:</h3>
+                <h3>Instrumentos</h3>
                 <ul>
                   {instruments.map((instrument, index) => (
                     <li key={index}>{renderInstrumentIcon(instrument)} {instrument}</li>
@@ -281,7 +281,7 @@ function PublicProfile() {
               </div>
 
               <div className="genres">
-                <h3>Géneros Musicales:</h3>
+                <h3>Géneros Musicales</h3>
                 <ul>
                   {genres.map((genre, index) => (
                     <li key={index}>{renderGenreIcon(genre)} {genre}</li>
@@ -293,7 +293,7 @@ function PublicProfile() {
 
           {/* Sección para mostrar reseñas */}
           <div className="reviews-list">
-            <h3>Reseñas</h3>
+            <h3>Reseñas:</h3>
             {reviews.length > 0 ? (
               reviews.map((reviewItem, index) => (
                 <div key={index} className="review-item">
@@ -315,7 +315,7 @@ function PublicProfile() {
 
           {/* Espacio para escribir reseñas con estrellas */}
           <div className="review-section">
-            <h3>Deja una reseña</h3>
+            <h3>Deja una reseña:</h3>
             <textarea 
               placeholder="Escribe tu reseña..." 
               rows="5" 

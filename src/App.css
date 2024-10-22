@@ -19,7 +19,7 @@ body {
 .logo img {
   width: 90px;
   height: 90px;
-  filter: drop-shadow(2px 2px 4px rgba(255, 200, 100, 1));
+  filter: drop-shadow(2px 4px 4px rgba(255, 201, 100, 0.983));
 }
 
 nav ul {
@@ -228,18 +228,21 @@ footer {
 
 /* Estilos específicos para el botón de Cerrar Sesión */
 .logout-btn {
+  display: block;
+  margin: 5px 0;
   padding: 8px 12px;
-  font-size: 16px;
-  background-color: #eb36ff;
-  color: #fff;
+  background-color: #26A295;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  color: #fff;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: -30px;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: -3px;
   margin-right: 10px;
 }
 
 .logout-btn:hover {
-  background-color: #f06fff;
+  background-color: #26A295;
+  transform: translateY(-3px);
 }

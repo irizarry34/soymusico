@@ -9,7 +9,7 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   margin-top: 150px;
-  box-shadow: 3px 0px 20px 8px rgba(255, 56, 255, 0.2);
+  box-shadow: 3px 0px 20px 8px rgba(38, 162, 149, 1);
 }
 
 /* Estructura contenedora similar */
@@ -45,11 +45,12 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   display: block;
   margin-left: 0;
+  filter: drop-shadow(2px 2px 4px rgba(243, 0, 137, 1));
 }
 
 /* Estilos de la biografía */
 .bio-section {
-  background-color: #1f1f1f;
+  background-color: #222831;
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 30px;
@@ -62,7 +63,7 @@
 
 /* Talentos musicales */
 .talentos-section {
-  background-color: #1f1f1f;
+  background-color: #222831;
   padding: 15px;
   border-radius: 8px;
   margin-bottom: 30px;
@@ -84,16 +85,16 @@
 
 .instruments ul li svg, .genres ul li svg {
   margin-right: 10px;
-  color: #F38FFF;
+  color: #26A295;
 }
 
 /* Reseñas */
 .review-section {
-  background-color: #1f1f1f;
+  background-color: #222831;
   padding: 20px;
   border-radius: 8px;
   margin-top: 20px;
-  color: #F38FFF;
+  color: #26A295;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -101,7 +102,7 @@
   width: 100%;
   padding: 10px;
   background-color: #2d2d2d;
-  border: 2px solid #F38FFF;
+  border: 2px solid #26A295;
   border-radius: 5px;
   color: #fff;
   margin-bottom: 10px;
@@ -109,7 +110,7 @@
 }
 
 button {
-  background-color: #F38FFF;
+  background-color: #26A295;
   color: #fff;
   border: none;
   padding: 10px 20px;
@@ -119,16 +120,17 @@ button {
 }
 
 button:hover {
-  background-color: #d12fe3;
+  background-color: #26A295;
+  box-shadow: 0 6px 8px rgba(243, 0, 137, 1), 0 3px 5px rgba(0, 0, 0, 0.15);
 }
 
 /* Sección para dejar mensajes o enviar correo */
 .contact-section {
-  background-color: #1f1f1f;
+  background-color: #222831;
   padding: 20px;
   border-radius: 8px;
   margin-top: 20px;
-  color: #F38FFF;
+  color: #26A295;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -136,7 +138,7 @@ button:hover {
   width: 100%;
   padding: 10px;
   background-color: #2d2d2d;
-  border: 2px solid #F38FFF;
+  border: 2px solid #26A295;
   border-radius: 5px;
   color: #fff;
   margin-bottom: 10px;
@@ -152,7 +154,7 @@ button:hover {
 
 .star-rating span {
   font-size: 2em;
-  color: #F38FFF;
+  color: #26A295;
   cursor: pointer;
 }
 
@@ -184,13 +186,13 @@ button:hover {
 
 .genres ul li svg {
   margin-right: 10px !important;
-  color: #F38FFF !important;
+  color: #26A295 !important;
 }
 
 /* Sección de la galería */
 .gallery-section {
   margin-top: 20px;
-  background-color: #1f1f1f;
+  background-color: #222831;
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -273,3 +275,60 @@ button:hover {
     height: 120px; /* Reduce el tamaño en pantallas pequeñas */
   }
 }
+
+/* Estilos para la lista de reseñas */
+.reviews-list {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #222831;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  color: #26A295; /* Color de acento para los títulos */
+}
+
+.reviews-list h3 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  color: #FFD700;
+  padding-bottom: 10px;
+  text-shadow: 2px 2px 5px rgba(243, 143, 255, 0.3);
+}
+
+/* Estilo para cada ítem de reseña */
+.review-item {
+  background-color: #1f1f1f;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover para cada reseña */
+.review-item:hover {
+  transform: translateY(-5px);
+}
+
+/* Estilo del texto dentro de las reseñas */
+.review-item p {
+  color: #eeeeee;
+  font-size: 1.1em;
+  margin: 10px 0;
+}
+
+/* Estilo para la fecha de la reseña */
+.review-item p small {
+  color: #cccccc;
+  font-size: 0.9em;
+}
+
+/* Estilo para el sistema de estrellas */
+.react-stars {
+  margin: 10px 0;
+}
+
+.react-stars svg {
+  color: #ffd700; /* Color dorado para las estrellas */
+  transition: color 0.3s ease;
+}
+

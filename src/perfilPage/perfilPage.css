@@ -1,61 +1,71 @@
+/* Estilos generales para PerfilPage */
 .perfil-page {
   font-family: 'Roboto', sans-serif;
-  padding: 20px;
-  max-width: 1300px;
+  padding: 30px;
+  max-width: 1200px;
   margin: 0 auto;
-  background-color: #2d2d2d;
-  color: #fff;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-  margin-top: 150px;
-  box-shadow: 3px 0px 20px 8px rgba(255, 56, 255, 0.2);
+  background-color: #222831; /* Fondo oscuro como en CalendarioPage */
+  color: #eeeeee; /* Texto claro */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5); /* Sombra similar */
+  border-radius: 15px;
+  margin-top: 130px;
+  transition: all 0.3s ease; /* Transición suave */
 }
 
+/* Título principal */
 .perfil-page h1 {
-  font-size: 2.5em;
-  margin-bottom: 30px;
+  font-size: 48px;
+  margin-bottom: 20px;
   text-align: center;
-  color: #F38FFF;
-  text-shadow: 2px 2px 8px rgba(243, 143, 255, 0.5);
+  color: #f6c90e; /* Color amarillo de CalendarioPage */
+  text-shadow: 2px 2px 8px rgba(246, 201, 14, 0.5); /* Sombras suaves */
+  font-weight: 700;
+  transition: all 0.3s ease;
 }
 
+/* Subtítulos */
 .perfil-page h2 {
-  font-size: 2em;
+  font-size: 32px;
   margin-bottom: 20px;
-  color: #F38FFF;
-  border-bottom: 2px solid #F38FFF;
+  color: #f6c90e; /* Amarillo de CalendarioPage */
+  border-bottom: 2px solid #f6c90e;
   padding-bottom: 10px;
-  text-shadow: 2px 2px 5px rgba(243, 143, 255, 0.3);
+  text-shadow: 2px 2px 5px rgba(246, 201, 14, 0.3);
+  transition: all 0.3s ease;
 }
 
 .perfil-page h3 {
-  font-size: 1.5em;
-  color: #F38FFF;
+  font-size: 24px;
+  color: #f6c90e;
   margin-bottom: 15px;
+  transition: all 0.3s ease;
 }
 
+/* Contenedor de perfil */
 .profile-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 20px;
+  gap: 30px;
 }
 
+/* Secciones izquierda y derecha */
 .left-section, .right-section {
   flex: 1;
   min-width: 300px;
-  background-color: #1f1f1f;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  background-color: #393e46; /* Fondo oscuro como en CalendarioPage */
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(243, 0, 137, 1); /* Sombra rosa vibrante */
+  transition: all 0.3s ease;
 }
 
 .left-section:hover, .right-section:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 12px 20px rgba(243, 0, 137, 1); /* Hover con sombra rosa */
 }
 
+/* Foto de perfil */
 .perfil-page .profile-photo-section img {
   width: 120px;
   height: 120px;
@@ -64,66 +74,59 @@
   margin-bottom: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   display: block;
-  margin-left: 0; /* Cambiado para mover la imagen a la izquierda */
+  margin-left: 0;
 }
 
-.perfil-page .profile-photo-section input[type="file"] {
-  display: block;
-  margin-top: 15px;
-}
-
+/* Inputs y Textareas */
 .perfil-page textarea, 
 .perfil-page input[type="text"], 
 .perfil-page input[type="file"] {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   margin-top: 10px;
-  background-color: #3a3a3a;
-  color: #fff;
-  font-size: 1.1em;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  transition: background-color 0.3s ease-in-out;
+  background-color: #222831;
+  color: #eeeeee;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
 .perfil-page textarea:focus, 
 .perfil-page input[type="text"]:focus, 
 .perfil-page input[type="file"]:focus {
-  background-color: #4a4a4a;
+  background-color: #333;
   outline: none;
+  transition: all 0.3s ease;
 }
 
+/* Sección de instrumentos y géneros */
 .instruments-genres {
   display: flex;
   justify-content: space-between;
   gap: 20px;
   margin-bottom: 30px;
+  
 }
 
 .perfil-page .instruments, .perfil-page .genres {
-  background-color: #1f1f1f;
+  background-color: #2a2a2a;
   padding: 15px;
   border-radius: 8px;
-  width: 50%;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  
 }
 
 .perfil-page .instruments ul, .perfil-page .genres input[type="text"] {
   background-color: #2a2a2a;
   padding: 1px;
   border-radius: 5px;
-  color: #fff;
-  width: 100%;
-  margin-top: 0;
+  color: #eeeeee;
 }
 
 .perfil-page .instruments ul li, .perfil-page .genres input {
   list-style: none;
   font-size: 1.1em;
   margin: 5px 0;
-  
 }
 
 .perfil-page .instruments ul li {
@@ -133,9 +136,10 @@
 
 .perfil-page .instruments ul li svg {
   margin-right: 10px;
-  color: #F38FFF;
+  color: #26A295; 
 }
 
+/* Reseñas */
 .perfil-page .review {
   background-color: #3a3a3a;
   padding: 15px;
@@ -159,12 +163,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #1f1f1f;
+  background-color: #393e46;
   padding: 10px 20px;
   border-radius: 8px;
   margin-bottom: 30px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  font-size: 25px;
 }
 
 .navbar ul {
@@ -177,28 +180,46 @@
 }
 
 .navbar ul li a {
-  color: #fff;
+  color: #eeeeee;
   text-decoration: none;
-  font-size: 16px;
+  font-size: 18px;
   transition: color 0.3s ease-in-out;
 }
 
 .navbar ul li a:hover {
-  color: #fcfcfc;
+  background-color: #26A295; /* Verde claro */
+  color: #222831;
 }
 
+/* Botón de cierre de sesión */
 .navbar .logout-btn {
     padding: 8px 12px;
     font-size: 16px;
-    background-color: #eb36ff;
-    color: #fff;
+    background-color: #26A295; /* Verde claro */
+    color: #ffffff;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-top: -30px;
-  }
+    margin-top: -10px;
+}
 
 .navbar .logout-btn:hover {
-  background-color: #f06fff;
+  background-color: #00adb5; /* Verde claro más intenso */
+}
+.genres select {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--input-background); /* Mismo fondo que otros inputs */
+  border: 2px solid #26A295; /* Cambia el color del borde a amarillo (o elige otro color) */
+  border-radius: 5px;
+  color: var(--text-color);
+  font-size: 1.1em;
+  transition: border-color 0.3s ease; /* Añade una transición suave */
+  appearance: none; /* Elimina las flechas predeterminadas del select en algunos navegadores */
+}
+
+.genres select:focus {
+  border-color: #26A295; /* Color verde claro al hacer focus */
+  outline: none; /* Elimina el borde azul por defecto */
 }

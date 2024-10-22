@@ -218,14 +218,14 @@ function PerfilPage() {
       <div className="profile-container">
         <div className="left-section">
           <div className="profile-photo-section">
-            <h2>Foto de Perfil</h2>
+            <h2>Foto de Perfil:</h2>
             {photoUrl ? <img src={photoUrl} alt="Foto de Perfil" className="profilephoto" /> : <p>No hay foto de perfil.</p>}
             <input type="file" accept="image/*" onChange={handleFileChange} />
             <button onClick={handlePhotoUpload} disabled={!selectedFile}>Guardar foto de perfil</button>
           </div>
 
           <div className="bio-section">
-            <h2>Autobiografía</h2>
+            <h2>Autobiografía Musical:</h2>
             <textarea value={bio} onChange={(e) => setBio(e.target.value)} placeholder="Escribe sobre tu experiencia musical..." rows="5" />
             <button onClick={saveBio}>Guardar autobiografía</button>
           </div>
@@ -233,7 +233,7 @@ function PerfilPage() {
 
         <div className="right-section">
           <div className="talentos-section">
-            <h2>Talentos Musicales</h2>
+            <h2>Talentos Musicales:</h2>
             <div className="instruments-genres">
               <div className="instruments">
                 <h3>Instrumentos</h3>
@@ -261,7 +261,7 @@ function PerfilPage() {
           </div>
 
           <div className="reviews-section">
-            <h2>Reseñas</h2>
+            <h2>Reseñas:</h2>
             {reviews.length > 0 ? (
               reviews.map((review, index) => (
                 <div key={index} className="review">

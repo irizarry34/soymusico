@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'; // Importa Link para navegación interna
 import { supabase } from '../supabaseClient'; // Importa supabase para verificar la autenticación
 
+
+
 function LandingPage() {
   const [user, setUser] = useState(null);
 
@@ -31,9 +33,7 @@ function LandingPage() {
           <nav>
             <ul>
               <li><Link to="/search">Búsqueda</Link></li>
-              <li><Link to="/community">Comunidad</Link></li>
               <li><Link to="/contact">Contacto</Link></li>
-
               {/* Mostrar enlace "Perfil" si el usuario está autenticado */}
               {user ? (
                 <>

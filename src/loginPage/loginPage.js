@@ -34,7 +34,7 @@ function LoginPage() {
         </div>
         <nav>
           <ul>
-            <li><Link to="/">Búsqueda</Link></li>
+            <li><Link to="/search">Búsqueda</Link></li>
             <li><Link to="/">Contacto</Link></li>
             <li><Link to="/login">Iniciar Sesión</Link></li>
             <li><Link to="/register">Registrarse</Link></li>

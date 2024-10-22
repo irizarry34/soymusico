@@ -322,7 +322,7 @@ function CalendarioPage() {
                   <li key={event.id}>
                     <p>
                       <strong>{event.start}</strong>
-                      {event.start !== event.end && <span> - {event.end}</span>}
+                      {event.start !== event.end && <span className="strong"> - {event.end}</span>}
                     </p>
                     <div className="event-details">
                       <p>Estado: {event.title}</p>

@@ -12,6 +12,7 @@ import GaleryPage from './galeryPage/galeryPage';
 import GaleryPublicPage from './galerypublicPage/galeryPublicPage';
 import CalendarioPage from './calendarioPage/calendarioPage'; // Importa el componente del calendario
 
+
 function App() {
   return (
     <Router>

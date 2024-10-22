@@ -9,7 +9,7 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     border-radius: 10px;
     margin-top: 150px;
-    box-shadow: 3px 0px 20px 8px rgba(255, 56, 255, 0.2);
+    box-shadow: 3px 0px 20px 8px rgba(38, 162, 149, 1);
   }
   
   /* Estructura del contenedor */
@@ -39,7 +39,7 @@
   }
   
   .search-button {
-    background-color: #F38FFF;
+    background-color: #26A295;
     color: #fff;
     border: none;
     padding: 10px 20px;
@@ -50,7 +50,7 @@
   }
   
   .search-button:hover {
-    background-color: #d12fe3;
+    background-color: #26A295;
   }
   
   /* Lista de resultados */

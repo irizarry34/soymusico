@@ -78,7 +78,7 @@ h1 {
   padding: 20px;
   background-color: #1f1f1f;
   border-radius: 15px;
-  box-shadow: 0 10px 20px 25px rgba(255, 56, 255, 0.2);
+  box-shadow: 0 10px 20px 25px rgba(38, 162, 149, 1);
 }
 
 .upload-section input[type="file"] {
@@ -106,7 +106,7 @@ h1 {
 .upload-section button {
   padding: 12px 18px;
   width: auto; /* Ajusta automáticamente el ancho al contenido */
-  background-color: #F38FFF;
+  background-color: #26A295;
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -116,7 +116,7 @@ h1 {
 }
 
 .upload-section button:hover {
-  background-color: #e36be0;
+  background-color: #26A295;
   transform: translateY(-2px);
 }
 
@@ -147,7 +147,7 @@ h1 {
   height: auto;
   border-radius: 10px;
   margin-bottom: 10px;
-  filter: drop-shadow(2px 2px 6px rgba(255, 200, 100, 0.7));
+  filter: drop-shadow(2px 2px 6px rgba(38, 162, 149, 1));
 }
 
 .media-item p {
@@ -165,7 +165,7 @@ h1 {
   display: block;
   margin: 5px 0;
   padding: 8px 12px;
-  background-color: #F38FFF;
+  background-color: #26A295;
   border: none;
   border-radius: 8px;
   color: #fff;
@@ -177,7 +177,7 @@ h1 {
 }
 
 .public-gallery-btn:hover {
-  background-color: #e36be0;
+  background-color: #26A295;
   transform: translateY(-3px);
 }
 

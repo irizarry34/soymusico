@@ -49,6 +49,16 @@ function GaleryPage() {
     }
   }, [user]);
 
+  // Función de logout
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error('Error logging out:', error);
+    } else {
+      navigate('/login'); // Redirigir al login después del logout
+    }
+  };
+
   // Manejar selección de archivos
   const handleFileChange = (e) => {
     setFiles(e.target.files); // Permitir múltiples archivos
@@ -253,6 +263,7 @@ function GaleryPage() {
             <li><button className="public-gallery-btn" onClick={() => navigate(`/galeryPublic/${user?.id}`)}>
               Galería Pública
             </button></li>
+            <li><button className="public-gallery-btn" onClick={handleLogout}>Cerrar Sesión</button></li> {/* Botón de logout */}
           </ul>
         </nav>
       </div>
