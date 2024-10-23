@@ -41,11 +41,12 @@ function CalendarioPublicPage() {
       if (error) {
         console.error('Error al obtener los eventos:', error);
       } else {
+        // Normalizamos las fechas utilizando calendar_start_date y calendar_end_date
         const normalizedEvents = data.map(event => ({
           id: event.id,
           title: event.status || 'Disponible',
-          start: event.start_date,
-          end: event.end_date,
+          start: new Date(event.calendar_start_date).toISOString().split('T')[0],  // Usamos las fechas del calendario
+          end: new Date(event.calendar_end_date).toISOString().split('T')[0],      // Fecha de fin desde calendar_end_date
         }));
         setEvents(normalizedEvents);
       }
@@ -106,7 +107,7 @@ function CalendarioPublicPage() {
                   className="logout-btn"
                   onClick={() => navigate('/profile')}
                 >
-                  Perfil
+                  Mi Perfil
                 </button>
               </li>
             )}

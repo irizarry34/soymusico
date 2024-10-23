@@ -59,8 +59,8 @@ function CalendarioPage() {
         const normalizedEvents = data.map(event => ({
           id: event.id,
           title: event.status || 'Disponible',
-          start: new Date(event.start_date).toISOString().split('T')[0],  // Asegura que la fecha esté en formato ISO
-          end: new Date(event.end_date).toISOString().split('T')[0],      // Lo mismo para la fecha de fin
+          start: new Date(event.calendar_start_date).toISOString().split('T')[0],  // Usamos las fechas seleccionadas en el calendario (del 1 al 6)
+          end: new Date(event.calendar_end_date).toISOString().split('T')[0],      // Lo mismo para la fecha de fin del calendario
           extendedProps: {
             event_details: event.event_details,
             client_name: event.client_name,
@@ -84,7 +84,10 @@ function CalendarioPage() {
     const start = new Date(selectionInfo.start);
     let end = new Date(selectionInfo.end);
 
-    // Restar un día al valor de 'end' porque FullCalendar incluye el siguiente día
+    // FullCalendar incluye el siguiente día, lo dejamos así para el calendario
+    const calendarEndDate = new Date(end);
+
+    // Ajustamos el evento para que termine el día anterior (1-5 en vez de 1-6)
     end.setDate(end.getDate() - 1);
 
     setSelectedDates([start, end]);
@@ -136,13 +139,19 @@ function CalendarioPage() {
 
     const [startDate, endDate] = selectedDates;
 
-    // Guardamos el evento en la base de datos como un solo rango de fechas
+    // Guardamos la fecha para el calendario sin modificar (1-6 de noviembre)
+    const calendarEndDate = new Date(endDate);
+    calendarEndDate.setDate(endDate.getDate() + 1); // FullCalendar selecciona hasta el día siguiente
+
+    // Guardamos el evento real (1-5 de noviembre)
     const { error } = await supabase
       .from('availability')
       .upsert({
         user_id: user.id,
-        start_date: startDate.toISOString().split('T')[0], // Guardamos la fecha de inicio correctamente formateada
-        end_date: endDate.toISOString().split('T')[0],     // Guardamos la fecha de fin correctamente formateada
+        start_date: startDate.toISOString().split('T')[0], // Guardamos el evento como 1-5 de noviembre
+        end_date: endDate.toISOString().split('T')[0],     // Guardamos el evento como 1-5 de noviembre
+        calendar_start_date: startDate.toISOString().split('T')[0], // Guardamos la selección de fecha original del calendario (1-6)
+        calendar_end_date: calendarEndDate.toISOString().split('T')[0], // Guardamos la selección de fin original del calendario (1-6)
         status,
         event_details,
         client_name,
@@ -160,8 +169,8 @@ function CalendarioPage() {
 
       const newEvent = {
         title: status || 'Disponible',
-        start: startDate.toISOString().split('T')[0],  // Asegúrate de que la fecha esté en formato correcto para FullCalendar
-        end: endDate.toISOString().split('T')[0],
+        start: startDate.toISOString().split('T')[0],
+        end: calendarEndDate.toISOString().split('T')[0], // Mostramos 1-6 en el calendario
         extendedProps: {
           event_details,
           client_name,
@@ -176,6 +185,25 @@ function CalendarioPage() {
     }
 
     setSelectedDates([]);
+    setTimeout(() => setMessage(null), 3000);
+  };
+
+  // Función para borrar un evento por su ID
+  const handleDeleteEvent = async (eventId) => {
+    const { error } = await supabase
+      .from('availability')
+      .delete()
+      .eq('id', eventId);
+
+    if (error) {
+      setMessage({ type: 'error', text: 'Error al borrar el evento.' });
+      console.error('Error al borrar el evento:', error);
+    } else {
+      // Eliminamos el evento de la lista de eventos en el frontend
+      setEvents(events.filter(event => event.id !== eventId));
+      setMessage({ type: 'success', text: 'Evento borrado con éxito.' });
+    }
+
     setTimeout(() => setMessage(null), 3000);
   };
 
@@ -220,7 +248,6 @@ function CalendarioPage() {
             <li><a href="/inbox">Buzón de Entrada</a></li>
             <li><a href="/gallery">Galería</a></li>
             <li><a href="/profile">{user ? user.email : 'Perfil'}</a></li>
-            {/* Cambiamos el nombre de las clases de los botones */}
             <li><button className="calendar-btn" onClick={handleLogout}>Cerrar Sesión</button></li>
             <li><button className="calendar-btn" onClick={() => navigate(`/publicProfile/${user?.id}`)}>Perfil Público</button></li>
           </ul>
@@ -309,7 +336,6 @@ function CalendarioPage() {
                 />
               </label>
 
-              {/* Aplicamos la clase 'calendar-btn' a estos botones también */}
               <button className="calendar-btn" onClick={handleSave}>Guardar</button>
               <button className="calendar-btn" onClick={handleDelete}>Eliminar</button>
             </div>
@@ -322,8 +348,8 @@ function CalendarioPage() {
                 {events.map(event => (
                   <li key={event.id}>
                     <p>
-                      <strong>{event.start}</strong>
-                      {event.start !== event.end && <span className="strong"> - {event.end}</span>}
+                      {/* Restamos un día a la fecha de fin en los eventos agendados */}
+                      <strong>{new Date(event.start).toISOString().split('T')[0]}</strong> - <strong>{new Date(new Date(event.end).setDate(new Date(event.end).getDate() - 1)).toISOString().split('T')[0]}</strong>
                     </p>
                     <div className="event-details">
                       <p>Estado: {event.title}</p>
@@ -333,6 +359,9 @@ function CalendarioPage() {
                       <p>Hora de Fin: {event.extendedProps.end_time}</p>
                       <p>Ganancia: {event.extendedProps.earnings}</p>
                     </div>
+                    <button className="calendar-btn" onClick={() => handleDeleteEvent(event.id)}>
+                      Borrar
+                    </button>
                   </li>
                 ))}
               </ul>
