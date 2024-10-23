@@ -59,8 +59,8 @@ function CalendarioPage() {
         const normalizedEvents = data.map(event => ({
           id: event.id,
           title: event.status || 'Disponible',
-          start: event.start_date,  // Cambiamos 'date' a 'start_date'
-          end: event.end_date,      // Agregamos el 'end_date'
+          start: new Date(event.start_date).toISOString().split('T')[0],  // Asegura que la fecha esté en formato ISO
+          end: new Date(event.end_date).toISOString().split('T')[0],      // Lo mismo para la fecha de fin
           extendedProps: {
             event_details: event.event_details,
             client_name: event.client_name,
@@ -79,11 +79,12 @@ function CalendarioPage() {
     }
   }, [user]);
 
+  // Ajustamos la selección de fechas
   const handleDateSelect = (selectionInfo) => {
     const start = new Date(selectionInfo.start);
-    const end = new Date(selectionInfo.end);
+    let end = new Date(selectionInfo.end);
 
-    // Restar un día al valor de 'end' para evitar que incluya un día extra
+    // Restar un día al valor de 'end' porque FullCalendar incluye el siguiente día
     end.setDate(end.getDate() - 1);
 
     setSelectedDates([start, end]);
@@ -140,8 +141,8 @@ function CalendarioPage() {
       .from('availability')
       .upsert({
         user_id: user.id,
-        start_date: startDate.toISOString().split('T')[0], // Guardamos la fecha de inicio
-        end_date: endDate.toISOString().split('T')[0],     // Guardamos la fecha de fin
+        start_date: startDate.toISOString().split('T')[0], // Guardamos la fecha de inicio correctamente formateada
+        end_date: endDate.toISOString().split('T')[0],     // Guardamos la fecha de fin correctamente formateada
         status,
         event_details,
         client_name,
@@ -159,7 +160,7 @@ function CalendarioPage() {
 
       const newEvent = {
         title: status || 'Disponible',
-        start: startDate.toISOString().split('T')[0],
+        start: startDate.toISOString().split('T')[0],  // Asegúrate de que la fecha esté en formato correcto para FullCalendar
         end: endDate.toISOString().split('T')[0],
         extendedProps: {
           event_details,
