@@ -35,6 +35,14 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
+/* Contenedor de la foto de perfil y el botón calendario */
+.profile-photo-section {
+  display: flex;
+  justify-content: space-between; /* Asegura que los elementos estén separados */
+  align-items: center; /* Alinea los elementos verticalmente */
+  margin-bottom: 15px;
+}
+
 /* Foto de perfil */
 .profile-photo-section img {
   width: 120px;
@@ -46,6 +54,23 @@
   display: block;
   margin-left: 0;
   filter: drop-shadow(2px 2px 4px rgba(243, 0, 137, 1));
+}
+
+/* Estilo para el botón de calendario */
+.calendar-btn {
+  background-color: #26A295;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-left: auto; /* Empuja el botón al extremo derecho */
+}
+
+.calendar-btn:hover {
+  background-color: #1f8f82;
 }
 
 /* Estilos de la biografía */
@@ -331,4 +356,3 @@ button:hover {
   color: #ffd700; /* Color dorado para las estrellas */
   transition: color 0.3s ease;
 }
-

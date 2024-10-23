@@ -65,23 +65,33 @@
   box-shadow: 0 12px 20px rgba(243, 0, 137, 1); /* Hover con sombra rosa */
 }
 
+
+/* Contenedor de la foto de perfil */
+/* Contenedor de la sección de la foto de perfil */
+.perfil-page .profile-photo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alinea la foto y el contenido a la izquierda */
+  text-align: left; /* Alinea el texto del título a la izquierda */
+  margin-bottom: 15px;
+}
+
 /* Foto de perfil */
 .perfil-page .profile-photo-section img {
-  width: 120px;
-  height: 120px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  display: block;
-  margin-left: 0;
+  box-shadow: 0 4px 15px rgba(189, 8, 186, 0.947);
+  margin-left: 0; /* Asegura que la imagen esté alineada a la izquierda sin margen adicional */
 }
 
 /* Inputs y Textareas */
 .perfil-page textarea, 
 .perfil-page input[type="text"], 
 .perfil-page input[type="file"] {
-  width: 100%;
+  width: 95%;
   padding: 12px;
   border: none;
   border-radius: 8px;
@@ -100,18 +110,34 @@
   transition: all 0.3s ease;
 }
 
+/* Botón para guardar foto de perfil */
+.perfil-page .profile-photo-section button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #26A295;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.perfil-page .profile-photo-section button:hover {
+  background-color: #00adb5; /* Verde más intenso en hover */
+}
+
 /* Sección de instrumentos y géneros */
 .instruments-genres {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  gap: 5px;
   margin-bottom: 30px;
-  
+  margin-right: -5px;
 }
 
 .perfil-page .instruments, .perfil-page .genres {
   background-color: #2a2a2a;
-  padding: 15px;
+  padding: 10px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
@@ -207,19 +233,21 @@
 .navbar .logout-btn:hover {
   background-color: #00adb5; /* Verde claro más intenso */
 }
+
+/* Select para géneros musicales */
 .genres select {
   width: 100%;
   padding: 12px;
   background-color: var(--input-background); /* Mismo fondo que otros inputs */
-  border: 2px solid #26A295; /* Cambia el color del borde a amarillo (o elige otro color) */
+  border: 2px solid #26A295; /* Cambia el color del borde a verde */
   border-radius: 5px;
   color: var(--text-color);
   font-size: 1.1em;
-  transition: border-color 0.3s ease; /* Añade una transición suave */
-  appearance: none; /* Elimina las flechas predeterminadas del select en algunos navegadores */
+  transition: border-color 0.3s ease;
+  appearance: none;
 }
 
 .genres select:focus {
   border-color: #26A295; /* Color verde claro al hacer focus */
-  outline: none; /* Elimina el borde azul por defecto */
+  outline: none;
 }

@@ -190,7 +190,6 @@ function PublicProfile() {
           <ul>
             <li><a href="/">Inicio</a></li>
             <li><a href="/search">Búsqueda</a></li>
-            <li><a href="/">Calendario</a></li> {/* Enlace al calendario */}
             <li><a href="/contact">Contacto</a></li>
             <li><a href="/inbox">Buzón de Entrada</a></li>
             <li><a href="/gallery">Galería</a></li> {/* Enlace agregado */}
@@ -205,6 +204,14 @@ function PublicProfile() {
         <div className="left-section">
           <div className="profile-photo-section">
             {photoUrl ? <img src={photoUrl} alt="Foto de Perfil" className="profilephoto" /> : <p>No hay foto de perfil.</p>}
+            
+            {/* Botón de Calendario */}
+            <button
+              className="calendar-btn"
+              onClick={() => navigate(`/calendarioPublic/${id}`)}
+            >
+              Ver Calendario
+            </button>
           </div>
           <div className="profile-name">
             <h2>{`${publicUser.first_name} ${publicUser.last_name}`}</h2>

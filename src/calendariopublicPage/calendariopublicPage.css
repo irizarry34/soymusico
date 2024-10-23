@@ -9,7 +9,7 @@
   justify-content: space-between;
   gap: 30px;
   min-height: 100vh;
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0 auto;
   border-radius: 15px;
   margin-top: 130px;
@@ -25,29 +25,33 @@
 }
 
 /* Estilos de la barra de navegación */
-.navbar {
+.calendarioPublic-navbar {
+  position: fixed; /* Fija el navbar en la parte superior */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #1f1f1f;
   padding: 10px 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  margin-bottom: 20px;
 }
 
-.logo img {
+.calendarioPublic-logo img {
   width: 80px;
   height: 80px;
   filter: drop-shadow(2px 2px 6px rgba(255, 200, 100, 0.9));
 }
 
-nav ul {
+.calendarioPublic-nav-list {
   list-style-type: none;
   display: flex;
   gap: 25px;
 }
 
-nav ul li a {
+.calendarioPublic-nav-list li a {
   margin-right: 5px;
   color: #fff;
   text-decoration: none;
@@ -57,29 +61,29 @@ nav ul li a {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-nav ul li a:hover {
-  background-color: #F38FFF;
+.calendarioPublic-nav-list li a:hover {
+  background-color: #26A295;
   color: #fff;
 }
 
 /* Estilos de la sección izquierda (formulario de contacto) */
-.left-section {
+.calendarioPublic-left-section {
   flex-basis: 40%;
   background-color: #393e46;
   padding: 25px;
   border-radius: 15px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 6px 12px rgba(38, 162, 149, 1);
 }
 
-.left-section h2 {
+.calendarioPublic-left-section h2 {
   color: #f6c90e;
   font-size: 24px;
   margin-bottom: 20px;
 }
 
-.left-section input,
-.left-section textarea {
-  width: 100%;
+.calendarioPublic-left-section input,
+.calendarioPublic-left-section textarea {
+  width: 95%;
   padding: 12px;
   border: none;
   border-radius: 8px;
@@ -89,7 +93,7 @@ nav ul li a:hover {
   font-size: 16px;
 }
 
-.left-section button {
+.calendarioPublic-left-section button {
   padding: 12px 20px;
   background-color: #26A295;
   border: none;
@@ -100,36 +104,36 @@ nav ul li a:hover {
   transition: background-color 0.3s ease;
 }
 
-.left-section button:hover {
+.calendarioPublic-left-section button:hover {
   background-color: #26A295;
   transform: translateY(-3px);
 }
 
-.left-section button:active {
+.calendarioPublic-left-section button:active {
   background-color: #f4b800;
   transform: translateY(2px);
 }
 
 /* Estilos de la sección derecha (calendario) */
-.right-section {
+.calendarioPublic-right-section {
   flex-basis: 55%;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.right-section h2 {
+.calendarioPublic-right-section h2 {
   text-align: center;
   color: #f6c90e;
   font-size: 24px;
   margin-bottom: 20px;
 }
 
-.calendar-section {
+.calendarioPublic-calendar-section {
   background-color: #393e46;
   padding: 25px;
   border-radius: 15px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 6px 12px rgba(38, 162, 149, 1);
 }
 
 .react-calendar {
@@ -145,4 +149,19 @@ nav ul li a:hover {
   color: #393e46;
   transform: scale(1.05);
   transition: all 0.3s ease;
+}
+.logout-btn {
+  padding: 8px 12px;
+  font-size: 16px;
+  background-color: #26A295; /* Verde claro */
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: -10px;
+}
+
+.logout-btn:hover {
+background-color: #00adb5; /* Verde claro más intenso */
 }

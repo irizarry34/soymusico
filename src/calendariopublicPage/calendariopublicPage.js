@@ -10,10 +10,25 @@ function CalendarioPublicPage() {
   const { id } = useParams(); // Captura el ID del músico público
   const [events, setEvents] = useState([]);
   const [publicUser, setPublicUser] = useState(null); // Datos del perfil público
+  const [currentUser, setCurrentUser] = useState(null); // Datos del usuario autenticado
   const [contactMessage, setContactMessage] = useState('');
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
   const navigate = useNavigate();
+
+  // Obtener el usuario autenticado
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser();
+      if (error) {
+        console.error('Error obteniendo el usuario autenticado:', error);
+        return;
+      }
+      setCurrentUser(user);
+    };
+
+    fetchCurrentUser();
+  }, []);
 
   // Obtener los eventos de disponibilidad del músico
   useEffect(() => {
@@ -74,25 +89,35 @@ function CalendarioPublicPage() {
   return (
     <div className="calendario-public-page">
       {/* Navbar */}
-      <div className="navbar">
-        <div className="logo">
+      <div className="calendarioPublic-navbar">
+        <div className="calendarioPublic-logo">
           <img src="/Subject.png" alt="Logo" />
         </div>
         <nav>
-          <ul>
+          <ul className="calendarioPublic-nav-list">
             <li><a href="/">Inicio</a></li>
             <li><a href="/search">Búsqueda</a></li>
             <li><a href="/contact">Contacto</a></li>
             <li><a href="/inbox">Buzón de Entrada</a></li>
             <li><a href="/gallery">Galería</a></li>
+            {currentUser && (
+              <li>
+                <button
+                  className="logout-btn"
+                  onClick={() => navigate('/profile')}
+                >
+                  Perfil
+                </button>
+              </li>
+            )}
           </ul>
         </nav>
       </div>
 
       <div className="calendario-public-content">
         {/* Sección izquierda: Formulario de contacto */}
-        <div className="left-section">
-          <h2>Contacto con {publicUser?.first_name} {publicUser?.last_name}</h2>
+        <div className="calendarioPublic-left-section">
+          <h2>Contacta con {publicUser?.first_name} {publicUser?.last_name}:</h2>
           <input
             type="email"
             placeholder="Tu correo electrónico"
@@ -115,9 +140,9 @@ function CalendarioPublicPage() {
         </div>
 
         {/* Sección derecha: Calendario de disponibilidad */}
-        <div className="right-section">
-          <h2>Disponibilidad de {publicUser?.first_name}</h2>
-          <div className="calendar-section">
+        <div className="calendarioPublic-right-section">
+          <h2>Disponibilidad:</h2>
+          <div className="calendarioPublic-calendar-section">
             <FullCalendar
               plugins={[dayGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"

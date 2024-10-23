@@ -11,7 +11,7 @@ import SearchPage from './searchPage/searchPage';
 import GaleryPage from './galeryPage/galeryPage';
 import GaleryPublicPage from './galerypublicPage/galeryPublicPage';
 import CalendarioPage from './calendarioPage/calendarioPage'; // Importa el componente del calendario
-
+import CalendarioPublicPage from './calendariopublicPage/calendariopublicPage'; // Importa el componente de calendario público
 
 function App() {
   return (
@@ -43,7 +43,10 @@ function App() {
           <Route path="/galeryPublic/:id" element={<GaleryPublicPage />} />
           
           {/* Ruta para la página de calendario */}
-          <Route path="/calendario" element={<CalendarioPage />} /> {/* Añade la ruta del calendario */}
+          <Route path="/calendario" element={<CalendarioPage />} />
+
+          {/* Ruta para la página de calendario público */}
+          <Route path="/calendarioPublic/:id" element={<CalendarioPublicPage />} /> {/* Añade la ruta para CalendarioPublicPage */}
         </Routes>
       </div>
     </Router>
