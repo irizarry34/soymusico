@@ -2,7 +2,7 @@ from pathlib import Path
 from datetime import timedelta
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),  # Cambia a la duración que prefieras
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Cambia a la duración que prefieras
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Cambia a la duración que prefieras
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,

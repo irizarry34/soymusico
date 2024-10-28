@@ -1,0 +1,68 @@
+/* Estilos generales para Inbox */
+.inbox-container {
+    font-family: 'Roboto', sans-serif;
+    padding: 30px;
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: #222831;
+    color: #eeeeee;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
+    border-radius: 15px;
+    margin-top: 130px;
+    transition: all 0.3s ease;
+  }
+  
+  /* Título del Inbox */
+  .inbox-container h2 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #f6c90e;
+    text-shadow: 2px 2px 8px rgba(246, 201, 14, 0.5);
+    font-weight: 700;
+    transition: all 0.3s ease;
+  }
+  
+  /* Tarjeta de mensaje individual */
+  .message-card {
+    background-color: #393e46;
+    margin-bottom: 15px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(243, 0, 137, 1);
+    transition: all 0.3s ease;
+  }
+  
+  .message-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 20px rgba(243, 0, 137, 1);
+  }
+  
+  /* Detalles del mensaje */
+  .message-sender {
+    font-weight: bold;
+    color: #f6c90e;
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+  
+  .message-body {
+    font-size: 1rem;
+    color: #eeeeee;
+    margin: 10px 0;
+    line-height: 1.5;
+  }
+  
+  .message-timestamp {
+    font-size: 0.9rem;
+    color: #777;
+    text-align: right;
+  }
+  
+  /* Estilo para cuando no hay mensajes */
+  .no-messages {
+    color: #999;
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 20px;
+  }
