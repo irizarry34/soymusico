@@ -1,68 +1,168 @@
-/* Estilos generales para Inbox */
+/* Estilos generales */
 .inbox-container {
-    font-family: 'Roboto', sans-serif;
-    padding: 30px;
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: #222831;
-    color: #eeeeee;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5);
-    border-radius: 15px;
-    margin-top: 130px;
-    transition: all 0.3s ease;
-  }
-  
-  /* Título del Inbox */
-  .inbox-container h2 {
-    font-size: 48px;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #f6c90e;
-    text-shadow: 2px 2px 8px rgba(246, 201, 14, 0.5);
-    font-weight: 700;
-    transition: all 0.3s ease;
-  }
-  
-  /* Tarjeta de mensaje individual */
-  .message-card {
-    background-color: #393e46;
-    margin-bottom: 15px;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(243, 0, 137, 1);
-    transition: all 0.3s ease;
-  }
-  
-  .message-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 20px rgba(243, 0, 137, 1);
-  }
-  
-  /* Detalles del mensaje */
-  .message-sender {
-    font-weight: bold;
-    color: #f6c90e;
-    font-size: 1.2rem;
-    margin-bottom: 8px;
-  }
-  
-  .message-body {
-    font-size: 1rem;
-    color: #eeeeee;
-    margin: 10px 0;
-    line-height: 1.5;
-  }
-  
-  .message-timestamp {
-    font-size: 0.9rem;
-    color: #777;
-    text-align: right;
-  }
-  
-  /* Estilo para cuando no hay mensajes */
-  .no-messages {
-    color: #999;
-    font-size: 1rem;
-    text-align: center;
-    margin-top: 20px;
-  }
+  display: flex;
+  margin-top: 105px;
+  font-family: 'Roboto', sans-serif;
+  height: 90vh;
+  background-color: #1f1f1f;
+  color: #eeeeee;
+}
+
+/* Sección de búsqueda y lista de usuarios */
+.user-search {
+  width: 25%;
+  padding: 20px;
+  background-color: #222831;
+  border-right: 1px solid #393e46;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.3);
+}
+
+.user-search input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  margin-bottom: 15px;
+  background-color: #393e46;
+  border: 1px solid #F30089;
+  color: #eeeeee;
+}
+
+.user-search button {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #26A295;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.user-search button:hover {
+  background-color: #1d8070;
+}
+
+.user-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.user-list li {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #393e46;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.user-list li:hover,
+.user-list .selected {
+  background-color: #26A295;
+  color: #ffffff;
+}
+
+/* Sección de conversación */
+.conversation-container {
+  width: 75%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  background-color: #1f1f1f;
+}
+
+.conversation-container h2 {
+  color: #F38FFF;
+  border-bottom: 1px solid #393e46;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+.message-list {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin-bottom: 20px;
+}
+
+/* Separador de fecha */
+.date-separator {
+  text-align: center;
+  color: #f6c90e;
+  font-size: 0.9em;
+  margin: 10px 0;
+}
+
+/* Burbujas de mensajes */
+.message {
+  padding: 10px 15px;
+  border-radius: 15px;
+  max-width: 70%;
+  font-size: 16px;
+  word-wrap: break-word;
+  margin: 5px 0;
+  position: relative;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.sent {
+  align-self: flex-end;
+  background-color: #26A295;
+  color: #ffffff;
+  border-bottom-right-radius: 0;
+  text-align: right;
+}
+
+.received {
+  align-self: flex-start;
+  background-color: #393e46;
+  color: #eeeeee;
+  border-bottom-left-radius: 0;
+  text-align: left;
+}
+
+.message-timestamp {
+  font-size: 0.8em;
+  color: #888;
+  margin-top: 5px;
+}
+
+/* Campo de entrada de mensaje */
+.send-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #393e46;
+}
+
+.send-message textarea {
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  resize: none;
+  background-color: #393e46;
+  color: #eeeeee;
+}
+
+.send-message button {
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+  background-color: #26A295;
+  color: #ffffff;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.send-message button:hover {
+  background-color: #1d8070;
+}

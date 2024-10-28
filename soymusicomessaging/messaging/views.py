@@ -93,12 +93,14 @@ class MessageDetailView(generics.RetrieveAPIView):
         user = self.request.user
         return Message.objects.filter(Q(sender=user) | Q(recipient=user))
 
-# Vista API para obtener todos los mensajes del usuario autenticado
+# Vista API para obtener todos los mensajes del usuario autenticado (como remitente o destinatario)
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_messages(request):
-    recipient_id = request.user.id
-    messages = Message.objects.filter(recipient_id=recipient_id)
+    user = request.user
+    messages = Message.objects.filter(
+        Q(sender=user) | Q(recipient=user)
+    ).order_by('timestamp')  # Ordenar por fecha de envío
     serializer = MessageSerializer(messages, many=True)
     return Response(serializer.data)
 

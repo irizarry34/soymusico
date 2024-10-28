@@ -10,12 +10,10 @@ from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 from .models import CustomUser, Message
 from .serializers import MessageSerializer
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
 
 User = get_user_model()
 
-# Vista para enviar un mensaje y notificar mediante WebSocket
+# Vista para enviar un mensaje
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def send_message(request):
@@ -27,36 +25,12 @@ def send_message(request):
         return Response({"error": "El destinatario y el cuerpo del mensaje son obligatorios"}, status=status.HTTP_400_BAD_REQUEST)
 
     recipient = get_object_or_404(CustomUser, id=recipient_id)
-    message = Message.objects.create(sender=sender, recipient=recipient, body=body)
-
-    # Notificar al grupo de WebSocket del destinatario
+    
     try:
-        channel_layer = get_channel_layer()
-        async_to_sync(channel_layer.group_send)(
-            f"messages_user_{recipient_id}",
-            {
-                'type': 'new_message',
-                'message': f"Nuevo mensaje de {sender.first_name} {sender.last_name}"
-            }
-        )
+        message = Message.objects.create(sender=sender, recipient=recipient, body=body)
+        return Response({"message": "Mensaje enviado exitosamente"}, status=status.HTTP_201_CREATED)
     except Exception as e:
-        print(f"Error al enviar notificación de WebSocket: {e}")
-
-    return Response({"message": "Mensaje enviado exitosamente"}, status=status.HTTP_201_CREATED)
-
-# Vista para obtener el UUID del usuario basado en su correo electrónico (GET)
-@api_view(['GET'])
-@permission_classes([AllowAny])
-def get_user_uuid_by_email(request):
-    email = request.GET.get('email')
-    if not email:
-        return JsonResponse({"error": "Correo electrónico no proporcionado"}, status=400)
-
-    user = User.objects.filter(email=email).first()
-    if user:
-        return JsonResponse({"uuid": str(user.uuid)}, status=200)
-    else:
-        return JsonResponse({"error": "Usuario no encontrado"}, status=404)
+        return Response({"error": f"Error al guardar el mensaje: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 # Vista para obtener el UUID del usuario basado en su correo electrónico mediante POST
 @api_view(['POST'])
@@ -128,9 +102,7 @@ def get_user_messages(request):
     serializer = MessageSerializer(messages, many=True)
     return Response(serializer.data)
 
-
-# Añade esta vista en messaging/views.py si aún la necesitas
-
+# Vista para obtener el primary key del usuario basado en UUID si es necesario
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def user_pk_view(request, uuid):
