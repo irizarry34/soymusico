@@ -19,17 +19,18 @@ function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Crear usuario en Supabase
     const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
       email: email,
       password: password
     });
 
     if (signUpError) {
-      setErrorMessage(`Error al registrar usuario: ${signUpError.message}`);
+      setErrorMessage(`Error al registrar usuario en Supabase: ${signUpError.message}`);
       return;
     }
 
-    // Verifica que el ID esté siendo insertado correctamente
+    // Crear registro en tabla 'users' en Supabase con campos adicionales
     const { error: userError } = await supabase
       .from('users')
       .insert([
@@ -46,11 +47,43 @@ function RegisterPage() {
       ]);
 
     if (userError) {
-      setErrorMessage(`Error al guardar datos del usuario: ${userError.message}`);
-    } else {
-      // Redirigir al perfil del usuario después de un registro exitoso
-      navigate('/profile'); // Redirige a la página de perfil
+      setErrorMessage(`Error al guardar datos del usuario en Supabase: ${userError.message}`);
+      return;
     }
+
+    // Crear el usuario en Django con los datos necesarios, incluyendo el email
+    const createDjangoUser = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/register/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            username: email,
+            password: password,
+            first_name: firstName,
+            last_name: lastName,
+            email: email // Agregar email aquí para que se registre en Django
+          })
+        });
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.error || 'Error al registrar el usuario en Django');
+        }
+
+        return response.json();
+      } catch (error) {
+        setErrorMessage(`Error al crear usuario en Django: ${error.message}`);
+        return null;
+      }
+    };
+
+    // Llamada para crear usuario en Django
+    const djangoUser = await createDjangoUser();
+    if (!djangoUser) return; // Detener si hay error al crear usuario en Django
+
+    // Redirigir al perfil del usuario después de un registro exitoso en ambas plataformas
+    navigate('/profile');
   };
 
   const instrumentOptions = {

@@ -12,6 +12,7 @@ import GaleryPage from './galeryPage/galeryPage';
 import GaleryPublicPage from './galerypublicPage/galeryPublicPage';
 import CalendarioPage from './calendarioPage/calendarioPage'; // Importa el componente del calendario
 import CalendarioPublicPage from './calendariopublicPage/calendariopublicPage'; // Importa el componente de calendario público
+import Inbox from './inbox/inbox';
 
 function App() {
   return (
@@ -47,6 +48,9 @@ function App() {
 
           {/* Ruta para la página de calendario público */}
           <Route path="/calendarioPublic/:id" element={<CalendarioPublicPage />} /> {/* Añade la ruta para CalendarioPublicPage */}
+          
+          {/* Ruta para la página de inbox */}
+          <Route path="/inbox" element={<Inbox />} />
         </Routes>
       </div>
     </Router>

@@ -1,27 +1,66 @@
 import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
-import './loginPage.css'; // Ya tienes el archivo de estilo
-import { Link, useNavigate } from 'react-router-dom'; // Para manejar la navegación
+import './loginPage.css';
+import { Link, useNavigate } from 'react-router-dom';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const navigate = useNavigate(); // Hook para redirigir
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password
-    });
+    try {
+      // Inicia sesión con Supabase
+      const { data: session, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
 
-    if (error) {
-      setErrorMessage('Error al iniciar sesión: ' + error.message);
-    } else {
-      // Login exitoso, redirigir al perfil del usuario
-      navigate('/profile'); // Redirige a la página de perfil
+      if (error) {
+        setErrorMessage('Error al iniciar sesión: ' + error.message);
+        localStorage.removeItem('token');
+        localStorage.removeItem('user_email');
+        localStorage.removeItem('user_password');
+      } else {
+        console.log('Sesión completa:', session);
+
+        if (session && session.session && session.session.access_token) {
+          localStorage.setItem('token', session.session.access_token);
+          localStorage.setItem('refresh_token', session.session.refresh_token);
+          localStorage.setItem('user_email', email);
+          localStorage.setItem('user_password', password);
+          console.log('Token almacenado:', session.session.access_token);
+
+          // Solicitar un token JWT de Django (token_obtain_pair en Django)
+          const response = await fetch('http://localhost:8000/api/token/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email, password: password })
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem('django_token', data.access); // Guardar el token de Django
+            localStorage.setItem('django_refresh_token', data.refresh); // Guardar el token de refresco de Django
+            console.log('Token JWT de Django almacenado:', data.access);
+
+            // Redirigir al perfil del usuario
+            navigate('/profile');
+          } else {
+            const errorData = await response.json();
+            setErrorMessage(`Error al obtener el token de Django: ${errorData.detail}`);
+          }
+        } else {
+          console.error('No se encontró un token en la sesión:', session);
+          setErrorMessage('Error al obtener el token. Intenta nuevamente.');
+        }
+      }
+    } catch (err) {
+      console.error('Error al iniciar sesión:', err);
+      setErrorMessage('Ocurrió un error inesperado. Intenta nuevamente.');
     }
   };
 
@@ -53,6 +92,7 @@ function LoginPage() {
             value={email} 
             onChange={(e) => setEmail(e.target.value)} 
             placeholder="Tu correo electrónico"
+            required
           />
 
           <label>Contraseña:</label>
@@ -61,12 +101,13 @@ function LoginPage() {
             value={password} 
             onChange={(e) => setPassword(e.target.value)} 
             placeholder="Tu contraseña"
+            required
           />
 
           <button type="submit">Iniciar Sesión</button>
         </form>
         <div className="back-link">
-          <a href="/">Volver a la página principal</a>
+          <Link to="/">Volver a la página principal</Link>
         </div>
       </div>
 

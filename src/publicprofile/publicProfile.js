@@ -171,9 +171,103 @@ function PublicProfile() {
     }
   };
 
-  const handleContactMessage = () => {
-    console.log("Mensaje de contacto enviado:", contactMessage, contactEmail, contactPhone);
-  };
+
+  const refreshDjangoAccessToken = async () => {
+    const refreshToken = localStorage.getItem('django_refresh_token');
+    if (!refreshToken) {
+        console.error("No se encontró el token de refresco de Django. Por favor, inicia sesión nuevamente.");
+        return null;
+    }
+
+    try {
+        const response = await fetch('http://localhost:8000/api/token/refresh/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refresh: refreshToken }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error al refrescar el token de Django:', errorData);
+
+            // Si el token de refresco no es válido, pide al usuario que inicie sesión nuevamente
+            if (errorData.code === "token_not_valid") {
+                console.error("El token de refresco de Django no es válido o ha expirado. Por favor, inicia sesión nuevamente.");
+                localStorage.removeItem('django_token'); 
+                localStorage.removeItem('django_refresh_token'); 
+                return null;
+            }
+            return null;
+        }
+
+        const data = await response.json();
+        localStorage.setItem('django_token', data.access);
+        return data.access;
+    } catch (error) {
+        console.error('Error al refrescar el token de Django:', error);
+        return null;
+    }
+};
+
+const handleContactMessage = async () => {
+  const token = localStorage.getItem('django_token'); // Token de Django
+
+  if (!token) {
+      console.error("Usuario no autenticado. Por favor, inicia sesión.");
+      return;
+  }
+
+  // Obtén el UUID de Django del usuario actual usando su email
+  let djangoRecipientId;
+  try {
+      const emailResponse = await fetch('http://localhost:8000/api/get-user-uuid/', {
+          method: 'POST',
+          headers: { 
+              'Content-Type': 'application/json' 
+          },
+          body: JSON.stringify({ email: publicUser.email.toLowerCase() }) // Usar el correo del usuario público
+      });
+
+      if (emailResponse.ok) {
+          const data = await emailResponse.json();
+          djangoRecipientId = data.uuid; // UUID de Django
+      } else {
+          console.error("Error al obtener el UUID del usuario en Django.");
+          return;
+      }
+  } catch (error) {
+      console.error("Error al solicitar el UUID del usuario:", error);
+      return;
+  }
+
+  // Ahora, envía el mensaje usando el UUID de Django como `recipient_id`
+  try {
+      const response = await fetch('http://localhost:8000/api/send-message/', {
+          method: 'POST',
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              recipient_id: djangoRecipientId, // ID de Django
+              body: contactMessage // Mensaje de contacto
+          })
+      });
+
+      if (response.ok) {
+          console.log("Mensaje enviado exitosamente");
+          setContactMessage(''); // Limpia el mensaje después de enviarlo
+          alert("Mensaje enviado con éxito!");
+      } else {
+          const errorData = await response.json();
+          console.error("Error al enviar el mensaje:", errorData);
+          alert("Hubo un error al enviar el mensaje.");
+      }
+  } catch (error) {
+      console.error("Error en la solicitud:", error);
+      alert("No se pudo enviar el mensaje. Por favor, intenta nuevamente.");
+  }
+};
 
   if (!publicUser) {
     return <p>Cargando perfil...</p>;

@@ -3,7 +3,9 @@ import React, { useState, useEffect } from 'react';
 import './perfilPage.css'; 
 import { supabase } from '../supabaseClient'; 
 import { useNavigate } from 'react-router-dom';
-import instrumentIcons from '../instrumentIcons'; 
+import instrumentIcons from '../instrumentIcons';
+import { validateToken, refreshAccessToken } from '../utils/auth';
+
 
 function PerfilPage() {
   const [user, setUser] = useState(null);
@@ -16,6 +18,19 @@ function PerfilPage() {
   const [instruments, setInstruments] = useState([]);
   const [alertas, setAlertas] = useState([]);
   const navigate = useNavigate();
+
+
+  const redirectToInbox = async () => {
+    const token = localStorage.getItem('token');
+    const isTokenValid = await validateToken(token); // Usa la función para validar el token
+    if (!isTokenValid) {
+      const newToken = await refreshAccessToken(); // Refresca el token si ha expirado
+      if (newToken) {
+        localStorage.setItem('token', newToken);
+      }
+    }
+    navigate('/inbox');
+  };
 
   // Verifica si el usuario está autenticado cada vez que se carga la página
   useEffect(() => {
@@ -203,7 +218,7 @@ function PerfilPage() {
             <li><a href="/search">Búsqueda</a></li>
             <li><a href="/calendario">Calendario</a></li> {/* Enlace al calendario */}
             <li><a href="/contact">Contacto</a></li>
-            <li><a href="/inbox">Buzón de Entrada</a></li>
+            <li><button onClick={redirectToInbox}>Buzón de Entrada</button></li> {/* Modificado */}
             <li><a href="/alerts">Alertas ({alertas.length})</a></li>
             <li><a href="/gallery">Galería</a></li> {/* Enlace agregado */}
             <li><a href="/profile">{user ? user.email : 'Perfil'}</a></li>
