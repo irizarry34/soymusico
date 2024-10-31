@@ -1,20 +1,31 @@
+
 import React, { useState, useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import './inbox.css';
+import { refreshAccessToken } from '../utils/auth';
+
+// Declara las variables de intervalo fuera del componente
+let fetchMessagesInterval;
+let checkForNewMessagesInterval;
 
 function Inbox() {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]); // Resultados de búsqueda de usuarios
-  const [selectedUser, setSelectedUser] = useState(null); // Usuario seleccionado en la conversación
+  const [results, setResults] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [conversation, setConversation] = useState([]);
-  const [currentUserId, setCurrentUserId] = useState(null);
-  const [messageText, setMessageText] = useState(''); // Mensaje que se enviará
+  const [currentUserId, setCurrentUserId] = useState(null); // Django UUID
+  const [djangoRecipientId, setDjangoRecipientId] = useState(null); // Django UUID for selected user
+  const [messageText, setMessageText] = useState('');
+  const [selectedMessages, setSelectedMessages] = useState([]); // Mensajes seleccionados para eliminar
+  const [newMessageAlert, setNewMessageAlert] = useState(false); // Alerta de nuevos mensajes
   const navigate = useNavigate();
+  const [newMessageSender, setNewMessageSender] = useState(null);
+  const [hasUnreadMessages, setHasUnreadMessages] = useState(false);
 
-  // Obtener el UUID del usuario autenticado desde Django
   const fetchCurrentUserId = async () => {
-    const token = localStorage.getItem('django_token');
+    await refreshAccessToken(navigate);
+    const djangoToken = localStorage.getItem('django_token');
     const email = localStorage.getItem('user_email');
 
     if (!email) {
@@ -26,7 +37,7 @@ function Inbox() {
       const response = await fetch('http://localhost:8000/api/get-user-uuid/', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${djangoToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email: email.toLowerCase() })
@@ -34,7 +45,7 @@ function Inbox() {
 
       if (response.ok) {
         const data = await response.json();
-        setCurrentUserId(data.uuid);
+        setCurrentUserId(data.uuid); // Almacena el UUID de Django del usuario actual
       } else {
         console.error("Error obteniendo el ID del usuario:", await response.json());
       }
@@ -43,21 +54,103 @@ function Inbox() {
     }
   };
 
-  // Obtener mensajes con el usuario seleccionado
-  const fetchMessages = async () => {
-    if (!currentUserId || !selectedUser) return;
+  const fetchRecipientId = async (selectedUserEmail) => {
+    const djangoToken = localStorage.getItem('django_token');
 
-    const token = localStorage.getItem('django_token');
     try {
-      const response = await fetch(`http://localhost:8000/api/user-messages/?recipient_id=${selectedUser.id}`, {
+      const response = await fetch('http://localhost:8000/api/get-user-uuid/', {
+        method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${djangoToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: selectedUserEmail.toLowerCase() })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setDjangoRecipientId(data.uuid); // Almacena el UUID de Django del usuario seleccionado
+      } else {
+        console.error("Error al obtener el UUID del destinatario en Django:", await response.json());
+      }
+    } catch (error) {
+      console.error("Error en la solicitud del UUID del destinatario:", error);
+    }
+  };
+
+  // Función para marcar mensajes como leídos
+  const markMessagesAsRead = async () => {
+    const djangoToken = localStorage.getItem('django_token');
+  
+    try {
+      // Asegúrate de que currentUserId es el destinatario (recipient_id) y selectedUser.id es el remitente (sender_id)
+      await fetch(`http://localhost:8000/api/mark-messages-as-read/?recipient_id=${currentUserId}&sender_id=${selectedUser?.id}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${djangoToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+    } catch (error) {
+      console.error("Error al marcar los mensajes como leídos:", error);
+    }
+  };
+
+  // Solo marca mensajes como leídos si el usuario actual es el destinatario
+  useEffect(() => {
+    if (selectedUser && currentUserId === djangoRecipientId && newMessageSender?.id !== currentUserId) {
+      markMessagesAsRead();
+    }
+  }, [selectedUser, djangoRecipientId, currentUserId, newMessageSender]);
+
+  const checkForNewMessages = async () => {
+    if (!currentUserId) return;
+  
+    const djangoToken = localStorage.getItem('django_token');
+    try {
+      const response = await fetch(`http://localhost:8000/api/check-new-messages/?recipient_id=${currentUserId}`, {
+        headers: {
+          'Authorization': `Bearer ${djangoToken}`,
+          'Content-Type': 'application/json'
+        }
+      });
+  
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Verifica si el remitente del mensaje es distinto del usuario actual
+        if (data.has_new_messages && data.sender?.id !== currentUserId) {
+          setNewMessageAlert(true);
+          setNewMessageSender(data.sender);
+          setHasUnreadMessages(true); // Actualiza a true si hay mensajes sin leer
+        } else {
+          setNewMessageAlert(false);
+          setHasUnreadMessages(false); // No hay mensajes sin leer
+        }
+      } else {
+        console.error("Error al verificar nuevos mensajes:", await response.json());
+      }
+    } catch (error) {
+      console.error("Error en la verificación de nuevos mensajes:", error);
+    }
+  };
+
+  const fetchMessages = async () => {
+    if (!currentUserId || !djangoRecipientId) return;
+
+    await refreshAccessToken(navigate);
+    const djangoToken = localStorage.getItem('django_token');
+    try {
+      const response = await fetch(`http://localhost:8000/api/user-messages/?sender_id=${currentUserId}&recipient_id=${djangoRecipientId}`, {
+        headers: {
+          'Authorization': `Bearer ${djangoToken}`,
           'Content-Type': 'application/json'
         }
       });
 
       if (response.ok) {
         const data = await response.json();
+
         const sortedMessages = data.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
         const formattedMessages = sortedMessages.map((message) => ({
           id: message.id,
@@ -67,6 +160,10 @@ function Inbox() {
           senderName: String(message.sender.id) === String(currentUserId) ? "Tú" : `${message.sender.first_name} ${message.sender.last_name}`,
         }));
         setConversation(formattedMessages);
+        // Marca los mensajes como leídos si el usuario actual es el destinatario
+        if (currentUserId === djangoRecipientId) {
+          markMessagesAsRead();
+        }
       } else {
         console.error("Error al obtener los mensajes:", await response.json());
       }
@@ -75,7 +172,41 @@ function Inbox() {
     }
   };
 
-  // Búsqueda de usuarios
+  const handleDeleteMessages = async () => {
+    const djangoToken = localStorage.getItem('django_token');
+    try {
+      for (let messageId of selectedMessages) {
+        await fetch(`http://localhost:8000/api/delete-message/${messageId}/`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${djangoToken}`,
+            'Content-Type': 'application/json',
+          },
+        });
+      }
+      setConversation((prevConversation) =>
+        prevConversation.filter((message) => !selectedMessages.includes(message.id))
+      );
+      setSelectedMessages([]); // Reinicia la selección
+      alert("Mensajes eliminados correctamente.");
+    } catch (error) {
+      console.error("Error en la eliminación de mensajes:", error);
+      alert("No se pudo eliminar los mensajes. Por favor, intenta nuevamente.");
+    }
+  };
+
+  const toggleMessageSelection = (messageId, isSent) => {
+    if (!isSent) {
+      alert("No puedes seleccionar mensajes de otros usuarios.");
+      return;
+    }
+    setSelectedMessages((prevSelected) =>
+      prevSelected.includes(messageId)
+        ? prevSelected.filter((id) => id !== messageId)
+        : [...prevSelected, messageId]
+    );
+  };
+
   const handleSearch = async () => {
     if (!query) return;
     try {
@@ -95,39 +226,16 @@ function Inbox() {
   };
 
   const handleSendMessage = async () => {
-    const token = localStorage.getItem('django_token'); // Token de autenticación de Django
-  
-    if (!token || !selectedUser || !messageText.trim()) return;
-  
-    // Obtiene el UUID del usuario seleccionado para usarlo como `recipient_id`
-    let djangoRecipientId;
-    try {
-      const emailResponse = await fetch('http://localhost:8000/api/get-user-uuid/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email: selectedUser.email.toLowerCase() })
-      });
-  
-      if (emailResponse.ok) {
-        const data = await emailResponse.json();
-        djangoRecipientId = data.uuid; // UUID de Django
-      } else {
-        console.error("Error al obtener el UUID del usuario en Django.");
-        return;
-      }
-    } catch (error) {
-      console.error("Error al solicitar el UUID del usuario:", error);
-      return;
-    }
-  
-    // Enviar el mensaje con el UUID de Django como `recipient_id`
+    await refreshAccessToken(navigate);
+    const djangoToken = localStorage.getItem('django_token');
+
+    if (!djangoRecipientId || !messageText.trim()) return;
+
     try {
       const response = await fetch('http://localhost:8000/api/send-message/', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${djangoToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -135,10 +243,10 @@ function Inbox() {
           body: messageText
         })
       });
-  
+
       if (response.ok) {
-        setMessageText(''); // Limpia el área de entrada de texto después de enviar
-        fetchMessages(selectedUser.id); // Actualiza la conversación
+        setMessageText('');
+        fetchMessages();
         alert("Mensaje enviado con éxito!");
       } else {
         const errorData = await response.json();
@@ -151,19 +259,57 @@ function Inbox() {
     }
   };
 
+  const handleViewConversation = async () => {
+    if (newMessageSender) {
+      // Primero marca los mensajes como leídos para que no aparezca la alerta nuevamente
+      await markMessagesAsRead();
+  
+      // Luego, establece el usuario seleccionado y carga los mensajes
+      setSelectedUser(newMessageSender);
+      setNewMessageAlert(false);
+  
+      await fetchRecipientId(newMessageSender.email);
+      await fetchMessages();
+    }
+  };
+
   useEffect(() => {
     fetchCurrentUserId();
   }, []);
-
+  
   useEffect(() => {
-    if (currentUserId && selectedUser) fetchMessages();
-  }, [currentUserId, selectedUser]);
+    if (currentUserId && selectedUser) {
+      fetchRecipientId(selectedUser.email);
+    }
+  }, [selectedUser, currentUserId]);
+  
+  useEffect(() => {
+    if (currentUserId && djangoRecipientId) {
+      fetchMessages();
+      fetchMessagesInterval = setInterval(fetchMessages, 5000);
+      return () => clearInterval(fetchMessagesInterval);
+    }
+  }, [currentUserId, djangoRecipientId]);
+  
+  useEffect(() => {
+    checkForNewMessagesInterval = setInterval(checkForNewMessages, 5000); // Verifica cada 5 segundos
+    return () => clearInterval(checkForNewMessagesInterval);
+  }, [currentUserId]);
+  
+  // Retrasa checkForNewMessages al verificar mensajes nuevos
+  useEffect(() => {
+    const delayCheckMessages = setTimeout(() => {
+      const interval = setInterval(checkForNewMessages, 5000); // Intervalo de verificación cada 5 segundos
+      return () => clearInterval(interval);
+    }, 500); // Retraso de 500ms para permitir que fetchMessages termine
+  
+    return () => clearTimeout(delayCheckMessages);
+  }, [currentUserId]);
 
   const formatDate = (date) => date.toLocaleDateString();
 
   return (
     <div className="inbox-container">
-      {/* Navbar */}
       <div className="navbar">
         <div className="logo">
           <img src="/Subject.png" alt="Logo" />
@@ -172,11 +318,10 @@ function Inbox() {
           <ul>
             <li><a href="/">Inicio</a></li>
             <li><a href="/search">Búsqueda</a></li>
-            <li><a href="/profile">Mi Perfil</a></li>
             <li><a href="/calendar">Calendario</a></li>
             <li><a href="/contact">Contacto</a></li>
             <li><a href="/gallery">Galería</a></li>
-            <li><a href="/alerts">Alertas</a></li>
+            <li><a href="/profile">Mi Perfil</a></li>
             <li>
               <button className="logout-btn" onClick={() => supabase.auth.signOut().then(() => navigate('/login'))}>
                 Cerrar Sesión
@@ -184,9 +329,18 @@ function Inbox() {
             </li>
           </ul>
         </nav>
+        {/* Notificación de mensaje en el navbar */}
+        {newMessageAlert && newMessageSender && (
+          <div className="navbar-notification">
+            <span>¡Tienes un nuevo mensaje de {newMessageSender.first_name} {newMessageSender.last_name}!</span>
+            <button className="view-conversation-btn" onClick={handleViewConversation}>
+              Ver Conversación
+            </button>
+            <span className="navbar-notification-close" onClick={() => setNewMessageAlert(false)}>×</span>
+          </div>
+        )}
       </div>
-
-      {/* Búsqueda de usuarios */}
+      
       <div className="user-search">
         <input
           type="text"
@@ -208,7 +362,6 @@ function Inbox() {
         </ul>
       </div>
 
-      {/* Conversación con el usuario seleccionado */}
       <div className="conversation-container">
         {selectedUser ? (
           <>
@@ -220,13 +373,30 @@ function Inbox() {
                     <div className="date-separator">{formatDate(message.timestamp)}</div>
                   ) : null}
                   <div className={`message ${message.isSent ? 'sent' : 'received'}`}>
+                  <div className="message-content">
                     <p className="message-text">{message.text}</p>
-                    <p className="message-timestamp">{message.timestamp.toLocaleTimeString()}</p>
+                    <div className="message-info">
+                      <p className="message-timestamp">{message.timestamp.toLocaleTimeString()}</p>
+                      {message.isSent && <span className="me-label">Me</span>}
+                    </div>
                   </div>
+                  {message.isSent && (
+                    <input
+                      type="checkbox"
+                      onChange={() => toggleMessageSelection(message.id, message.isSent)}
+                      checked={selectedMessages.includes(message.id)}
+                      className="message-checkbox"
+                    />
+                  )}
+                </div>
                 </Fragment>
               ))}
             </div>
-            {/* Campo para enviar mensaje */}
+            {selectedMessages.length > 0 && (
+              <button onClick={handleDeleteMessages} className="delete-button">
+                Eliminar mensajes seleccionados
+              </button>
+            )}
             <div className="send-message">
               <textarea
                 placeholder="Escribe un mensaje..."

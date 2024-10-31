@@ -13,6 +13,65 @@ from .serializers import MessageSerializer
 
 User = get_user_model()
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def check_new_messages(request):
+    recipient_id = request.query_params.get('recipient_id')
+
+    # Verificar si hay algún mensaje no leído sin cambiar el estado
+    last_unread_message = (
+        Message.objects.filter(recipient_id=recipient_id, is_read=False)
+        .select_related('sender')
+        .order_by('-timestamp')
+        .first()
+    )
+
+    if last_unread_message:
+        response_data = {
+            "has_new_messages": True,
+            "sender": {
+                "first_name": last_unread_message.sender.first_name,
+                "last_name": last_unread_message.sender.last_name,
+                "email": last_unread_message.sender.email,
+                "id": str(last_unread_message.sender.id)  # UUID del remitente
+            }
+        }
+    else:
+        response_data = {"has_new_messages": False}
+    
+    return JsonResponse(response_data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def mark_messages_as_read(request):
+    recipient_id = request.query_params.get('recipient_id')
+    sender_id = request.query_params.get('sender_id')
+
+    # Confirma que el usuario actual es el destinatario antes de marcar como leído
+    if str(request.user.id) != recipient_id:
+        return Response({"error": "No autorizado para marcar estos mensajes como leídos"}, status=status.HTTP_403_FORBIDDEN)
+    
+    # Actualiza solo los mensajes no leídos del remitente especificado
+    Message.objects.filter(
+        sender_id=sender_id,
+        recipient_id=recipient_id,
+        is_read=False
+    ).update(is_read=True)
+    
+    return Response({"message": "Mensajes marcados como leídos"}, status=status.HTTP_200_OK)
+
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_message(request, message_id):
+    try:
+        message = Message.objects.get(id=message_id, sender=request.user)
+        message.delete()
+        return JsonResponse({'message': 'Mensaje eliminado con éxito'}, status=200)
+    except Message.DoesNotExist:
+        return JsonResponse({'error': 'Mensaje no encontrado o permiso denegado'}, status=404)
+
 # Vista para enviar un mensaje
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -42,7 +101,7 @@ def get_user_uuid(request):
 
     user = CustomUser.objects.filter(email=email).first()
     if user:
-        return Response({"uuid": str(user.id)}, status=status.HTTP_200_OK)  # `id` debe ser UUID
+        return Response({"uuid": str(user.id)}, status=status.HTTP_200_OK)
     else:
         return Response({"error": "Usuario no encontrado"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -96,11 +155,17 @@ class MessageDetailView(generics.RetrieveAPIView):
 # Vista API para obtener todos los mensajes del usuario autenticado (como remitente o destinatario)
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_user_messages(request):
-    user = request.user
+def user_messages(request):
+    sender = request.user  # Usuario autenticado como remitente
+    recipient_id = request.query_params.get('recipient_id')
+    recipient = get_object_or_404(CustomUser, id=recipient_id)  # UUID de Django como destinatario
+
+    # Filtra mensajes donde el sender y recipient son el currentUser y el recipient
     messages = Message.objects.filter(
-        Q(sender=user) | Q(recipient=user)
-    ).order_by('timestamp')  # Ordenar por fecha de envío
+        (Q(sender=sender) & Q(recipient=recipient)) |
+        (Q(sender=recipient) & Q(recipient=sender))
+    ).order_by('timestamp')
+
     serializer = MessageSerializer(messages, many=True)
     return Response(serializer.data)
 
@@ -109,7 +174,7 @@ def get_user_messages(request):
 @permission_classes([AllowAny])
 def user_pk_view(request, uuid):
     try:
-        user = CustomUser.objects.get(id=uuid)  # o `uuid=uuid` si `uuid` es un campo UUID distinto de `id`
+        user = CustomUser.objects.get(id=uuid)
         return JsonResponse({"pk": user.pk})
     except CustomUser.DoesNotExist:
         return JsonResponse({"error": "Usuario no encontrado"}, status=404)

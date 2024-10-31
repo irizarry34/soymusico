@@ -15,22 +15,24 @@
   background-color: #222831;
   border-right: 1px solid #393e46;
   box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .user-search input[type="text"] {
-  width: 100%;
+  width: 98%;
   padding: 10px;
   border-radius: 5px;
-  border: none;
+  border: 1px solid #F30089;
   outline: none;
   margin-bottom: 15px;
   background-color: #393e46;
-  border: 1px solid #F30089;
   color: #eeeeee;
 }
 
 .user-search button {
-  width: 100%;
+  width: 30%;
   padding: 10px;
   border-radius: 5px;
   border: none;
@@ -38,14 +40,17 @@
   color: #ffffff;
   cursor: pointer;
   font-weight: bold;
+  text-align: center;
+  transition: background-color 0.3s;
 }
 
 .user-search button:hover {
-  background-color: #1d8070;
+  background-color: #6CDBE3;
 }
 
 .user-list {
   list-style: none;
+  width: 100%;
   padding: 0;
   margin-top: 20px;
 }
@@ -61,7 +66,7 @@
 
 .user-list li:hover,
 .user-list .selected {
-  background-color: #26A295;
+  background-color: #6CDBE3;
   color: #ffffff;
 }
 
@@ -76,13 +81,14 @@
 }
 
 .conversation-container h2 {
-  color: #F38FFF;
+  color: #f6c90e;
   border-bottom: 1px solid #393e46;
   padding-bottom: 10px;
   margin-bottom: 20px;
   font-size: 1.5em;
 }
 
+/* Lista de mensajes */
 .message-list {
   flex-grow: 1;
   overflow-y: auto;
@@ -98,38 +104,107 @@
   margin: 10px 0;
 }
 
-/* Burbujas de mensajes */
+/* Burbujas de mensajes finas y alargadas */
 .message {
   padding: 10px 15px;
-  border-radius: 15px;
-  max-width: 70%;
-  font-size: 16px;
+  border-radius: 12px;
+  max-width: 75%; /* Limita el ancho de las burbujas para dar un aspecto más alargado */
+  font-size: 15px;
   word-wrap: break-word;
   margin: 5px 0;
   position: relative;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
+/* Burbujas de mensajes para el usuario actual (sender) */
 .sent {
   align-self: flex-end;
-  background-color: #26A295;
+  background-color: #222831; /* Fondo para mensajes enviados */
   color: #ffffff;
-  border-bottom-right-radius: 0;
-  text-align: right;
+  text-align: left;
+  border-radius: 12px 12px 0 12px; /* Bordes más redondeados */
+  padding: 10px 15px;
+  max-width: 70%;
+  margin: 5px 0;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+/* Burbujas de mensajes para el usuario seleccionado (recipient) */
 .received {
   align-self: flex-start;
-  background-color: #393e46;
+  background-color: #393e46; /* Fondo para mensajes recibidos */
   color: #eeeeee;
-  border-bottom-left-radius: 0;
   text-align: left;
+  border-radius: 12px 12px 12px 0;
+  padding: 10px 50px;
+  max-width: 70%;
+  margin: 5px 0;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+/* Contenido del mensaje */
+.message-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+/* Checkbox pequeño y alineado a la derecha */
+.message-checkbox {
+  transform: scale(0.5); /* Tamaño reducido del checkbox */
+  margin-left: 25px;
+  margin-top: -40px;
+  cursor: pointer;
+}
+
+/* Texto del mensaje alineado a la izquierda */
+.message-text {
+  text-align: left;
+  margin: 0;
+}
+
+/* Contenedor de la fecha y el "Me" alineados a la derecha */
+.message-info {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: -40px;
+  margin-top: 5px;
+  font-size: 0.8em;
+  color: #f6c90e;
+}
+
+/* Estilo específico de la fecha */
+.message-timestamp {
+  margin-left: 5px;
+}
+
+/* Estilo específico para el texto "Me" */
+.me-label {
+  font-weight: bold;
+  margin-left: 8px;
+  color: #f6c90e;
+}
+
+/* Estilo de la hora y el texto "Me" */
 .message-timestamp {
   font-size: 0.8em;
-  color: #888;
+  color: #f6c90e;
+  margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.me-label {
+  color: #f6c90e;
   margin-top: 5px;
+  margin-left: 65px;
+  font-weight: bold;
+  font-size: 0.8em;
 }
 
 /* Campo de entrada de mensaje */
@@ -164,5 +239,103 @@
 }
 
 .send-message button:hover {
-  background-color: #1d8070;
+  background-color: #6CDBE3;
+}
+
+/* Alerta de nuevos mensajes */
+.new-message-alert {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  background-color: #ffcc00;
+  padding: 10px 15px;
+  border-radius: 8px;
+  color: #1f1f1f;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.new-message-alert.hide {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.new-message-alert-icon {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.new-message-alert-close {
+  cursor: pointer;
+  color: #1f1f1f;
+  font-size: 1.2em;
+  margin-left: auto;
+}
+
+/* Navbar alert icon */
+.alerts-link {
+  position: relative;
+  display: inline-block;
+}
+
+.alert-icon {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: #FF4A4A;
+  color: white;
+  font-size: 0.7em;
+  font-weight: bold;
+  padding: 2px 5px;
+  border-radius: 50%;
+}
+
+/* Estilo para la notificación en el navbar */
+.navbar-notification {
+  position: absolute;
+  top: 30px;
+  right: 20px;
+  background: linear-gradient(135deg, #4b79a1, #283e51);
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  margin-right: 950px;
+}
+
+.view-conversation-btn {
+  background-color: #26A295;
+  color: #ffffff;
+  font-size: 14px;
+  border: none;
+  padding: 5px 12px;
+  margin-left: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.view-conversation-btn:hover {
+  background-color: #6CDBE3;
+}
+
+.navbar-notification-close {
+  margin-left: 15px;
+  cursor: pointer;
+  color: #ffffff;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.navbar-notification-close:hover {
+  color: #FFD700;
 }

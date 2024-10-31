@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LandingPage from './landingPage/landingpage';
@@ -10,14 +10,20 @@ import instrumentIcons from './instrumentIcons';
 import SearchPage from './searchPage/searchPage';
 import GaleryPage from './galeryPage/galeryPage';
 import GaleryPublicPage from './galerypublicPage/galeryPublicPage';
-import CalendarioPage from './calendarioPage/calendarioPage'; // Importa el componente del calendario
-import CalendarioPublicPage from './calendariopublicPage/calendariopublicPage'; // Importa el componente de calendario público
+import CalendarioPage from './calendarioPage/calendarioPage';
+import CalendarioPublicPage from './calendariopublicPage/calendariopublicPage';
 import Inbox from './inbox/inbox';
+import Navbar from './components/Navbar';
 
 function App() {
+  const [newMessageAlert, setNewMessageAlert] = useState(false); // Estado para manejar la alerta de nuevos mensajes
+
   return (
     <Router>
       <div className="App">
+        {/* Pasar el estado de la alerta de nuevos mensajes a Navbar */}
+        <Navbar newMessageAlert={newMessageAlert} />
+        
         <Routes>
           {/* Ruta para la página principal (landing page) */}
           <Route path="/" element={<LandingPage />} />
@@ -47,10 +53,19 @@ function App() {
           <Route path="/calendario" element={<CalendarioPage />} />
 
           {/* Ruta para la página de calendario público */}
-          <Route path="/calendarioPublic/:id" element={<CalendarioPublicPage />} /> {/* Añade la ruta para CalendarioPublicPage */}
-          
+          <Route path="/calendarioPublic/:id" element={<CalendarioPublicPage />} />
+
           {/* Ruta para la página de inbox */}
-          <Route path="/inbox" element={<Inbox />} />
+          <Route 
+            path="/inbox" 
+            element={<Inbox setNewMessageAlert={setNewMessageAlert} />} 
+          />
+
+          {/* Ruta para las alertas que dirige al Inbox */}
+          <Route 
+            path="/alerts" 
+            element={<Inbox setNewMessageAlert={setNewMessageAlert} />} 
+          />
         </Routes>
       </div>
     </Router>
