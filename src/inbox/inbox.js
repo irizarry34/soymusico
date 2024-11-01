@@ -310,7 +310,7 @@ function Inbox() {
 
   return (
     <div className="inbox-container">
-      <div className="navbar">
+      <div className="navbar inbox-navbar">
         <div className="logo">
           <img src="/Subject.png" alt="Logo" />
         </div>
@@ -318,12 +318,11 @@ function Inbox() {
           <ul>
             <li><a href="/">Inicio</a></li>
             <li><a href="/search">Búsqueda</a></li>
-            <li><a href="/calendar">Calendario</a></li>
-            <li><a href="/contact">Contacto</a></li>
+            <li><a href="/calendario">Calendario</a></li> {/* Enlace al calendario */}
             <li><a href="/gallery">Galería</a></li>
             <li><a href="/profile">Mi Perfil</a></li>
             <li>
-              <button className="logout-btn" onClick={() => supabase.auth.signOut().then(() => navigate('/login'))}>
+              <button className="custom-button" onClick={() => supabase.auth.signOut().then(() => navigate('/login'))}>
                 Cerrar Sesión
               </button>
             </li>

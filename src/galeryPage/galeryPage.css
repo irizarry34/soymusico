@@ -218,4 +218,29 @@ h1 {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+/* Estilos para el tag de estado de medios */
+.media-item .tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.media-item .tag.public {
+  background-color: #26A295; /* Verde para medios públicos */
+}
+
+.media-item .tag.private {
+  background-color: #F38FFF; /* Rojo para medios privados */
+}
+
+/* Asegúrate de que los tags no interfieran con el contenido */
+.media-item {
+  position: relative;
+}
 

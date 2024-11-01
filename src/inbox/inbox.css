@@ -1,7 +1,7 @@
 /* Estilos generales */
 .inbox-container {
   display: flex;
-  margin-top: 105px;
+  margin-top: 115px;
   font-family: 'Roboto', sans-serif;
   height: 90vh;
   background-color: #1f1f1f;
@@ -24,7 +24,7 @@
   width: 98%;
   padding: 10px;
   border-radius: 5px;
-  border: 1px solid #F30089;
+  border: 1px solid #f6c90e;
   outline: none;
   margin-bottom: 15px;
   background-color: #393e46;
@@ -36,7 +36,7 @@
   padding: 10px;
   border-radius: 5px;
   border: none;
-  background-color: #26A295;
+  background-color: #393e46;
   color: #ffffff;
   cursor: pointer;
   font-weight: bold;
@@ -45,7 +45,7 @@
 }
 
 .user-search button:hover {
-  background-color: #6CDBE3;
+  background-color: #2F1EEA;;
 }
 
 .user-list {
@@ -66,7 +66,8 @@
 
 .user-list li:hover,
 .user-list .selected {
-  background-color: #6CDBE3;
+  background-color: #393e46;
+  filter: drop-shadow(2px 4px 4px rgba(255, 201, 100, 0.983));
   color: #ffffff;
 }
 
@@ -108,8 +109,8 @@
 .message {
   padding: 10px 15px;
   border-radius: 12px;
-  max-width: 75%; /* Limita el ancho de las burbujas para dar un aspecto más alargado */
-  font-size: 15px;
+  max-width: 75%;
+  font-size: 18px;
   word-wrap: break-word;
   margin: 5px 0;
   position: relative;
@@ -122,27 +123,30 @@
 /* Burbujas de mensajes para el usuario actual (sender) */
 .sent {
   align-self: flex-end;
-  background-color: #222831; /* Fondo para mensajes enviados */
+  background-color: #222831;
   color: #ffffff;
   text-align: left;
-  border-radius: 12px 12px 0 12px; /* Bordes más redondeados */
+  border-radius: 12px 12px 12px 0;
   padding: 10px 15px;
-  max-width: 70%;
+  max-width: 85%;
   margin: 5px 0;
+  margin-top: 20px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  filter: drop-shadow(2px 4px 4px rgba(255, 201, 100, 0.983));
 }
 
 /* Burbujas de mensajes para el usuario seleccionado (recipient) */
 .received {
   align-self: flex-start;
-  background-color: #393e46; /* Fondo para mensajes recibidos */
+  background-color: #393e46;
   color: #eeeeee;
-  text-align: left;
-  border-radius: 12px 12px 12px 0;
-  padding: 10px 50px;
-  max-width: 70%;
+  text-align: right;
+  border-radius: 12px 12px 0 12px;
+  padding: 10px 15px;
+  max-width: 85%;
   margin: 5px 0;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  filter: drop-shadow(4px 4px 2px rgba(255, 201, 100, 0.983));
 }
 
 /* Contenido del mensaje */
@@ -154,57 +158,42 @@
 
 /* Checkbox pequeño y alineado a la derecha */
 .message-checkbox {
-  transform: scale(0.5); /* Tamaño reducido del checkbox */
+  transform: scale(0.5);
   margin-left: 25px;
-  margin-top: -40px;
   cursor: pointer;
+  margin-top: -80px;
 }
 
 /* Texto del mensaje alineado a la izquierda */
 .message-text {
   text-align: left;
-  margin: 0;
+  margin-right: 1px;
 }
 
-/* Contenedor de la fecha y el "Me" alineados a la derecha */
+/* Contenedor de la fecha y el "Me" alineados a los extremos */
 .message-info {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between; /* Alinea la hora a la izquierda y el "Me" a la derecha */
   align-items: center;
-  margin-right: -40px;
-  margin-top: 5px;
   font-size: 0.8em;
   color: #f6c90e;
+  margin-top: 5px;
 }
 
-/* Estilo específico de la fecha */
+/* Estilo específico de la fecha (hora) */
 .message-timestamp {
-  margin-left: 5px;
+  color: #f6c90e;
+  font-size: 0.8em;
+  font-weight: normal;
+  margin-left: -5px;
 }
 
 /* Estilo específico para el texto "Me" */
 .me-label {
   font-weight: bold;
-  margin-left: 8px;
   color: #f6c90e;
-}
-
-/* Estilo de la hora y el texto "Me" */
-.message-timestamp {
   font-size: 0.8em;
-  color: #f6c90e;
-  margin-top: 15px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-}
-
-.me-label {
-  color: #f6c90e;
-  margin-top: 5px;
-  margin-left: 65px;
-  font-weight: bold;
-  font-size: 0.8em;
+  margin-right: -40px;
 }
 
 /* Campo de entrada de mensaje */
@@ -231,7 +220,7 @@
   padding: 10px 20px;
   border-radius: 5px;
   border: none;
-  background-color: #26A295;
+  background-color: #393e46;
   color: #ffffff;
   cursor: pointer;
   font-weight: bold;
@@ -239,7 +228,7 @@
 }
 
 .send-message button:hover {
-  background-color: #6CDBE3;
+  background-color: #2F1EEA;
 }
 
 /* Alerta de nuevos mensajes */
@@ -313,8 +302,8 @@
 }
 
 .view-conversation-btn {
-  background-color: #26A295;
-  color: #ffffff;
+  background-color: #2F1EEA;
+  color: #ffcc00;
   font-size: 14px;
   border: none;
   padding: 5px 12px;
@@ -325,7 +314,7 @@
 }
 
 .view-conversation-btn:hover {
-  background-color: #6CDBE3;
+  background-color: #2F1EEA;
 }
 
 .navbar-notification-close {
@@ -338,4 +327,103 @@
 
 .navbar-notification-close:hover {
   color: #FFD700;
+  box-shadow: 0 12px 20px rgba(243, 0, 137, 1); /* Hover con sombra rosa */
+}
+
+
+
+/* Nuevo estilo para el navbar en la sección de inbox */
+.inbox-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2C3E50;
+  padding: 5px 15px;
+  border-radius: 10px;
+  box-shadow: 
+    0px 4px 8px rgb(46, 30, 226),    /* Azul profundo, más cerca */
+    0px 6px 10px rgb(38, 162, 150),   /* Verde azulado, más cerca */
+    0px 8px 12px rgb(255, 201, 100),  /* Amarillo pastel, más cerca */
+    0px 10px 14px rgb(243, 0, 138),    /* Rosa fuerte, más cerca */
+    0px 12px 16px rgb(227, 107, 223);  /* Rosa claro, más cerca */
+}
+
+/* Estilo del logo en el navbar de inbox */
+.inbox-navbar .logo img {
+  width: 80px; /* Tamaño ligeramente más grande */
+  height: 80px;
+  filter: drop-shadow(2px 4px 4px rgba(255, 201, 100, 0.983)); /* Mantiene la sombra */
+}
+
+/* Lista de navegación en el navbar de inbox */
+.inbox-navbar nav ul {
+  list-style-type: none;
+  display: flex;
+  gap: 25px; /* Mayor espacio entre los elementos */
+}
+
+.inbox-navbar nav ul li a {
+  color: #FFD700; /* Color diferente para los enlaces */
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 12px; /* Más espacio interno para los enlaces */
+  transition: color 0.3s ease, background-color 0.3s ease; /* Transición de color y fondo */
+}
+
+.inbox-navbar nav ul li a:hover {
+  color: #ffffff; /* Color de texto en hover */
+  background-color: #2F1EEA; /* Color de fondo en hover */
+  border-radius: 5px; /* Bordes redondeados en hover */
+}
+
+.inbox-navbar .custom-button {
+  padding: 10px 20px;
+  background-color: #2F1EEA; /* Color de fondo inicial */
+  color: #FFD700; /* Color del texto */
+  border: none;
+  border-radius: 8px; /* Bordes redondeados */
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: -25px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Sombra para darle profundidad */
+}
+
+/* Efecto hover para los botones dentro de inbox-navbar */
+.inbox-navbar .custom-button:hover {
+  background-color: #2F1EEA; /* Color de fondo en hover */
+  color: #ffffff;
+  transform: translateY(-2px); /* Levanta el botón ligeramente */
+  box-shadow: 0 12px 20px rgba(243, 0, 137, 1); /* Hover con sombra rosa */
+}
+
+/* Efecto activo para los botones dentro de inbox-navbar (cuando se presiona) */
+.inbox-navbar .custom-button:active {
+  background-color: #2417A6; /* Color de fondo en activo */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Reduce la sombra */
+  transform: translateY(0); /* Devuelve el botón a su posición original */
+}
+
+/* Estilo para el botón de eliminación */
+.delete-button {
+  background-color: #2417A6; /* Color rojo intenso */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-button:hover {
+  background-color: #2417A6; /* Oscurece el color al hacer hover */
+  transform: translateY(-2px); /* Eleva el botón ligeramente */
+}
+
+.delete-button:active {
+  background-color: #a93226; /* Otro tono de rojo cuando se presiona */
+  transform: translateY(0);
 }

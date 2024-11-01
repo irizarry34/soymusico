@@ -3,7 +3,7 @@ import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { useParams, useNavigate } from 'react-router-dom';
-import './calendariopublicPage.css'; // Archivo CSS específico para esta página
+import './calendariopublicPage.css';
 import { supabase } from '../supabaseClient';
 
 function CalendarioPublicPage() {
@@ -41,12 +41,11 @@ function CalendarioPublicPage() {
       if (error) {
         console.error('Error al obtener los eventos:', error);
       } else {
-        // Normalizamos las fechas utilizando calendar_start_date y calendar_end_date
         const normalizedEvents = data.map(event => ({
           id: event.id,
           title: event.status || 'Disponible',
-          start: new Date(event.calendar_start_date).toISOString().split('T')[0],  // Usamos las fechas del calendario
-          end: new Date(event.calendar_end_date).toISOString().split('T')[0],      // Fecha de fin desde calendar_end_date
+          start: new Date(event.calendar_start_date).toISOString().split('T')[0],
+          end: new Date(event.calendar_end_date).toISOString().split('T')[0],
         }));
         setEvents(normalizedEvents);
       }
@@ -78,13 +77,97 @@ function CalendarioPublicPage() {
     }
   }, [id]);
 
-  // Manejar el envío del mensaje de contacto
-  const handleContactMessage = () => {
-    console.log("Mensaje enviado a:", publicUser.email, contactMessage, contactEmail, contactPhone);
-    setContactMessage('');
-    setContactEmail('');
-    setContactPhone('');
-    alert('Mensaje enviado correctamente.');
+  const refreshDjangoAccessToken = async () => {
+    const refreshToken = localStorage.getItem('django_refresh_token');
+    if (!refreshToken) {
+        console.error("No se encontró el token de refresco de Django. Por favor, inicia sesión nuevamente.");
+        return null;
+    }
+
+    try {
+        const response = await fetch('http://localhost:8000/api/token/refresh/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refresh: refreshToken }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error al refrescar el token de Django:', errorData);
+
+            // Si el token de refresco no es válido, pide al usuario que inicie sesión nuevamente
+            if (errorData.code === "token_not_valid") {
+                console.error("El token de refresco de Django no es válido o ha expirado. Por favor, inicia sesión nuevamente.");
+                localStorage.removeItem('django_token'); 
+                localStorage.removeItem('django_refresh_token'); 
+                return null;
+            }
+            return null;
+        }
+
+        const data = await response.json();
+        localStorage.setItem('django_token', data.access);
+        return data.access;
+    } catch (error) {
+        console.error('Error al refrescar el token de Django:', error);
+        return null;
+    }
+  };
+
+  const handleContactMessage = async () => {
+    const token = localStorage.getItem('django_token');
+
+    if (!token) {
+        console.error("Usuario no autenticado. Por favor, inicia sesión.");
+        return;
+    }
+
+    let djangoRecipientId;
+    try {
+        const emailResponse = await fetch('http://localhost:8000/api/get-user-uuid/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: publicUser.email.toLowerCase() })
+        });
+
+        if (emailResponse.ok) {
+            const data = await emailResponse.json();
+            djangoRecipientId = data.uuid;
+        } else {
+            console.error("Error al obtener el UUID del usuario en Django.");
+            return;
+        }
+    } catch (error) {
+        console.error("Error al solicitar el UUID del usuario:", error);
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:8000/api/send-message/', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                recipient_id: djangoRecipientId,
+                body: contactMessage
+            })
+        });
+
+        if (response.ok) {
+            console.log("Mensaje enviado exitosamente");
+            setContactMessage('');
+            alert("Mensaje enviado con éxito!");
+        } else {
+            const errorData = await response.json();
+            console.error("Error al enviar el mensaje:", errorData);
+            alert("Hubo un error al enviar el mensaje.");
+        }
+    } catch (error) {
+        console.error("Error en la solicitud:", error);
+        alert("No se pudo enviar el mensaje. Por favor, intenta nuevamente.");
+    }
   };
 
   return (
@@ -147,9 +230,9 @@ function CalendarioPublicPage() {
             <FullCalendar
               plugins={[dayGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"
-              events={events} // Muestra los eventos sin opción de modificación
-              selectable={false} // Desactiva la selección
-              eventClick={null} // No permite interacción en los eventos
+              events={events}
+              selectable={false}
+              eventClick={null}
             />
           </div>
         </div>

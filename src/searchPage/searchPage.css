@@ -1,16 +1,40 @@
 /* Mantiene la coherencia estética con los demás archivos */
 .search-page {
-    font-family: 'Roboto', sans-serif;
-    padding: 20px;
-    max-width: 1300px;
-    margin: 0 auto;
-    background-color: #2d2d2d;
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    border-radius: 10px;
-    margin-top: 150px;
-    box-shadow: 3px 0px 20px 8px rgba(38, 162, 149, 1);
-  }
+  position: relative;
+  font-family: 'Roboto', sans-serif;
+  padding: 20px;
+  max-width: 1300px;
+  margin: 0 auto;
+  background-color: #2d2d2d;
+  color: #fff;
+  border-radius: 10px;
+  margin-top: 150px;
+  box-shadow: 3px 0px 20px 8px rgba(38, 162, 149, 1); /* Sombra original */
+}
+
+.search-page::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  z-index: -1;
+  border-radius: 10px;
+  background: linear-gradient(
+      90deg,
+      #26A295 0%,
+      rgba(255, 200, 100, 1) 15%,
+      #d320cd 30%,     /* Primer aparición de #e36be0 */
+      rgba(243, 0, 137, 1) 45%,
+      #d320cd 55%,     /* Segunda aparición de #e36be0 para resaltarlo */
+      #f6c90e 70%,
+      #2F1EEA 85%,
+      #4A90E2 100%
+  );
+  box-shadow: 3px 0px 20px 8px rgba(0, 0, 0, 0.2);
+  opacity: 0.8;
+}
   
   /* Estructura del contenedor */
   .search-container {

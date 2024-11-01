@@ -284,7 +284,6 @@ const handleContactMessage = async () => {
           <ul>
             <li><a href="/">Inicio</a></li>
             <li><a href="/search">Búsqueda</a></li>
-            <li><a href="/contact">Contacto</a></li>
             <li><a href="/inbox">Buzón de Entrada</a></li>
             <li><a href="/gallery">Galería</a></li> {/* Enlace agregado */}
             <li><a href="/profile">{currentUser ? currentUser.email : 'Perfil'}</a></li>

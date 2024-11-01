@@ -67,12 +67,10 @@ function SearchPage() {
         <nav>
           <ul>
             <li><Link to="/">Inicio</Link></li>
-            <li><Link to="/profile">Mi Perfil</Link></li>
-            <li><Link to="/calendar">Calendario</Link></li>
-            <li><Link to="/contact">Contacto</Link></li>
+            <li><a href="/calendario">Calendario</a></li> {/* Enlace al calendario */}
             <li><Link to="/gallery">Galería</Link></li>
             <li><Link to="/inbox">Buzón de Entrada</Link></li>
-            <li><Link to="/alerts">Alertas</Link></li>
+            <li><Link to="/profile">Mi Perfil</Link></li>
             {user && (
               <li>
                 <button

@@ -49,7 +49,7 @@ h1 {
 /* Hover para calendar-section similar a scheduled-events */
 .calendar-section:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 20px rgba(243, 0, 137, 1);
+  box-shadow: 0 12px 20px rgb(0, 0, 0);
 }
 
 .react-calendar {

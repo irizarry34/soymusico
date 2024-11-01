@@ -33,7 +33,6 @@ function LandingPage() {
           <nav>
             <ul>
               <li><Link to="/search">Búsqueda</Link></li>
-              <li><Link to="/contact">Contacto</Link></li>
               {/* Mostrar enlace "Perfil" si el usuario está autenticado */}
               {user ? (
                 <>

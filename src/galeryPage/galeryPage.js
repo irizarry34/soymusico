@@ -288,12 +288,15 @@ function GaleryPage() {
         {progress > 0 && <p>Subiendo: {progress}%</p>}
       </div>
 
-      {/* Galería de medios */}
       <div className="media-gallery">
         {media.map((item, index) => (
           <div key={index} className={`media-item ${selectedMedia.includes(item) ? 'selected' : ''}`}>
             <div className="select-box" onClick={() => toggleSelectMedia(item)} style={{ fontSize: '24px' }}>
               {selectedMedia.includes(item) ? '✓' : '□'}
+            </div>
+            {/* Tag de estado público/privado */}
+            <div className={`tag ${item.is_public ? 'public' : 'private'}`}>
+              {item.is_public ? 'Público' : 'Privado'}
             </div>
             {item.url.endsWith('.mp4') || item.url.endsWith('.mov') ? (
               <video controls src={item.url} alt="Media" />

@@ -244,7 +244,6 @@ function CalendarioPage() {
             <li><a href="/">Inicio</a></li>
             <li><a href="/search">Búsqueda</a></li>
             <li><a href="/calendario">Calendario</a></li>
-            <li><a href="/contact">Contacto</a></li>
             <li><a href="/inbox">Buzón de Entrada</a></li>
             <li><a href="/gallery">Galería</a></li>
             <li><a href="/profile">{user ? user.email : 'Perfil'}</a></li>
