@@ -28,9 +28,9 @@ applications:
       phases:
         preBuild:
           commands:
-            - pip install -r soymusicomessaging/requirements.txt  # Ruta a `requirements.txt` en la segunda carpeta
+            - pip install -r requirements.txt
         build:
           commands:
-            - python3 manage.py migrate  # `manage.py` está en la primera carpeta
+            - python3 manage.py migrate  # Ruta corregida de `manage.py`
             - python3 manage.py collectstatic --noinput
       startCommand: python3 manage.py runserver
