@@ -1,7 +1,7 @@
 version: 1
 applications:
   - frontend:
-      frontendRoot: soymusico  # Ubicación de la carpeta que contiene React
+      frontendRoot: soymusico  # Carpeta donde tienes el proyecto React
       phases:
         preBuild:
           commands:
@@ -10,7 +10,7 @@ applications:
         build:
           commands:
             - cd soymusico
-            - npm run build # Genera el build de producción de React
+            - npm run build # Construye el proyecto React para producción
       artifacts:
         baseDirectory: soymusico/build # Ubicación del build de React
         files:
@@ -23,16 +23,16 @@ applications:
           headers:
             - key: 'Cache-Control'
               value: 'no-cache, no-store, must-revalidate'
-  backend:
-    backendRoot: soymusicomessaging  # Ubicación de la carpeta que contiene Django
-    phases:
-      preBuild:
-        commands:
-          - cd soymusicomessaging
-          - pip install -r requirements.txt
-      build:
-        commands:
-          - cd soymusicomessaging
-          - python manage.py migrate
-          - python manage.py collectstatic --noinput
-    startCommand: cd soymusicomessaging && python manage.py runserver
+    backend:
+      backendRoot: soymusico/soymusicomessaging  # Ruta correcta para el backend de Django
+      phases:
+        preBuild:
+          commands:
+            - cd soymusico/soymusicomessaging
+            - pip install -r requirements.txt
+        build:
+          commands:
+            - cd soymusico/soymusicomessaging
+            - python3 manage.py migrate
+            - python3 manage.py collectstatic --noinput
+      startCommand: cd soymusico/soymusicomessaging && python3 manage.py runserver
