@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
 import './loginPage.css';
 import { Link, useNavigate } from 'react-router-dom';
-
+import api from '../axiosConfig';
 
 function LoginPage() {
   const [email, setEmail] = useState('');
@@ -30,26 +30,22 @@ function LoginPage() {
         console.log('Sesión completa en Supabase:', session);
 
         if (session && session.session && session.session.access_token) {
-          localStorage.setItem('supabase_token', session.session.access_token); // Guardar el token de Supabase
-          localStorage.setItem('supabase_refresh_token', session.session.refresh_token); // Guardar el refresh token de Supabase
+          localStorage.setItem('supabase_token', session.session.access_token);
+          localStorage.setItem('supabase_refresh_token', session.session.refresh_token);
           localStorage.setItem('user_email', email);
           localStorage.setItem('user_password', password);
-          console.log('Token de Supabase almacenado:', session.session.access_token);
-          console.log('Token de refresco de Supabase almacenado:', session.session.refresh_token);
 
-          // Solicitar un token JWT de Django
-          const response = await fetch('http://localhost:8000/api/token/', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: email, password: password })
+          // Solicitar un token JWT de Django usando axios
+          const response = await api.post('/api/token/', {
+            email: email,
+            password: password,
           });
 
-          if (response.ok) {
-            const data = await response.json();
+          if (response.status === 200) {
+            const data = response.data;
             localStorage.setItem('django_token', data.access); // Guardar el token de acceso de Django
             localStorage.setItem('django_refresh_token', data.refresh); // Guardar el token de refresco de Django
             console.log('Token JWT de Django almacenado:', data.access);
-            console.log('Token de refresco de Django almacenado:', data.refresh);
 
             // Verificación de todos los tokens en localStorage
             console.log('Tokens en localStorage:', {
@@ -62,8 +58,7 @@ function LoginPage() {
             // Redirigir al perfil del usuario
             navigate('/profile');
           } else {
-            const errorData = await response.json();
-            setErrorMessage(`Error al obtener el token de Django: ${errorData.detail}`);
+            setErrorMessage(`Error al obtener el token de Django: ${response.statusText}`);
           }
         } else {
           console.error('No se encontró un token en la sesión de Supabase:', session);
@@ -124,7 +119,7 @@ function LoginPage() {
 
       {/* Imagen añadida debajo del formulario */}
       <div className="login-image">
-        <img src="loginPageimg.jpg" alt="Music Concept" /> {/* Ruta desde public */}
+        <img src="loginPageimg.jpg" alt="Music Concept" />
       </div>
     </div>
   );
