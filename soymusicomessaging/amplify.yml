@@ -24,13 +24,13 @@ applications:
             - key: Cache-Control
               value: no-cache, no-store, must-revalidate
     backend:
-      backendRoot: soymusico/soymusicomessaging  # Carpeta que contiene `requirements.txt`
+      backendRoot: .  # Se establece la raíz del proyecto
       phases:
         preBuild:
           commands:
-            - pip install -r requirements.txt  # Instalar directamente en backendRoot
+            - pip install -r soymusico/soymusicomessaging/requirements.txt  # Ruta completa
         build:
           commands:
-            - python3 manage.py migrate
-            - python3 manage.py collectstatic --noinput
-      startCommand: python3 manage.py runserver
+            - python3 soymusico/soymusicomessaging/manage.py migrate
+            - python3 soymusico/soymusicomessaging/manage.py collectstatic --noinput
+      startCommand: python3 soymusico/soymusicomessaging/manage.py runserver
