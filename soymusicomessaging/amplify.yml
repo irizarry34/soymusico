@@ -5,11 +5,9 @@ applications:
       phases:
         preBuild:
           commands:
-            - cd soymusico
             - npm install
         build:
           commands:
-            - cd soymusico
             - npm run build
       artifacts:
         baseDirectory: soymusico/build
