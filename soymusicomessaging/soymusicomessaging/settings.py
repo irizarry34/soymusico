@@ -2,6 +2,12 @@ from pathlib import Path
 from datetime import timedelta
 import os
 from dotenv import load_dotenv
+from pathlib import Path
+
+# Define BASE_DIR como la carpeta raíz de tu proyecto
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Cambia a la duración que prefieras
@@ -122,6 +128,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
