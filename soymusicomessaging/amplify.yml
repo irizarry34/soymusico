@@ -10,7 +10,7 @@ applications:
         build:
           commands:
             - cd soymusico
-            - npm run build # Crea el build de producción de React
+            - npm run build # Genera el build de producción de React
       artifacts:
         baseDirectory: soymusico/build # Ubicación del build de React
         files:
@@ -23,16 +23,16 @@ applications:
           headers:
             - key: 'Cache-Control'
               value: 'no-cache, no-store, must-revalidate'
-    backend:
-      backendRoot: soymusicomessaging  # Ubicación de la carpeta que contiene Django
-      phases:
-        preBuild:
-          commands:
-            - cd soymusicomessaging
-            - pip install -r requirements.txt
-        build:
-          commands:
-            - cd soymusicomessaging
-            - python manage.py migrate
-            - python manage.py collectstatic --noinput
-      startCommand: cd soymusicomessaging && python manage.py runserver
+  backend:
+    backendRoot: soymusicomessaging  # Ubicación de la carpeta que contiene Django
+    phases:
+      preBuild:
+        commands:
+          - cd soymusicomessaging
+          - pip install -r requirements.txt
+      build:
+        commands:
+          - cd soymusicomessaging
+          - python manage.py migrate
+          - python manage.py collectstatic --noinput
+    startCommand: cd soymusicomessaging && python manage.py runserver
