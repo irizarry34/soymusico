@@ -1,5 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { createClient } from '@supabase/supabase-js';
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);  // Asegúrate de que estas constantes estén definidas
+const navigate = useNavigate();
 
 function Navbar({ newMessageAlert }) {
   return (
