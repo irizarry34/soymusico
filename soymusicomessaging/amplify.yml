@@ -24,13 +24,13 @@ applications:
             - key: Cache-Control
               value: no-cache, no-store, must-revalidate
     backend:
-      backendRoot: soymusico/soymusicomessaging  # La primera carpeta `soymusicomessaging`
+      backendRoot: soymusico/soymusicomessaging
       phases:
         preBuild:
           commands:
-            - pip install -r requirements.txt
+            - pip install -r soymusico/soymusicomessaging/requirements.txt  # Ruta completa a `requirements.txt`
         build:
           commands:
-            - python3 manage.py migrate  # Ruta corregida de `manage.py`
+            - python3 manage.py migrate
             - python3 manage.py collectstatic --noinput
       startCommand: python3 manage.py runserver
