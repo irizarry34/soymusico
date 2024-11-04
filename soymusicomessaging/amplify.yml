@@ -10,17 +10,12 @@ applications:
           commands:
             - npm run build
       artifacts:
-        baseDirectory: soymusico/build
+        baseDirectory: build
         files:
           - "**/*"
       cache:
         paths:
-          - soymusico/node_modules/**/*
-      customHeaders:
-        - pattern: "**"
-          headers:
-            - key: Cache-Control
-              value: no-cache, no-store, must-revalidate
+          - node_modules/**/*
     backend:
       backendRoot: .
       phases:
