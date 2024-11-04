@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import LandingPage from './landingPage/landingpage';
 import RegisterPage from './registerpage/registerPage';
 import LoginPage from './loginPage/loginPage';
@@ -16,59 +16,27 @@ import Inbox from './inbox/inbox';
 import Navbar from './components/Navbar';
 
 function App() {
-  const [newMessageAlert, setNewMessageAlert] = useState(false); // Estado para manejar la alerta de nuevos mensajes
+  const [newMessageAlert, setNewMessageAlert] = useState(false);
 
   return (
-    <Router>
-      <div className="App">
-        {/* Pasar el estado de la alerta de nuevos mensajes a Navbar */}
-        <Navbar newMessageAlert={newMessageAlert} />
-        
-        <Routes>
-          {/* Ruta para la página principal (landing page) */}
-          <Route path="/" element={<LandingPage />} />
-          
-          {/* Ruta para la página de registro */}
-          <Route path="/register" element={<RegisterPage />} />
-          
-          {/* Ruta para la página de login */}
-          <Route path="/login" element={<LoginPage />} />
-          
-          {/* Ruta para la página de perfil */}
-          <Route path="/profile" element={<PerfilPage />} />
-
-          {/* Ruta para la página de ver el perfil público */}
-          <Route path="/publicProfile/:id" element={<PublicProfile />} />
-
-          {/* Ruta para la página de búsqueda */}
-          <Route path="/search" element={<SearchPage />} />
-
-          {/* Ruta para la página de galería privada */}
-          <Route path="/gallery" element={<GaleryPage />} />
-
-          {/* Ruta para la galería pública del usuario */}
-          <Route path="/galeryPublic/:id" element={<GaleryPublicPage />} />
-          
-          {/* Ruta para la página de calendario */}
-          <Route path="/calendario" element={<CalendarioPage />} />
-
-          {/* Ruta para la página de calendario público */}
-          <Route path="/calendarioPublic/:id" element={<CalendarioPublicPage />} />
-
-          {/* Ruta para la página de inbox */}
-          <Route 
-            path="/inbox" 
-            element={<Inbox setNewMessageAlert={setNewMessageAlert} />} 
-          />
-
-          {/* Ruta para las alertas que dirige al Inbox */}
-          <Route 
-            path="/alerts" 
-            element={<Inbox setNewMessageAlert={setNewMessageAlert} />} 
-          />
-        </Routes>
-      </div>
-    </Router>
+    <div className="App">
+      <Navbar newMessageAlert={newMessageAlert} />
+      
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/profile" element={<PerfilPage />} />
+        <Route path="/publicProfile/:id" element={<PublicProfile />} />
+        <Route path="/search" element={<SearchPage />} />
+        <Route path="/gallery" element={<GaleryPage />} />
+        <Route path="/galeryPublic/:id" element={<GaleryPublicPage />} />
+        <Route path="/calendario" element={<CalendarioPage />} />
+        <Route path="/calendarioPublic/:id" element={<CalendarioPublicPage />} />
+        <Route path="/inbox" element={<Inbox setNewMessageAlert={setNewMessageAlert} />} />
+        <Route path="/alerts" element={<Inbox setNewMessageAlert={setNewMessageAlert} />} />
+      </Routes>
+    </div>
   );
 }
 
