@@ -24,11 +24,11 @@ applications:
             - key: Cache-Control
               value: no-cache, no-store, must-revalidate
     backend:
-      backendRoot: soymusico/soymusicomessaging  # La primera carpeta `soymusicomessaging`
+      backendRoot: soymusico/soymusicomessaging  # Carpeta que contiene `requirements.txt`
       phases:
         preBuild:
           commands:
-            - pip install -r requirements.txt  # `requirements.txt` está en esta misma carpeta
+            - pip install -r requirements.txt  # Instalar directamente en backendRoot
         build:
           commands:
             - python3 manage.py migrate
