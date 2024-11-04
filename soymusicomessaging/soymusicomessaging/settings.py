@@ -1,5 +1,7 @@
 from pathlib import Path
 from datetime import timedelta
+import os
+from dotenv import load_dotenv
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Cambia a la duración que prefieras
@@ -82,14 +84,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'soymusicomessaging.wsgi.application'
 
+# Carga el archivo .env
+load_dotenv()
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'soymusico',
-        'USER': 'postgres',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER': os.getenv('DATABASE_USER'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': os.getenv('DATABASE_HOST'),
+        'PORT': os.getenv('DATABASE_PORT'),
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
 }
 

@@ -158,7 +158,7 @@
 
 /* Checkbox pequeño y alineado a la derecha */
 .message-checkbox {
-  transform: scale(0.5);
+  transform: scale(0.8);
   margin-left: 25px;
   cursor: pointer;
   margin-top: -80px;
