@@ -179,3 +179,25 @@ button:hover {
     max-width: 100%;
   }
 }
+
+/* Estilo para el botón de restablecimiento de contraseña */
+.password-reset button {
+  background-color: #26A295; /* Azul suave */
+  color: white;
+  border: none;
+  padding: 10px 10px;
+  font-size: 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.password-reset button:hover {
+  background-color: #26A295; /* Azul más oscuro al pasar el cursor */
+}
+
+.password-reset button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.5); /* Resalta el botón al enfocarse */
+}
