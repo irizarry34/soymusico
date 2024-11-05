@@ -34,7 +34,7 @@ function Inbox() {
     }
 
     try {
-      const response = await fetch('${process.env.REACT_APP_API_URL}/api/get-user-uuid/', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/get-user-uuid/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${djangoToken}`,
@@ -58,7 +58,7 @@ function Inbox() {
     const djangoToken = localStorage.getItem('django_token');
 
     try {
-      const response = await fetch('${process.env.REACT_APP_API_URL}/api/get-user-uuid/', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/get-user-uuid/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${djangoToken}`,
@@ -232,7 +232,7 @@ function Inbox() {
     if (!djangoRecipientId || !messageText.trim()) return;
 
     try {
-      const response = await fetch('${process.env.REACT_APP_API_URL}/api/send-message/', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/send-message/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${djangoToken}`,
