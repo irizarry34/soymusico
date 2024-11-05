@@ -84,10 +84,10 @@ function LandingPage() {
           </div>
           {/* Segunda imagen - Contacto */}
           <div className="feature">
-            <Link to="/contact">
+            <Link to="/login">
               <div className="image-container">
                 <img src="musican2.jpg" alt="Músico 2" className="responsive-img" />
-                <div className="image-title">Contacto</div> {/* Título para la imagen */}
+                <div className="image-title">Iniciar Sesión</div> {/* Título para la imagen */}
               </div>
             </Link>
           </div>
