@@ -65,6 +65,7 @@ MIDDLEWARE = [
 
 CORS_ALLOWED_ORIGINS = [
     "https://master.du5bvw1goxlgn.amplifyapp.com",
+    "https://d0e6-2604-b000-b237-fbce-4108-3641-5ea6-b2e7.ngrok-free.app",
 ]
 
 
