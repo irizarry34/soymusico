@@ -63,7 +63,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://master.du5bvw1goxlgn.amplifyapp.com",
+]
+
+
 CORS_ALLOW_HEADERS = [
     'authorization',
     'content-type',
