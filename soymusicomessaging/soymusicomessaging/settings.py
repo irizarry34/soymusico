@@ -68,6 +68,16 @@ CORS_ALLOWED_ORIGINS = [
     "https://d0e6-2604-b000-b237-fbce-4108-3641-5ea6-b2e7.ngrok-free.app",
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS"
+]
 
 CORS_ALLOW_HEADERS = [
     'authorization',
