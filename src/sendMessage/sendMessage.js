@@ -7,7 +7,7 @@ const SendMessage = ({ recipientId }) => {
   const sendMessage = (e) => {
     e.preventDefault();
 
-    axios.post(`${process.env.REACT_APP_API_URL}/api/messages/`, {
+    axios.post(`http://localhost:8000/api/messages/`, {
       recipient: recipientId,
       body: messageBody
     }, {

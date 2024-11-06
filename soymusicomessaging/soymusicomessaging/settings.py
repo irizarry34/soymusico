@@ -2,30 +2,28 @@ from pathlib import Path
 from datetime import timedelta
 import os
 from dotenv import load_dotenv
-from pathlib import Path
 
-# Define BASE_DIR como la carpeta raíz de tu proyecto
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Cambia a la duración que prefieras
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Cambia a la duración que prefieras
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'ALGORITHM': 'HS256',
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
 load_dotenv()  # Cargar variables desde .env si existe
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
+# Asegúrate de incluir localhost, 127.0.0.1 y el dominio de Amplify
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,.amplifyapp.com').split(',')
 
 AUTH_USER_MODEL = 'messaging.CustomUser'
 
@@ -63,28 +61,16 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Configuración de CORS para permitir solicitudes desde Amplify y local
 CORS_ALLOWED_ORIGINS = [
-    "https://master.du5bvw1goxlgn.amplifyapp.com",
-    "https://d0e6-2604-b000-b237-fbce-4108-3641-5ea6-b2e7.ngrok-free.app",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://master.du5bvw1goxlgn.amplifyapp.com",  # URL de AWS Amplify
 ]
 
 CORS_ALLOW_CREDENTIALS = True
-
-CORS_ALLOW_METHODS = [
-    "GET",
-    "POST",
-    "PUT",
-    "PATCH",
-    "DELETE",
-    "OPTIONS"
-]
-
-CORS_ALLOW_HEADERS = [
-    'authorization',
-    'content-type',
-    'accept',
-    'origin',
-]
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+CORS_ALLOW_HEADERS = ["authorization", "content-type", "accept", "origin"]
 
 ROOT_URLCONF = 'soymusicomessaging.urls'
 
@@ -105,9 +91,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'soymusicomessaging.wsgi.application'
-
-# Carga el archivo .env
-load_dotenv()
 
 DATABASES = {
     'default': {
