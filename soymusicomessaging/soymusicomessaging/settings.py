@@ -18,12 +18,14 @@ SIMPLE_JWT = {
 
 load_dotenv()  # Cargar variables desde .env si existe
 
+# Configuración de SECRET_KEY desde el archivo .env
 SECRET_KEY = os.getenv('SECRET_KEY')
 
+# Configuración de DEBUG según el archivo .env
 DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
-# Asegúrate de incluir localhost, 127.0.0.1 y el dominio de Amplify
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,.amplifyapp.com').split(',')
+# Lista de hosts permitidos, incluyendo localhost, Amplify, y la IP pública de EC2
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,.amplifyapp.com,18.223.110.15').split(',')
 
 AUTH_USER_MODEL = 'messaging.CustomUser'
 
@@ -61,11 +63,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Configuración de CORS para permitir solicitudes desde Amplify y local
+# Configuración de CORS para permitir solicitudes desde Amplify y la IP pública de EC2
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "https://master.du5bvw1goxlgn.amplifyapp.com",  # URL de AWS Amplify
+    "http://18.223.110.15"  # Dirección pública de tu instancia EC2
 ]
 
 CORS_ALLOW_CREDENTIALS = True
