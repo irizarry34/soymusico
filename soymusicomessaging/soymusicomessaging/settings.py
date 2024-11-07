@@ -63,15 +63,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# Configuración de CORS para permitir solicitudes desde Amplify y la IP pública de EC2
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "https://master.du5bvw1goxlgn.amplifyapp.com",  # URL de AWS Amplify
-    "http://18.223.110.15",  # Dirección pública de tu instancia EC2
-    "https://5b3b-18-223-110-15.ngrok-free.app",
-]
 
+
+# Configuración de CORS para permitir solicitudes desde Amplify y la IP pública de EC2
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
 CORS_ALLOW_HEADERS = ["authorization", "content-type", "accept", "origin"]
