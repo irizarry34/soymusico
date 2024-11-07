@@ -34,7 +34,7 @@ function Inbox() {
     }
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/get-user-uuid/`, {
+      const response = await fetch(`http://18.223.110.15:8000/api/get-user-uuid/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${djangoToken}`,
@@ -58,7 +58,7 @@ function Inbox() {
     const djangoToken = localStorage.getItem('django_token');
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/get-user-uuid/`, {
+      const response = await fetch(`http://18.223.110.15:8000/api/get-user-uuid/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${djangoToken}`,
@@ -84,7 +84,7 @@ function Inbox() {
   
     try {
       // Asegúrate de que currentUserId es el destinatario (recipient_id) y selectedUser.id es el remitente (sender_id)
-      await fetch(`${process.env.REACT_APP_API_URL}/api/mark-messages-as-read/?recipient_id=${currentUserId}&sender_id=${selectedUser?.id}`, {
+      await fetch(`http://18.223.110.15:8000/api/mark-messages-as-read/?recipient_id=${currentUserId}&sender_id=${selectedUser?.id}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${djangoToken}`,
@@ -108,7 +108,7 @@ function Inbox() {
   
     const djangoToken = localStorage.getItem('django_token');
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/check-new-messages/?recipient_id=${currentUserId}`, {
+      const response = await fetch(`http://18.223.110.15:8000/api/check-new-messages/?recipient_id=${currentUserId}`, {
         headers: {
           'Authorization': `Bearer ${djangoToken}`,
           'Content-Type': 'application/json'
@@ -141,7 +141,7 @@ function Inbox() {
     await refreshAccessToken(navigate);
     const djangoToken = localStorage.getItem('django_token');
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/user-messages/?sender_id=${currentUserId}&recipient_id=${djangoRecipientId}`, {
+      const response = await fetch(`http://18.223.110.15:8000/api/user-messages/?sender_id=${currentUserId}&recipient_id=${djangoRecipientId}`, {
         headers: {
           'Authorization': `Bearer ${djangoToken}`,
           'Content-Type': 'application/json'
@@ -176,7 +176,7 @@ function Inbox() {
     const djangoToken = localStorage.getItem('django_token');
     try {
       for (let messageId of selectedMessages) {
-        await fetch(`${process.env.REACT_APP_API_URL}/api/delete-message/${messageId}/`, {
+        await fetch(`http://18.223.110.15:8000/api/delete-message/${messageId}/`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${djangoToken}`,
@@ -232,7 +232,7 @@ function Inbox() {
     if (!djangoRecipientId || !messageText.trim()) return;
 
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/send-message/`, {
+      const response = await fetch(`http://18.223.110.15:8000/api/send-message/`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${djangoToken}`,
