@@ -36,7 +36,7 @@ function LoginPage() {
           localStorage.setItem('user_password', password);
 
           // Solicitar un token JWT de Django
-          const response = await fetch(`${process.env.REACT_APP_API_URL}/api/token/`, {
+          const response = await fetch(`https://5b3b-18-223-110-15.ngrok-free.app/api/token/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: email, password: password })
