@@ -68,7 +68,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
     "https://master.du5bvw1goxlgn.amplifyapp.com",  # URL de AWS Amplify
-    "http://18.223.110.15"  # Dirección pública de tu instancia EC2
+    "http://18.223.110.15",  # Dirección pública de tu instancia EC2
+    "https://5b3b-18-223-110-15.ngrok-free.app",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
