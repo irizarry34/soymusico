@@ -7,7 +7,7 @@ const SendMessage = ({ recipientId }) => {
   const sendMessage = (e) => {
     e.preventDefault();
 
-    axios.post('http://localhost:8000/api/messages/', {
+    axios.post(`http://18.223.110.15:8000/api/messages/`, {
       recipient: recipientId,
       body: messageBody
     }, {

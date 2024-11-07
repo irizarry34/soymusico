@@ -54,7 +54,7 @@ function RegisterPage() {
     // Crear el usuario en Django con los datos necesarios, incluyendo el email
     const createDjangoUser = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/register/', {
+        const response = await fetch(`http://18.223.110.15:8000/api/register/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

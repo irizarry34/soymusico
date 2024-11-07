@@ -1,0 +1,29 @@
+version: 1
+applications:
+  - frontend:
+      frontendRoot: soymusico
+      phases:
+        preBuild:
+          commands:
+            - npm install
+        build:
+          commands:
+            - npm run build
+      artifacts:
+        baseDirectory: build
+        files:
+          - "**/*"
+      cache:
+        paths:
+          - node_modules/**/*
+    backend:
+      backendRoot: .
+      phases:
+        preBuild:
+          commands:
+            - pip install -r requirements.txt
+        build:
+          commands:
+            - python3 soymusicomessaging/manage.py migrate
+            - python3 soymusicomessaging/manage.py collectstatic --noinput
+      startCommand: python3 soymusicomessaging/manage.py runserver

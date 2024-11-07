@@ -1,22 +1,31 @@
 from pathlib import Path
 from datetime import timedelta
+import os
+from dotenv import load_dotenv
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Cambia a la duración que prefieras
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),    # Cambia a la duración que prefieras
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'ALGORITHM': 'HS256',
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv()  # Cargar variables desde .env si existe
 
-SECRET_KEY = 'django-insecure-laflc09!3r8=61enb0f^*dtapje455ue@k$d-p-rxmq#07q%__'
+# Configuración de SECRET_KEY desde el archivo .env
+SECRET_KEY = os.getenv('SECRET_KEY')
 
-DEBUG = True
+# Configuración de DEBUG según el archivo .env
+DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+# Lista de hosts permitidos, incluyendo localhost, Amplify, y la IP pública de EC2
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,ec2-18-223-110-15.us-east-2.compute.amazonaws.com,5b3b-18-223-110-15.ngrok-free.app').split(',')
 
 AUTH_USER_MODEL = 'messaging.CustomUser'
 
@@ -54,13 +63,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
+
+# Configuración de CORS para permitir solicitudes desde Amplify y la IP pública de EC2
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_HEADERS = [
-    'authorization',
-    'content-type',
-    'accept',
-    'origin',
-]
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
+CORS_ALLOW_HEADERS = ["authorization", "content-type", "accept", "origin"]
 
 ROOT_URLCONF = 'soymusicomessaging.urls'
 
@@ -85,11 +94,14 @@ WSGI_APPLICATION = 'soymusicomessaging.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'soymusico',
-        'USER': 'postgres',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER': os.getenv('DATABASE_USER'),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': os.getenv('DATABASE_HOST'),
+        'PORT': os.getenv('DATABASE_PORT'),
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
 }
 
@@ -113,6 +125,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

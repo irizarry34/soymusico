@@ -3,11 +3,11 @@ import { supabase } from '../supabaseClient';
 import './loginPage.css';
 import { Link, useNavigate } from 'react-router-dom';
 
-
 function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState(''); // Para mensajes de éxito
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -30,15 +30,13 @@ function LoginPage() {
         console.log('Sesión completa en Supabase:', session);
 
         if (session && session.session && session.session.access_token) {
-          localStorage.setItem('supabase_token', session.session.access_token); // Guardar el token de Supabase
-          localStorage.setItem('supabase_refresh_token', session.session.refresh_token); // Guardar el refresh token de Supabase
+          localStorage.setItem('supabase_token', session.session.access_token);
+          localStorage.setItem('supabase_refresh_token', session.session.refresh_token);
           localStorage.setItem('user_email', email);
           localStorage.setItem('user_password', password);
-          console.log('Token de Supabase almacenado:', session.session.access_token);
-          console.log('Token de refresco de Supabase almacenado:', session.session.refresh_token);
 
           // Solicitar un token JWT de Django
-          const response = await fetch('http://localhost:8000/api/token/', {
+          const response = await fetch(`http://18.223.110.15:8000/api/token/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: email, password: password })
@@ -46,10 +44,9 @@ function LoginPage() {
 
           if (response.ok) {
             const data = await response.json();
-            localStorage.setItem('django_token', data.access); // Guardar el token de acceso de Django
-            localStorage.setItem('django_refresh_token', data.refresh); // Guardar el token de refresco de Django
+            localStorage.setItem('django_token', data.access);
+            localStorage.setItem('django_refresh_token', data.refresh);
             console.log('Token JWT de Django almacenado:', data.access);
-            console.log('Token de refresco de Django almacenado:', data.refresh);
 
             // Verificación de todos los tokens en localStorage
             console.log('Tokens en localStorage:', {
@@ -59,8 +56,7 @@ function LoginPage() {
               supabase_refresh_token: localStorage.getItem('supabase_refresh_token'),
             });
 
-            // Redirigir al perfil del usuario
-            navigate('/profile');
+            navigate('/profile'); // Redirigir al perfil del usuario
           } else {
             const errorData = await response.json();
             setErrorMessage(`Error al obtener el token de Django: ${errorData.detail}`);
@@ -73,6 +69,20 @@ function LoginPage() {
     } catch (err) {
       console.error('Error al iniciar sesión:', err);
       setErrorMessage('Ocurrió un error inesperado. Intenta nuevamente.');
+    }
+  };
+
+  const handlePasswordReset = async () => {
+    try {
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+      if (error) {
+        setErrorMessage('Error al enviar el correo de restablecimiento: ' + error.message);
+      } else {
+        setSuccessMessage('Correo de restablecimiento enviado. Revisa tu bandeja de entrada.');
+      }
+    } catch (err) {
+      console.error('Error al solicitar restablecimiento de contraseña:', err);
+      setErrorMessage('Error al solicitar el restablecimiento. Intenta nuevamente.');
     }
   };
 
@@ -96,6 +106,7 @@ function LoginPage() {
       <div className="login-container">
         <h1>Iniciar Sesión</h1>
         {errorMessage && <div className="error-message">{errorMessage}</div>}
+        {successMessage && <div className="success-message">{successMessage}</div>}
         <form onSubmit={handleLogin}>
           <label>Correo Electrónico:</label>
           <input 
@@ -117,6 +128,11 @@ function LoginPage() {
 
           <button type="submit">Iniciar Sesión</button>
         </form>
+        <div className="password-reset">
+          <button type="button" onClick={handlePasswordReset}>
+            ¿Olvidaste tu contraseña?
+          </button>
+        </div>
         <div className="back-link">
           <Link to="/">Volver a la página principal</Link>
         </div>
@@ -124,7 +140,7 @@ function LoginPage() {
 
       {/* Imagen añadida debajo del formulario */}
       <div className="login-image">
-        <img src="loginPageimg.jpg" alt="Music Concept" /> {/* Ruta desde public */}
+        <img src="loginPageimg.jpg" alt="Music Concept" />
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
   "name": "soymusico",
   "version": "0.1.0",
   "private": true,
-  
+  "proxy": "http://127.0.0.1:8000",
   "dependencies": {
     "@fullcalendar/daygrid": "^6.1.15",
     "@fullcalendar/interaction": "^6.1.15",
@@ -13,6 +13,7 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.7.7",
     "date-fns": "^4.1.0",
     "react": "^18.3.1",
     "react-calendar": "^5.0.0",
@@ -49,6 +50,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "cross-env": "^7.0.3"
   }
 }

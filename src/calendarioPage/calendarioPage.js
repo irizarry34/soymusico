@@ -20,6 +20,7 @@ function CalendarioPage() {
   const [events, setEvents] = useState([]);
   const [selectedDates, setSelectedDates] = useState([]);
   const [formData, setFormData] = useState({
+    id: null, // Añadimos el campo id aquí
     status: 'disponible',
     event_details: '',
     client_name: '',
@@ -59,8 +60,8 @@ function CalendarioPage() {
         const normalizedEvents = data.map(event => ({
           id: event.id,
           title: event.status || 'Disponible',
-          start: new Date(event.calendar_start_date).toISOString().split('T')[0],  // Usamos las fechas seleccionadas en el calendario (del 1 al 6)
-          end: new Date(event.calendar_end_date).toISOString().split('T')[0],      // Lo mismo para la fecha de fin del calendario
+          start: new Date(event.calendar_start_date).toISOString().split('T')[0],
+          end: new Date(event.calendar_end_date).toISOString().split('T')[0],
           extendedProps: {
             event_details: event.event_details,
             client_name: event.client_name,
@@ -84,10 +85,7 @@ function CalendarioPage() {
     const start = new Date(selectionInfo.start);
     let end = new Date(selectionInfo.end);
 
-    // FullCalendar incluye el siguiente día, lo dejamos así para el calendario
     const calendarEndDate = new Date(end);
-
-    // Ajustamos el evento para que termine el día anterior (1-5 en vez de 1-6)
     end.setDate(end.getDate() - 1);
 
     setSelectedDates([start, end]);
@@ -97,6 +95,7 @@ function CalendarioPage() {
     );
     if (event) {
       setFormData({
+        id: event.id, // Añadimos el id del evento al formData para la edición
         status: event.title || 'disponible',
         event_details: event.extendedProps.event_details || '',
         client_name: event.extendedProps.client_name || '',
@@ -107,6 +106,7 @@ function CalendarioPage() {
       });
     } else {
       setFormData({
+        id: null,
         status: 'disponible',
         event_details: '',
         client_name: '',
@@ -120,8 +120,16 @@ function CalendarioPage() {
 
   const handleEventClick = (info) => {
     const event = info.event;
-    setSelectedDates([new Date(event.start), new Date(event.end || event.start)]);
+    
+    // Ajustamos la fecha de fin para que coincida con el comportamiento de handleDateSelect
+    const start = new Date(event.start);
+    const end = new Date(event.end || event.start);
+    end.setDate(end.getDate() - 1); // Restamos un día para mostrar el rango correctamente
+  
+    setSelectedDates([start, end]);
+  
     setFormData({
+      id: event.id, // Añadimos el id del evento al formData para la edición
       status: event.title || 'disponible',
       event_details: event.extendedProps.event_details || '',
       client_name: event.extendedProps.client_name || '',
@@ -133,25 +141,22 @@ function CalendarioPage() {
   };
 
   const handleSave = async () => {
-    const { status, event_details, client_name, start_time, end_time, earnings } = formData;
-
+    const { id, status, event_details, client_name, start_time, end_time, earnings } = formData;
     const duration = calculateDuration(start_time, end_time);
-
     const [startDate, endDate] = selectedDates;
 
-    // Guardamos la fecha para el calendario sin modificar (1-6 de noviembre)
     const calendarEndDate = new Date(endDate);
-    calendarEndDate.setDate(endDate.getDate() + 1); // FullCalendar selecciona hasta el día siguiente
+    calendarEndDate.setDate(endDate.getDate() + 1);
 
-    // Guardamos el evento real (1-5 de noviembre)
     const { error } = await supabase
       .from('availability')
       .upsert({
+        id: id || undefined,  // Esto asegura que solo se actualice si id existe
         user_id: user.id,
-        start_date: startDate.toISOString().split('T')[0], // Guardamos el evento como 1-5 de noviembre
-        end_date: endDate.toISOString().split('T')[0],     // Guardamos el evento como 1-5 de noviembre
-        calendar_start_date: startDate.toISOString().split('T')[0], // Guardamos la selección de fecha original del calendario (1-6)
-        calendar_end_date: calendarEndDate.toISOString().split('T')[0], // Guardamos la selección de fin original del calendario (1-6)
+        start_date: startDate.toISOString().split('T')[0],
+        end_date: endDate.toISOString().split('T')[0],
+        calendar_start_date: startDate.toISOString().split('T')[0],
+        calendar_end_date: calendarEndDate.toISOString().split('T')[0],
         status,
         event_details,
         client_name,
@@ -167,10 +172,11 @@ function CalendarioPage() {
     } else {
       setMessage({ type: 'success', text: 'Evento guardado con éxito.' });
 
-      const newEvent = {
+      const updatedEvent = {
+        id: id || new Date().getTime(),
         title: status || 'Disponible',
         start: startDate.toISOString().split('T')[0],
-        end: calendarEndDate.toISOString().split('T')[0], // Mostramos 1-6 en el calendario
+        end: calendarEndDate.toISOString().split('T')[0],
         extendedProps: {
           event_details,
           client_name,
@@ -181,14 +187,29 @@ function CalendarioPage() {
         }
       };
 
-      setEvents(prevEvents => [...prevEvents, newEvent]);
+      setEvents(prevEvents => {
+        if (id) {
+          return prevEvents.map(event => event.id === id ? updatedEvent : event);
+        } else {
+          return [...prevEvents, updatedEvent];
+        }
+      });
     }
 
+    setFormData({
+      id: null,
+      status: 'disponible',
+      event_details: '',
+      client_name: '',
+      start_time: '',
+      end_time: '',
+      duration: '',
+      earnings: ''
+    });
     setSelectedDates([]);
     setTimeout(() => setMessage(null), 3000);
   };
 
-  // Función para borrar un evento por su ID
   const handleDeleteEvent = async (eventId) => {
     const { error } = await supabase
       .from('availability')
@@ -199,7 +220,6 @@ function CalendarioPage() {
       setMessage({ type: 'error', text: 'Error al borrar el evento.' });
       console.error('Error al borrar el evento:', error);
     } else {
-      // Eliminamos el evento de la lista de eventos en el frontend
       setEvents(events.filter(event => event.id !== eventId));
       setMessage({ type: 'success', text: 'Evento borrado con éxito.' });
     }
@@ -347,7 +367,6 @@ function CalendarioPage() {
                 {events.map(event => (
                   <li key={event.id}>
                     <p>
-                      {/* Restamos un día a la fecha de fin en los eventos agendados */}
                       <strong>{new Date(event.start).toISOString().split('T')[0]}</strong> - <strong>{new Date(new Date(event.end).setDate(new Date(event.end).getDate() - 1)).toISOString().split('T')[0]}</strong>
                     </p>
                     <div className="event-details">

@@ -180,7 +180,7 @@ function PublicProfile() {
     }
 
     try {
-        const response = await fetch('http://localhost:8000/api/token/refresh/', {
+        const response = await fetch(`http://18.223.110.15:8000/api/token/refresh/`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ refresh: refreshToken }),
@@ -220,7 +220,7 @@ const handleContactMessage = async () => {
   // Obtén el UUID de Django del usuario actual usando su email
   let djangoRecipientId;
   try {
-      const emailResponse = await fetch('http://localhost:8000/api/get-user-uuid/', {
+      const emailResponse = await fetch(`http://18.223.110.15:8000/api/get-user-uuid/`, {
           method: 'POST',
           headers: { 
               'Content-Type': 'application/json' 
@@ -242,7 +242,7 @@ const handleContactMessage = async () => {
 
   // Ahora, envía el mensaje usando el UUID de Django como `recipient_id`
   try {
-      const response = await fetch('http://localhost:8000/api/send-message/', {
+      const response = await fetch(`http://18.223.110.15:8000/api/send-message/`, {
           method: 'POST',
           headers: {
               'Authorization': `Bearer ${token}`,
