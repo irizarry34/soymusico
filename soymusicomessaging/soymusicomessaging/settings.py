@@ -25,7 +25,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DJANGO_DEBUG', 'False') == 'True'
 
 # Lista de hosts permitidos, incluyendo localhost, Amplify, y la IP pública de EC2
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,.amplifyapp.com,18.223.110.15').split(',')
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1,ec2-18-223-110-15.us-east-2.compute.amazonaws.com,5b3b-18-223-110-15.ngrok-free.app').split(',')
 
 AUTH_USER_MODEL = 'messaging.CustomUser'
 
