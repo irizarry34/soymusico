@@ -9,6 +9,9 @@ import { refreshAccessToken } from '../utils/auth';
 let fetchMessagesInterval;
 let checkForNewMessagesInterval;
 
+// Declara el límite de caracteres
+const MESSAGE_LIMIT = 500;
+
 function Inbox() {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -18,6 +21,7 @@ function Inbox() {
   const [djangoRecipientId, setDjangoRecipientId] = useState(null); // Django UUID for selected user
   const [messageText, setMessageText] = useState('');
   const [selectedMessages, setSelectedMessages] = useState([]); // Mensajes seleccionados para eliminar
+  const [remainingChars, setRemainingChars] = useState(MESSAGE_LIMIT);
   const [newMessageAlert, setNewMessageAlert] = useState(false); // Alerta de nuevos mensajes
   const navigate = useNavigate();
   const [newMessageSender, setNewMessageSender] = useState(null);
@@ -411,9 +415,20 @@ function Inbox() {
               <textarea
                 placeholder="Escribe un mensaje..."
                 value={messageText}
-                onChange={(e) => setMessageText(e.target.value)}
+                onChange={(e) => {
+                  const text = e.target.value;
+                  if (text.length <= MESSAGE_LIMIT) {
+                    setMessageText(text);
+                    setRemainingChars(MESSAGE_LIMIT - text.length);
+                  }
+                }}
               />
-              <button onClick={handleSendMessage}>Enviar</button>
+              <p style={{ color: remainingChars < 0 ? 'red' : 'black' }}>
+                {remainingChars} caracteres restantes
+              </p>
+              <button onClick={handleSendMessage} disabled={messageText.length === 0 || messageText.length > MESSAGE_LIMIT}>
+                Enviar
+              </button>
             </div>
           </>
         ) : (
