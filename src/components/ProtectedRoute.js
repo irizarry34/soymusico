@@ -1,15 +1,10 @@
 import React from "react";
-import { Route, Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectedRoute = ({ element: Component, ...rest }) => {
-    const djangoToken = localStorage.getItem("django_token"); // Verifica el token JWT de Django
+const ProtectedRoute = () => {
+  const djangoToken = localStorage.getItem("django_token"); // Verifica el token JWT de Django
 
-    return (
-        <Route
-            {...rest}
-            element={djangoToken ? Component : <Navigate to="/login" />}
-        />
-    );
+  return djangoToken ? <Outlet /> : <Navigate to="/login" />;
 };
 
 export default ProtectedRoute;

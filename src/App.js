@@ -27,16 +27,18 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
 
-        {/* Rutas protegidas */}
-        <ProtectedRoute path="/profile" element={<PerfilPage />} />
-        <ProtectedRoute path="/publicProfile/:id" element={<PublicProfile />} />
-        <ProtectedRoute path="/search" element={<SearchPage />} />
-        <ProtectedRoute path="/gallery" element={<GaleryPage />} />
-        <ProtectedRoute path="/galeryPublic/:id" element={<GaleryPublicPage />} />
-        <ProtectedRoute path="/calendario" element={<CalendarioPage />} />
-        <ProtectedRoute path="/calendarioPublic/:id" element={<CalendarioPublicPage />} />
-        <ProtectedRoute path="/inbox" element={<Inbox setNewMessageAlert={setNewMessageAlert} />} />
-        <ProtectedRoute path="/alerts" element={<Inbox setNewMessageAlert={setNewMessageAlert} />} />
+        {/* Agrupa las rutas protegidas dentro de ProtectedRoute */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/profile" element={<PerfilPage />} />
+          <Route path="/publicProfile/:id" element={<PublicProfile />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/gallery" element={<GaleryPage />} />
+          <Route path="/galeryPublic/:id" element={<GaleryPublicPage />} />
+          <Route path="/calendario" element={<CalendarioPage />} />
+          <Route path="/calendarioPublic/:id" element={<CalendarioPublicPage />} />
+          <Route path="/inbox" element={<Inbox setNewMessageAlert={setNewMessageAlert} />} />
+          <Route path="/alerts" element={<Inbox setNewMessageAlert={setNewMessageAlert} />} />
+        </Route>
       </Routes>
     </div>
   );
