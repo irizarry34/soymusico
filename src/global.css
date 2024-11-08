@@ -1,0 +1,74 @@
+/* global.css */
+
+/* Estilos generales para todos los tamaños de pantalla */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #2d2d2d;
+    color: #fff;
+  }
+  
+  /* Ajustes de fuentes y tamaños de contenedores */
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+  }
+  
+  img, video {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+  
+  /* Estilos responsivos */
+  @media (max-width: 1200px) {
+    /* Reduce el tamaño de las fuentes en pantallas medianas */
+    body {
+      font-size: 0.95rem;
+    }
+  }
+  
+  @media (max-width: 992px) {
+    /* Ajusta contenedores grandes para tablets y pantallas medianas */
+    .navbar, .footer {
+      flex-direction: column;
+      padding: 15px;
+      text-align: center;
+    }
+  
+    /* Centra los elementos de las secciones */
+    .hero, .features, .services {
+      padding: 30px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    /* Cambia de filas a columnas en dispositivos móviles */
+    .navbar, .features {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .hero h1 {
+      font-size: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    /* Ajustes para pantallas muy pequeñas */
+    .navbar ul, .footer .social-media {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+  
+    .hero-text {
+      font-size: 1.2rem;
+      padding: 10px;
+    }
+  }
