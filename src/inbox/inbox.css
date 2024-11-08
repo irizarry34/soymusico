@@ -427,3 +427,23 @@
   background-color: #a93226; /* Otro tono de rojo cuando se presiona */
   transform: translateY(0);
 }
+
+/* Estilo para el contador de caracteres */
+.character-count {
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 5px;
+  transition: color 0.3s ease;
+}
+
+.character-count.normal {
+  color: #F6C90E; /* Amarillo dorado para suficiente espacio */
+}
+
+.character-count.warning {
+  color: #FFA500; /* Naranja suave para advertencia */
+}
+
+.character-count.danger {
+  color: #FF4A4A; /* Rojo suave cuando se excede el límite */
+}

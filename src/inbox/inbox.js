@@ -423,7 +423,8 @@ function Inbox() {
                   }
                 }}
               />
-              <p style={{ color: remainingChars < 0 ? 'red' : 'black' }}>
+              {/* Contador de caracteres */}
+              <p className={`character-count ${remainingChars < 0 ? 'danger' : remainingChars <= 50 ? 'warning' : 'normal'}`}>
                 {remainingChars} caracteres restantes
               </p>
               <button onClick={handleSendMessage} disabled={messageText.length === 0 || messageText.length > MESSAGE_LIMIT}>
