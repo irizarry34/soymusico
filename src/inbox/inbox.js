@@ -54,6 +54,17 @@ function Inbox() {
     }
   };
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    localStorage.removeItem('django_token');
+    localStorage.removeItem('django_refresh_token');
+    localStorage.removeItem('supabase_token');
+    localStorage.removeItem('supabase_refresh_token');
+    localStorage.removeItem('user_email');
+    localStorage.removeItem('user_password');
+    navigate('/login');
+  };
+
   const fetchRecipientId = async (selectedUserEmail) => {
     const djangoToken = localStorage.getItem('django_token');
 
@@ -322,7 +333,7 @@ function Inbox() {
             <li><a href="/gallery">Galería</a></li>
             <li><a href="/profile">Mi Perfil</a></li>
             <li>
-              <button className="custom-button" onClick={() => supabase.auth.signOut().then(() => navigate('/login'))}>
+            <button className="custom-button" onClick={handleLogout}>
                 Cerrar Sesión
               </button>
             </li>
