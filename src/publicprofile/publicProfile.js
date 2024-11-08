@@ -70,6 +70,8 @@ function PublicProfile() {
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
   const [gallery, setGallery] = useState([]); // Estado para la galería
+  const MESSAGE_LIMIT = 500; // Límite de caracteres
+  const [remainingChars, setRemainingChars] = useState(MESSAGE_LIMIT); // Contador de caracteres
 
   const navigate = useNavigate(); // Para redirigir
 
@@ -171,7 +173,6 @@ function PublicProfile() {
     }
   };
 
-
   const refreshDjangoAccessToken = async () => {
     const refreshToken = localStorage.getItem('django_refresh_token');
     if (!refreshToken) {
@@ -190,7 +191,6 @@ function PublicProfile() {
             const errorData = await response.json();
             console.error('Error al refrescar el token de Django:', errorData);
 
-            // Si el token de refresco no es válido, pide al usuario que inicie sesión nuevamente
             if (errorData.code === "token_not_valid") {
                 console.error("El token de refresco de Django no es válido o ha expirado. Por favor, inicia sesión nuevamente.");
                 localStorage.removeItem('django_token'); 
@@ -207,60 +207,61 @@ function PublicProfile() {
         console.error('Error al refrescar el token de Django:', error);
         return null;
     }
-};
+  };
 
   const handleLogout = async () => {
-    // Cierra sesión en Supabase
     const { error } = await supabase.auth.signOut();
     if (error) {
       console.error('Error al cerrar sesión en Supabase:', error);
     } else {
-      // Eliminar todos los tokens de localStorage
       localStorage.removeItem('django_token');
       localStorage.removeItem('django_refresh_token');
       localStorage.removeItem('supabase_token');
       localStorage.removeItem('supabase_refresh_token');
       localStorage.removeItem('user_email');
       localStorage.removeItem('user_password');
-
-      // Redirige al usuario a la página de login
       navigate('/login');
     }
-};
+  };
 
-const handleContactMessage = async () => {
-  const token = localStorage.getItem('django_token'); // Token de Django
+  const handleContactMessageChange = (e) => {
+    const text = e.target.value;
+    if (text.length <= MESSAGE_LIMIT) {
+      setContactMessage(text);
+      setRemainingChars(MESSAGE_LIMIT - text.length);
+    }
+  };
 
-  if (!token) {
+  const handleContactMessage = async () => {
+    const token = localStorage.getItem('django_token');
+    if (!token) {
       console.error("Usuario no autenticado. Por favor, inicia sesión.");
       return;
-  }
+    }
 
-  // Obtén el UUID de Django del usuario actual usando su email
-  let djangoRecipientId;
-  try {
+    let djangoRecipientId;
+    try {
       const emailResponse = await fetch(`http://18.223.110.15:8000/api/get-user-uuid/`, {
           method: 'POST',
           headers: { 
               'Content-Type': 'application/json' 
           },
-          body: JSON.stringify({ email: publicUser.email.toLowerCase() }) // Usar el correo del usuario público
+          body: JSON.stringify({ email: publicUser.email.toLowerCase() })
       });
 
       if (emailResponse.ok) {
           const data = await emailResponse.json();
-          djangoRecipientId = data.uuid; // UUID de Django
+          djangoRecipientId = data.uuid;
       } else {
           console.error("Error al obtener el UUID del usuario en Django.");
           return;
       }
-  } catch (error) {
+    } catch (error) {
       console.error("Error al solicitar el UUID del usuario:", error);
       return;
-  }
+    }
 
-  // Ahora, envía el mensaje usando el UUID de Django como `recipient_id`
-  try {
+    try {
       const response = await fetch(`http://18.223.110.15:8000/api/send-message/`, {
           method: 'POST',
           headers: {
@@ -268,25 +269,26 @@ const handleContactMessage = async () => {
               'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-              recipient_id: djangoRecipientId, // ID de Django
-              body: contactMessage // Mensaje de contacto
+              recipient_id: djangoRecipientId,
+              body: contactMessage
           })
       });
 
       if (response.ok) {
           console.log("Mensaje enviado exitosamente");
-          setContactMessage(''); // Limpia el mensaje después de enviarlo
+          setContactMessage('');
+          setRemainingChars(MESSAGE_LIMIT); // Restablece el contador
           alert("Mensaje enviado con éxito!");
       } else {
           const errorData = await response.json();
           console.error("Error al enviar el mensaje:", errorData);
           alert("Hubo un error al enviar el mensaje.");
       }
-  } catch (error) {
+    } catch (error) {
       console.error("Error en la solicitud:", error);
       alert("No se pudo enviar el mensaje. Por favor, intenta nuevamente.");
-  }
-};
+    }
+  };
 
   if (!publicUser) {
     return <p>Cargando perfil...</p>;
@@ -294,7 +296,6 @@ const handleContactMessage = async () => {
 
   return (
     <div className="perfil-page">
-      {/* Navbar */}
       <div className="navbar">
         <div className="logo">
           <img src="/Subject.png" alt="Logo" />
@@ -304,20 +305,18 @@ const handleContactMessage = async () => {
             <li><a href="/">Inicio</a></li>
             <li><a href="/search">Búsqueda</a></li>
             <li><a href="/inbox">Buzón de Entrada</a></li>
-            <li><a href="/gallery">Galería</a></li> {/* Enlace agregado */}
+            <li><a href="/gallery">Galería</a></li>
             <li><a href="/profile">{currentUser ? currentUser.email : 'Perfil'}</a></li>
             <li><button className="logout-btn" onClick={handleLogout}>Cerrar Sesión</button></li>
           </ul>
         </nav>
       </div>
 
-      {/* Sección de la Foto de Perfil y nombre completo */}
       <div className="profile-container">
         <div className="left-section">
           <div className="profile-photo-section">
             {photoUrl ? <img src={photoUrl} alt="Foto de Perfil" className="profilephoto" /> : <p>No hay foto de perfil.</p>}
             
-            {/* Botón de Calendario */}
             <button
               className="calendar-btn"
               onClick={() => navigate(`/calendarioPublic/${id}`)}
@@ -329,12 +328,10 @@ const handleContactMessage = async () => {
             <h2>{`${publicUser.first_name} ${publicUser.last_name}`}</h2>
           </div>
 
-          {/* Sección de la Autobiografía */}
           <div className="bio-section">
             <p>{bio}</p>
           </div>
 
-          {/* Sección de la Galería */}
           <div className="gallery-section">
             <h3 style={{ cursor: 'pointer', color: '#f6c90e' }} onClick={() => navigate(`/galeryPublic/${id}`)}>
               Galería:
@@ -360,7 +357,6 @@ const handleContactMessage = async () => {
             )}
           </div>
 
-          {/* Sección para dejar un mensaje o enviar un correo */}
           <div className="contact-section">
             <h3>Deja un mensaje:</h3>
             <input 
@@ -379,13 +375,15 @@ const handleContactMessage = async () => {
               placeholder="Escribe tu mensaje..." 
               rows="5" 
               value={contactMessage} 
-              onChange={(e) => setContactMessage(e.target.value)} 
+              onChange={handleContactMessageChange} 
             />
+            <p className={`character-count ${remainingChars < 0 ? 'danger' : remainingChars <= 50 ? 'warning' : 'normal'}`}>
+              {remainingChars} caracteres restantes
+            </p>
             <button onClick={handleContactMessage}>Enviar Mensaje</button>
           </div>
         </div>
 
-        {/* Sección de Talentos Musicales y Géneros */}
         <div className="right-section">
           <div className="talentos-section">
             <h3>Talentos Musicales:</h3>
@@ -410,7 +408,6 @@ const handleContactMessage = async () => {
             </div>
           </div>
 
-          {/* Sección para mostrar reseñas */}
           <div className="reviews-list">
             <h3>Reseñas:</h3>
             {reviews.length > 0 ? (
@@ -432,7 +429,6 @@ const handleContactMessage = async () => {
             )}
           </div>
 
-          {/* Espacio para escribir reseñas con estrellas */}
           <div className="review-section">
             <h3>Deja una reseña:</h3>
             <textarea 
