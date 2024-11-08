@@ -22,6 +22,24 @@ function SearchPage() {
     checkUser();
   }, [navigate]);
 
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error('Error al cerrar sesión en Supabase:', error);
+    } else {
+      // Eliminar todos los tokens de localStorage
+      localStorage.removeItem('django_token');
+      localStorage.removeItem('django_refresh_token');
+      localStorage.removeItem('supabase_token');
+      localStorage.removeItem('supabase_refresh_token');
+      localStorage.removeItem('user_email');
+      localStorage.removeItem('user_password');
+
+      // Redirigir al usuario a la página de login
+      navigate('/login');
+    }
+  };
+
   const handleSearch = async () => {
     console.log('Buscando:', query);
 
@@ -75,7 +93,7 @@ function SearchPage() {
               <li>
                 <button
                   className="logout-btn"
-                  onClick={() => supabase.auth.signOut().then(() => navigate('/login'))}
+                  onClick={handleLogout} // Llamada a la función handleLogout
                 >
                   Cerrar Sesión
                 </button>

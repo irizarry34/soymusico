@@ -49,15 +49,24 @@ function GaleryPage() {
     }
   }, [user]);
 
-  // Función de logout
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      console.error('Error logging out:', error);
-    } else {
-      navigate('/login'); // Redirigir al login después del logout
-    }
-  };
+// Función de logout
+const handleLogout = async () => {
+  const { error } = await supabase.auth.signOut();
+  if (error) {
+    console.error('Error al cerrar sesión:', error);
+  } else {
+    // Eliminar todos los tokens de localStorage
+    localStorage.removeItem('django_token');
+    localStorage.removeItem('django_refresh_token');
+    localStorage.removeItem('supabase_token');
+    localStorage.removeItem('supabase_refresh_token');
+    localStorage.removeItem('user_email');
+    localStorage.removeItem('user_password');
+
+    // Redirigir al usuario a la página de login
+    navigate('/login');
+  }
+};
 
   // Manejar selección de archivos
   const handleFileChange = (e) => {

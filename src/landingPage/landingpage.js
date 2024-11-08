@@ -16,10 +16,22 @@ function LandingPage() {
     checkUser();
   }, []);
 
+  
   // Manejar el cierre de sesión y recargar la página
   const handleLogout = async () => {
+    // Cierra sesión en Supabase
     await supabase.auth.signOut();
-    window.location.reload(); // Recarga la página después de cerrar sesión
+  
+    // Elimina todos los tokens de localStorage
+    localStorage.removeItem('django_token');
+    localStorage.removeItem('django_refresh_token');
+    localStorage.removeItem('supabase_token');
+    localStorage.removeItem('supabase_refresh_token');
+    localStorage.removeItem('user_email');
+    localStorage.removeItem('user_password');
+  
+    // Redirige al usuario a la página de login
+    navigate('/login');
   };
 
   return (

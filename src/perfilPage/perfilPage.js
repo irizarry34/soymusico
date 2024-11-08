@@ -88,6 +88,15 @@ function PerfilPage() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+
+      // Elimina todos los tokens de localStorage
+    localStorage.removeItem('django_token');
+    localStorage.removeItem('django_refresh_token');
+    localStorage.removeItem('supabase_token');
+    localStorage.removeItem('supabase_refresh_token');
+    localStorage.removeItem('user_email');
+    localStorage.removeItem('user_password');
+    
     navigate('/login');
   };
 

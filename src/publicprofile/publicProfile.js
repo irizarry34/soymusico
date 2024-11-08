@@ -209,6 +209,25 @@ function PublicProfile() {
     }
 };
 
+  const handleLogout = async () => {
+    // Cierra sesión en Supabase
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      console.error('Error al cerrar sesión en Supabase:', error);
+    } else {
+      // Eliminar todos los tokens de localStorage
+      localStorage.removeItem('django_token');
+      localStorage.removeItem('django_refresh_token');
+      localStorage.removeItem('supabase_token');
+      localStorage.removeItem('supabase_refresh_token');
+      localStorage.removeItem('user_email');
+      localStorage.removeItem('user_password');
+
+      // Redirige al usuario a la página de login
+      navigate('/login');
+    }
+};
+
 const handleContactMessage = async () => {
   const token = localStorage.getItem('django_token'); // Token de Django
 
@@ -287,7 +306,7 @@ const handleContactMessage = async () => {
             <li><a href="/inbox">Buzón de Entrada</a></li>
             <li><a href="/gallery">Galería</a></li> {/* Enlace agregado */}
             <li><a href="/profile">{currentUser ? currentUser.email : 'Perfil'}</a></li>
-            <li><button className="logout-btn" onClick={() => navigate('/login')}>Cerrar Sesión</button></li>
+            <li><button className="logout-btn" onClick={handleLogout}>Cerrar Sesión</button></li>
           </ul>
         </nav>
       </div>
