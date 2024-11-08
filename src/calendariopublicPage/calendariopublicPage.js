@@ -14,6 +14,8 @@ function CalendarioPublicPage() {
   const [contactMessage, setContactMessage] = useState('');
   const [contactEmail, setContactEmail] = useState('');
   const [contactPhone, setContactPhone] = useState('');
+  const [remainingChars, setRemainingChars] = useState(500); // Contador de caracteres
+  const MESSAGE_LIMIT = 500; // Límite de caracteres
   const navigate = useNavigate();
 
   // Obtener el usuario autenticado
@@ -80,37 +82,44 @@ function CalendarioPublicPage() {
   const refreshDjangoAccessToken = async () => {
     const refreshToken = localStorage.getItem('django_refresh_token');
     if (!refreshToken) {
-        console.error("No se encontró el token de refresco de Django. Por favor, inicia sesión nuevamente.");
-        return null;
+      console.error("No se encontró el token de refresco de Django. Por favor, inicia sesión nuevamente.");
+      return null;
     }
 
     try {
-        const response = await fetch(`http://18.223.110.15:8000/api/token/refresh/`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ refresh: refreshToken }),
-        });
+      const response = await fetch(`http://18.223.110.15:8000/api/token/refresh/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh: refreshToken }),
+      });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error('Error al refrescar el token de Django:', errorData);
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error al refrescar el token de Django:', errorData);
 
-            // Si el token de refresco no es válido, pide al usuario que inicie sesión nuevamente
-            if (errorData.code === "token_not_valid") {
-                console.error("El token de refresco de Django no es válido o ha expirado. Por favor, inicia sesión nuevamente.");
-                localStorage.removeItem('django_token'); 
-                localStorage.removeItem('django_refresh_token'); 
-                return null;
-            }
-            return null;
+        if (errorData.code === "token_not_valid") {
+          console.error("El token de refresco de Django no es válido o ha expirado. Por favor, inicia sesión nuevamente.");
+          localStorage.removeItem('django_token'); 
+          localStorage.removeItem('django_refresh_token'); 
+          return null;
         }
-
-        const data = await response.json();
-        localStorage.setItem('django_token', data.access);
-        return data.access;
-    } catch (error) {
-        console.error('Error al refrescar el token de Django:', error);
         return null;
+      }
+
+      const data = await response.json();
+      localStorage.setItem('django_token', data.access);
+      return data.access;
+    } catch (error) {
+      console.error('Error al refrescar el token de Django:', error);
+      return null;
+    }
+  };
+
+  const handleContactMessageChange = (e) => {
+    const text = e.target.value;
+    if (text.length <= MESSAGE_LIMIT) {
+      setContactMessage(text);
+      setRemainingChars(MESSAGE_LIMIT - text.length);
     }
   };
 
@@ -118,55 +127,56 @@ function CalendarioPublicPage() {
     const token = localStorage.getItem('django_token');
 
     if (!token) {
-        console.error("Usuario no autenticado. Por favor, inicia sesión.");
-        return;
+      console.error("Usuario no autenticado. Por favor, inicia sesión.");
+      return;
     }
 
     let djangoRecipientId;
     try {
-        const emailResponse = await fetch(`http://18.223.110.15:8000/api/get-user-uuid/`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: publicUser.email.toLowerCase() })
-        });
+      const emailResponse = await fetch(`http://18.223.110.15:8000/api/get-user-uuid/`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: publicUser.email.toLowerCase() })
+      });
 
-        if (emailResponse.ok) {
-            const data = await emailResponse.json();
-            djangoRecipientId = data.uuid;
-        } else {
-            console.error("Error al obtener el UUID del usuario en Django.");
-            return;
-        }
-    } catch (error) {
-        console.error("Error al solicitar el UUID del usuario:", error);
+      if (emailResponse.ok) {
+        const data = await emailResponse.json();
+        djangoRecipientId = data.uuid;
+      } else {
+        console.error("Error al obtener el UUID del usuario en Django.");
         return;
+      }
+    } catch (error) {
+      console.error("Error al solicitar el UUID del usuario:", error);
+      return;
     }
 
     try {
-        const response = await fetch(`http://18.223.110.15:8000/api/send-message/`, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                recipient_id: djangoRecipientId,
-                body: contactMessage
-            })
-        });
+      const response = await fetch(`http://18.223.110.15:8000/api/send-message/`, {
+          method: 'POST',
+          headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+              recipient_id: djangoRecipientId,
+              body: contactMessage
+          })
+      });
 
-        if (response.ok) {
-            console.log("Mensaje enviado exitosamente");
-            setContactMessage('');
-            alert("Mensaje enviado con éxito!");
-        } else {
-            const errorData = await response.json();
-            console.error("Error al enviar el mensaje:", errorData);
-            alert("Hubo un error al enviar el mensaje.");
-        }
+      if (response.ok) {
+        console.log("Mensaje enviado exitosamente");
+        setContactMessage('');
+        setRemainingChars(MESSAGE_LIMIT); // Restablece el contador
+        alert("Mensaje enviado con éxito!");
+      } else {
+        const errorData = await response.json();
+        console.error("Error al enviar el mensaje:", errorData);
+        alert("Hubo un error al enviar el mensaje.");
+      }
     } catch (error) {
-        console.error("Error en la solicitud:", error);
-        alert("No se pudo enviar el mensaje. Por favor, intenta nuevamente.");
+      console.error("Error en la solicitud:", error);
+      alert("No se pudo enviar el mensaje. Por favor, intenta nuevamente.");
     }
   };
 
@@ -218,8 +228,11 @@ function CalendarioPublicPage() {
             placeholder="Escribe tu mensaje..."
             rows="5"
             value={contactMessage}
-            onChange={(e) => setContactMessage(e.target.value)}
+            onChange={handleContactMessageChange}
           />
+          <p className={`character-count ${remainingChars < 0 ? 'danger' : remainingChars <= 50 ? 'warning' : 'normal'}`}>
+            {remainingChars} caracteres restantes
+          </p>
           <button onClick={handleContactMessage}>Enviar Mensaje</button>
         </div>
 
