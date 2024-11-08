@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'; // Importa Link para navegación interna
 import { supabase } from '../supabaseClient'; // Importa supabase para verificar la autenticación
+import { useNavigate } from 'react-router-dom';
 
 
 
 function LandingPage() {
   const [user, setUser] = useState(null);
+  const navigate = useNavigate(); // Define navigate dentro del componente
 
   // Verificar si hay un usuario autenticado
   useEffect(() => {
