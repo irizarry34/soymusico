@@ -12,7 +12,7 @@ import GaleryPublicPage from './galerypublicPage/galeryPublicPage';
 import CalendarioPage from './calendarioPage/calendarioPage';
 import CalendarioPublicPage from './calendariopublicPage/calendariopublicPage';
 import Inbox from './inbox/inbox';
-import Navbar from './components/Navbar';
+// import Navbar from './components/Navbar'; // Comentado para evitar duplicación del navbar
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -20,7 +20,7 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar newMessageAlert={newMessageAlert} />
+      {/* <Navbar newMessageAlert={newMessageAlert} /> */}
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
