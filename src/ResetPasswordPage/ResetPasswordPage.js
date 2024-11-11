@@ -1,40 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 
-function RequestResetPassword() {
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
+function ResetPasswordPage() {
+  const [newPassword, setNewPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [recoveryToken, setRecoveryToken] = useState(null);
 
-  const handleRequestReset = async (e) => {
-    e.preventDefault();
-    
-    const { error } = await supabase.auth.api.resetPasswordForEmail(email, {
-      redirectTo: 'https://master.du5bvw1goxlgn.amplifyapp.com/reset-password'
-    });
+  useEffect(() => {
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const token = hashParams.get('access_token');
+    const type = hashParams.get('type');
 
-    if (error) {
-      setMessage(`Error: ${error.message}`);
+    if (type === 'recovery' && token) {
+      setRecoveryToken(token);
+      supabase.auth.setSession({ access_token: token, refresh_token: token })
+        .then(({ error }) => {
+          if (error) {
+            setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
+          }
+        });
     } else {
-      setMessage('Se ha enviado un enlace de restablecimiento de contraseña a tu correo.');
+      setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
+    }
+  }, []);
+
+  const handlePasswordUpdate = async (e) => {
+    e.preventDefault();
+
+    if (!recoveryToken) {
+      setErrorMessage('No estás en modo de recuperación de contraseña.');
+      return;
+    }
+
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (error) {
+        setErrorMessage('Error al actualizar la contraseña: ' + error.message);
+      } else {
+        setSuccessMessage('Contraseña actualizada exitosamente.');
+      }
+    } catch (err) {
+      console.error('Error al actualizar la contraseña:', err);
+      setErrorMessage('Ocurrió un error. Intenta nuevamente.');
     }
   };
 
   return (
     <div>
-      <h2>Solicitar Restablecimiento de Contraseña</h2>
-      <form onSubmit={handleRequestReset}>
-        <label>Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <button type="submit">Enviar Enlace de Restablecimiento</button>
-      </form>
-      {message && <p>{message}</p>}
+      <h2>Cambiar Contraseña</h2>
+      {errorMessage && <div>{errorMessage}</div>}
+      {successMessage && <div>{successMessage}</div>}
+      {recoveryToken ? (
+        <form onSubmit={handlePasswordUpdate}>
+          <label>Nueva Contraseña:</label>
+          <input
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Actualizar Contraseña</button>
+        </form>
+      ) : (
+        <p>No se puede restablecer la contraseña sin un enlace de recuperación válido.</p>
+      )}
     </div>
   );
 }
 
-export default RequestResetPassword;
+export default ResetPasswordPage;
