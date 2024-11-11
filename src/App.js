@@ -12,8 +12,8 @@ import GaleryPublicPage from './galerypublicPage/galeryPublicPage';
 import CalendarioPage from './calendarioPage/calendarioPage';
 import CalendarioPublicPage from './calendariopublicPage/calendariopublicPage';
 import Inbox from './inbox/inbox';
-// import Navbar from './components/Navbar'; // Comentado para evitar duplicación del navbar
 import ProtectedRoute from './components/ProtectedRoute';
+import ResetPasswordPage from './ResetPasswordPage/ResetPasswordPage'; // Nueva importación
 
 function App() {
   const [newMessageAlert, setNewMessageAlert] = useState(false);
@@ -26,6 +26,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} /> {/* Nueva ruta de restablecimiento de contraseña */}
 
         {/* Agrupa las rutas protegidas dentro de ProtectedRoute */}
         <Route element={<ProtectedRoute />}>
