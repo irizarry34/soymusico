@@ -3,6 +3,7 @@ import { supabase } from '../supabaseClient';
 
 function ResetPasswordPage() {
   const [newPassword, setNewPassword] = useState('');
+  const [username, setUsername] = useState(''); // Campo de usuario para accesibilidad
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [recoveryToken, setRecoveryToken] = useState(null);
@@ -13,9 +14,10 @@ function ResetPasswordPage() {
     const token = urlParams.get('token');
     const type = urlParams.get('type');
 
+    // Verifica si tenemos un token y un tipo válido
     if (type === 'recovery' && token) {
       setRecoveryToken(token);
-      // Usa verifyOtp para verificar el token de recuperación
+      // Verifica el token y establece la sesión
       supabase.auth.verifyOtp({ token, type: 'recovery' })
         .then(({ data, error }) => {
           if (error) {
@@ -65,6 +67,14 @@ function ResetPasswordPage() {
       {successMessage && <div>{successMessage}</div>}
       {recoveryToken ? (
         <form onSubmit={handlePasswordUpdate}>
+          {/* Campo de usuario oculto para accesibilidad */}
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            autoComplete="username"
+            style={{ display: 'none' }}
+          />
           <label>Nueva Contraseña:</label>
           <input
             type="password"
