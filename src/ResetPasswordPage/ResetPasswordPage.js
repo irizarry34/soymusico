@@ -6,7 +6,6 @@ function ResetPasswordPage() {
   const [newPassword, setNewPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const [isRecoveryMode, setIsRecoveryMode] = useState(false);
   const [recoveryToken, setRecoveryToken] = useState(null);
 
   // Detectar el modo de recuperación de contraseña en la URL y obtener el token
@@ -16,7 +15,6 @@ function ResetPasswordPage() {
     const type = hashParams.get('type');
 
     if (type === 'recovery' && token) {
-      setIsRecoveryMode(true);
       setRecoveryToken(token);
     } else {
       setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
@@ -26,17 +24,17 @@ function ResetPasswordPage() {
   const handlePasswordUpdate = async (e) => {
     e.preventDefault();
 
-    if (!isRecoveryMode || !recoveryToken) {
+    if (!recoveryToken) {
       setErrorMessage('No estás en modo de recuperación de contraseña.');
       return;
     }
 
     try {
-      // Verifica el token de recuperación y actualiza la contraseña
-      const { error } = await supabase.auth.verifyOtp({
-        token: recoveryToken,
-        type: 'recovery',
+      // Verificar el token de recuperación y actualizar la contraseña
+      const { data, error } = await supabase.auth.updateUser({
         password: newPassword,
+      }, {
+        access_token: recoveryToken
       });
 
       if (error) {
@@ -56,7 +54,7 @@ function ResetPasswordPage() {
         <h1>Cambiar Contraseña</h1>
         {errorMessage && <div className="error-message">{errorMessage}</div>}
         {successMessage && <div className="success-message">{successMessage}</div>}
-        {isRecoveryMode ? (
+        {recoveryToken ? (
           <form onSubmit={handlePasswordUpdate}>
             <label>Nueva Contraseña:</label>
             <input
