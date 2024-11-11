@@ -3,7 +3,6 @@ import { supabase } from '../supabaseClient';
 
 function ResetPasswordPage() {
   const [newPassword, setNewPassword] = useState('');
-  const [username, setUsername] = useState(''); // Campo de usuario para accesibilidad
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [recoveryToken, setRecoveryToken] = useState(null);
@@ -14,13 +13,17 @@ function ResetPasswordPage() {
     const token = urlParams.get('token');
     const type = urlParams.get('type');
 
-    // Verifica si tenemos un token y un tipo válido
+    // Depuración: verifica el token y el tipo
+    console.log("Token:", token);
+    console.log("Type:", type);
+
     if (type === 'recovery' && token) {
       setRecoveryToken(token);
       // Verifica el token y establece la sesión
       supabase.auth.verifyOtp({ token, type: 'recovery' })
         .then(({ data, error }) => {
           if (error) {
+            console.error("Error de verificación:", error.message);
             setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
           } else if (data) {
             supabase.auth.setSession(data.session)
@@ -67,14 +70,6 @@ function ResetPasswordPage() {
       {successMessage && <div>{successMessage}</div>}
       {recoveryToken ? (
         <form onSubmit={handlePasswordUpdate}>
-          {/* Campo de usuario oculto para accesibilidad */}
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            autoComplete="username"
-            style={{ display: 'none' }}
-          />
           <label>Nueva Contraseña:</label>
           <input
             type="password"
