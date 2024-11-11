@@ -7,10 +7,9 @@ function ResetPasswordPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [recoveryToken, setRecoveryToken] = useState(null);
-  const [sessionVerified, setSessionVerified] = useState(false); // nuevo estado
+  const [isVerified, setIsVerified] = useState(false);
 
   useEffect(() => {
-    // Captura el token y el tipo desde los parámetros de consulta
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     const type = urlParams.get('type');
@@ -34,21 +33,18 @@ function ResetPasswordPage() {
     }
 
     try {
-      // Verifica el token de recuperación con el correo electrónico
       const { data, error } = await supabase.auth.verifyOtp({
         email: email,
         token: recoveryToken,
-        type: 'recovery'
+        type: 'recovery',
       });
 
       if (error) {
         console.error("Error de verificación:", error.message);
         setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
       } else if (data && data.session) {
-        // Si la verificación es exitosa, establece la sesión y muestra el formulario de nueva contraseña
-        console.log("Sesión establecida:", data.session);
         await supabase.auth.setSession(data.session);
-        setSessionVerified(true); // se establece la sesión como verificada
+        setIsVerified(true); // Permite que el usuario cambie la contraseña
         setSuccessMessage('Ahora puedes cambiar tu contraseña.');
       }
     } catch (err) {
@@ -61,7 +57,6 @@ function ResetPasswordPage() {
     e.preventDefault();
 
     try {
-      // Actualiza la contraseña del usuario
       const { error } = await supabase.auth.updateUser({
         password: newPassword,
       });
@@ -82,7 +77,7 @@ function ResetPasswordPage() {
       <h2>Cambiar Contraseña</h2>
       {errorMessage && <div>{errorMessage}</div>}
       {successMessage && <div>{successMessage}</div>}
-      {!sessionVerified ? (
+      {!isVerified ? (
         <form onSubmit={handleVerifyToken}>
           <label>Correo Electrónico:</label>
           <input
