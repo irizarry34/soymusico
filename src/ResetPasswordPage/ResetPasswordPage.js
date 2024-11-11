@@ -16,6 +16,7 @@ function ResetPasswordPage() {
 
     if (type === 'recovery' && token) {
       setRecoveryToken(token);
+      supabase.auth.setSession({ access_token: token }); // Establecer la sesión temporalmente
     } else {
       setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
     }
@@ -30,11 +31,9 @@ function ResetPasswordPage() {
     }
 
     try {
-      // Verificar el token de recuperación y actualizar la contraseña
-      const { data, error } = await supabase.auth.updateUser({
+      // Actualizar la contraseña del usuario
+      const { error } = await supabase.auth.updateUser({
         password: newPassword,
-      }, {
-        access_token: recoveryToken
       });
 
       if (error) {
