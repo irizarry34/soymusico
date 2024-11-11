@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 
 function ResetPasswordPage() {
+  const [email, setEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -13,41 +14,52 @@ function ResetPasswordPage() {
     const token = urlParams.get('token');
     const type = urlParams.get('type');
 
-    // Depuración: verifica el token y el tipo
     console.log("Token:", token);
     console.log("Type:", type);
 
     if (type === 'recovery' && token) {
       setRecoveryToken(token);
-      // Verifica el token y establece la sesión
-      supabase.auth.verifyOtp({ token, type: 'recovery' })
-        .then(({ data, error }) => {
-          if (error) {
-            console.error("Error de verificación:", error.message);
-            setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
-          } else if (data) {
-            supabase.auth.setSession(data.session)
-              .then(({ error: sessionError }) => {
-                if (sessionError) {
-                  setErrorMessage('Error al establecer la sesión: ' + sessionError.message);
-                }
-              });
-          }
-        });
     } else {
       setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
     }
   }, []);
 
-  const handlePasswordUpdate = async (e) => {
+  const handleVerifyToken = async (e) => {
     e.preventDefault();
 
-    if (!recoveryToken) {
-      setErrorMessage('No estás en modo de recuperación de contraseña.');
+    if (!email || !recoveryToken) {
+      setErrorMessage('Por favor, proporciona tu correo electrónico y asegúrate de que el enlace es válido.');
       return;
     }
 
     try {
+      // Verifica el token de recuperación con el correo electrónico
+      const { data, error } = await supabase.auth.verifyOtp({
+        email: email,
+        token: recoveryToken,
+        type: 'recovery'
+      });
+
+      if (error) {
+        console.error("Error de verificación:", error.message);
+        setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
+      } else if (data) {
+        // Si la verificación es exitosa, establece la sesión
+        console.log("Sesión establecida:", data.session);
+        await supabase.auth.setSession(data.session);
+        setSuccessMessage('Ahora puedes cambiar tu contraseña.');
+      }
+    } catch (err) {
+      console.error('Error al verificar el token:', err);
+      setErrorMessage('Ocurrió un error. Intenta nuevamente.');
+    }
+  };
+
+  const handlePasswordUpdate = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Actualiza la contraseña del usuario
       const { error } = await supabase.auth.updateUser({
         password: newPassword,
       });
@@ -68,7 +80,18 @@ function ResetPasswordPage() {
       <h2>Cambiar Contraseña</h2>
       {errorMessage && <div>{errorMessage}</div>}
       {successMessage && <div>{successMessage}</div>}
-      {recoveryToken ? (
+      {!successMessage ? (
+        <form onSubmit={handleVerifyToken}>
+          <label>Correo Electrónico:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <button type="submit">Verificar Enlace de Recuperación</button>
+        </form>
+      ) : (
         <form onSubmit={handlePasswordUpdate}>
           <label>Nueva Contraseña:</label>
           <input
@@ -80,8 +103,6 @@ function ResetPasswordPage() {
           />
           <button type="submit">Actualizar Contraseña</button>
         </form>
-      ) : (
-        <p>No se puede restablecer la contraseña sin un enlace de recuperación válido.</p>
       )}
     </div>
   );
