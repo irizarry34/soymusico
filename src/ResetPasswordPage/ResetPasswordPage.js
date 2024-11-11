@@ -8,10 +8,23 @@ function ResetPasswordPage() {
   const [recoveryToken, setRecoveryToken] = useState(null);
 
   useEffect(() => {
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const token = hashParams.get('access_token');
-    const type = hashParams.get('type');
+    // Depuración: imprime el hash y query de la URL
+    console.log("Hash:", window.location.hash);
+    console.log("Query:", window.location.search);
 
+    // Intentar obtener el token desde el hash primero
+    let hashParams = new URLSearchParams(window.location.hash.substring(1));
+    let token = hashParams.get('access_token');
+    let type = hashParams.get('type');
+
+    // Si no está en el hash, intentar obtenerlo desde el query
+    if (!token || type !== 'recovery') {
+      const urlParams = new URLSearchParams(window.location.search);
+      token = urlParams.get('access_token');
+      type = urlParams.get('type');
+    }
+
+    // Verificar si tenemos un token válido
     if (type === 'recovery' && token) {
       setRecoveryToken(token);
       supabase.auth.setSession({ access_token: token, refresh_token: token })
