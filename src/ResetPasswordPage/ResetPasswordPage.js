@@ -13,16 +13,14 @@ function ResetPasswordPage() {
     const token = urlParams.get('token');
     const type = urlParams.get('type');
 
-    // Verifica si tenemos un token y un tipo válido
     if (type === 'recovery' && token) {
       setRecoveryToken(token);
-      // Usamos verifyOtp para verificar el token de recuperación
+      // Usa verifyOtp para verificar el token de recuperación
       supabase.auth.verifyOtp({ token, type: 'recovery' })
         .then(({ data, error }) => {
           if (error) {
             setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
           } else if (data) {
-            // Si verifyOtp tiene éxito, establecemos la sesión
             supabase.auth.setSession(data.session)
               .then(({ error: sessionError }) => {
                 if (sessionError) {
@@ -45,7 +43,6 @@ function ResetPasswordPage() {
     }
 
     try {
-      // Intenta actualizar la contraseña después de establecer la sesión de autenticación
       const { error } = await supabase.auth.updateUser({
         password: newPassword,
       });
@@ -74,7 +71,7 @@ function ResetPasswordPage() {
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             required
-            autoComplete="new-password" // Sugiere un valor de autocompletar
+            autoComplete="new-password"
           />
           <button type="submit">Actualizar Contraseña</button>
         </form>
