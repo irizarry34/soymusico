@@ -8,26 +8,15 @@ function ResetPasswordPage() {
   const [recoveryToken, setRecoveryToken] = useState(null);
 
   useEffect(() => {
-    // Depuración: imprime el hash y query de la URL
-    console.log("Hash:", window.location.hash);
-    console.log("Query:", window.location.search);
-
-    // Intentar obtener el token desde el hash primero
-    let hashParams = new URLSearchParams(window.location.hash.substring(1));
-    let token = hashParams.get('access_token');
-    let type = hashParams.get('type');
-
-    // Si no está en el hash, intentar obtenerlo desde el query
-    if (!token || type !== 'recovery') {
-      const urlParams = new URLSearchParams(window.location.search);
-      token = urlParams.get('access_token');
-      type = urlParams.get('type');
-    }
+    // Intentar obtener el token desde el query
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    const type = urlParams.get('type');
 
     // Verificar si tenemos un token válido
     if (type === 'recovery' && token) {
       setRecoveryToken(token);
-      supabase.auth.setSession({ access_token: token, refresh_token: token })
+      supabase.auth.verifyOtp({ token, type: 'recovery' })
         .then(({ error }) => {
           if (error) {
             setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
