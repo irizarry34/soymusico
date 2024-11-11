@@ -7,22 +7,17 @@ function ResetPasswordPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [isRecoveryMode, setIsRecoveryMode] = useState(false);
-  const [accessToken, setAccessToken] = useState(null);
+  const [recoveryToken, setRecoveryToken] = useState(null);
 
-  // Detectar el modo de recuperación de contraseña en la URL y obtener el access_token
+  // Detectar el modo de recuperación de contraseña en la URL y obtener el token
   useEffect(() => {
-    const hashParams = new URLSearchParams(window.location.hash.substring(1)); // Obtiene parámetros del hash
-    const queryParams = new URLSearchParams(window.location.search); // Obtiene parámetros de consulta
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const token = hashParams.get('access_token');
+    const type = hashParams.get('type');
 
-    const tokenFromHash = hashParams.get('access_token');
-    const tokenFromQuery = queryParams.get('access_token');
-    const typeFromHash = hashParams.get('type');
-    const typeFromQuery = queryParams.get('type');
-
-    // Revisar si el token y el tipo están en hash o en los parámetros de consulta
-    if ((typeFromHash === 'recovery' || typeFromQuery === 'recovery') && (tokenFromHash || tokenFromQuery)) {
+    if (type === 'recovery' && token) {
       setIsRecoveryMode(true);
-      setAccessToken(tokenFromHash || tokenFromQuery);
+      setRecoveryToken(token);
     } else {
       setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
     }
@@ -30,14 +25,20 @@ function ResetPasswordPage() {
 
   const handlePasswordUpdate = async (e) => {
     e.preventDefault();
-    if (!isRecoveryMode || !accessToken) {
+
+    if (!isRecoveryMode || !recoveryToken) {
       setErrorMessage('No estás en modo de recuperación de contraseña.');
       return;
     }
 
     try {
-      // Autenticación usando el access_token de recuperación
-      const { data, error } = await supabase.auth.updateUser({ password: newPassword }, { access_token: accessToken });
+      // Verifica el token de recuperación y actualiza la contraseña
+      const { error } = await supabase.auth.verifyOtp({
+        token: recoveryToken,
+        type: 'recovery',
+        password: newPassword,
+      });
+
       if (error) {
         setErrorMessage('Error al actualizar la contraseña: ' + error.message);
       } else {
