@@ -7,7 +7,7 @@ function ResetPasswordPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [recoveryToken, setRecoveryToken] = useState(null);
-  const [isVerified, setIsVerified] = useState(false);
+  const [isTokenExpired, setIsTokenExpired] = useState(false);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -28,7 +28,7 @@ function ResetPasswordPage() {
     e.preventDefault();
 
     if (!email || !recoveryToken) {
-      setErrorMessage('Por favor, proporciona tu correo electrónico y asegúrate de que el enlace es válido.');
+      setErrorMessage('Proporciona tu correo electrónico y verifica el enlace.');
       return;
     }
 
@@ -36,16 +36,18 @@ function ResetPasswordPage() {
       const { data, error } = await supabase.auth.verifyOtp({
         email: email,
         token: recoveryToken,
-        type: 'recovery',
+        type: 'recovery'
       });
 
       if (error) {
-        console.error("Error de verificación:", error.message);
-        setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
-      } else if (data && data.session) {
-        await supabase.auth.setSession(data.session);
-        setIsVerified(true); // Permite que el usuario cambie la contraseña
-        setSuccessMessage('Ahora puedes cambiar tu contraseña.');
+        if (error.message.includes("expired")) {
+          setErrorMessage('El enlace de restablecimiento de contraseña ha expirado.');
+          setIsTokenExpired(true); // Permite solicitar un nuevo enlace
+        } else {
+          setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
+        }
+      } else if (data) {
+        setSuccessMessage('Token verificado. Ahora puedes cambiar tu contraseña.');
       }
     } catch (err) {
       console.error('Error al verificar el token:', err);
@@ -72,12 +74,29 @@ function ResetPasswordPage() {
     }
   };
 
+  const handleRequestNewLink = async () => {
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://master.du5bvw1goxlgn.amplifyapp.com/reset-password'
+      });
+
+      if (error) {
+        setErrorMessage(`Error al solicitar un nuevo enlace: ${error.message}`);
+      } else {
+        setMessage('Se ha enviado un nuevo enlace de restablecimiento a tu correo electrónico.');
+        setIsTokenExpired(false);
+      }
+    } catch (err) {
+      setErrorMessage('Error al solicitar un nuevo enlace. Intenta nuevamente.');
+    }
+  };
+
   return (
     <div>
       <h2>Cambiar Contraseña</h2>
       {errorMessage && <div>{errorMessage}</div>}
       {successMessage && <div>{successMessage}</div>}
-      {!isVerified ? (
+      {!isTokenExpired ? (
         <form onSubmit={handleVerifyToken}>
           <label>Correo Electrónico:</label>
           <input
@@ -89,6 +108,12 @@ function ResetPasswordPage() {
           <button type="submit">Verificar Enlace de Recuperación</button>
         </form>
       ) : (
+        <div>
+          <p>Tu enlace de restablecimiento ha expirado. Solicita uno nuevo a continuación.</p>
+          <button onClick={handleRequestNewLink}>Solicitar Nuevo Enlace</button>
+        </div>
+      )}
+      {successMessage && (
         <form onSubmit={handlePasswordUpdate}>
           <label>Nueva Contraseña:</label>
           <input
