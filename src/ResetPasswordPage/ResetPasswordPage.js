@@ -8,15 +8,13 @@ function ResetPasswordPage() {
   const [successMessage, setSuccessMessage] = useState('');
   const [recoveryToken, setRecoveryToken] = useState(null);
 
-  // Detectar el modo de recuperación de contraseña en la URL y obtener el token
   useEffect(() => {
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const token = hashParams.get('access_token');
-    const type = hashParams.get('type');
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('access_token');
+    const type = urlParams.get('type');
 
     if (type === 'recovery' && token) {
       setRecoveryToken(token);
-      // Establecer la sesión temporalmente con el token de recuperación
       supabase.auth.setSession({ access_token: token, refresh_token: token })
         .then(({ error }) => {
           if (error) {
@@ -37,7 +35,6 @@ function ResetPasswordPage() {
     }
 
     try {
-      // Actualizar la contraseña del usuario
       const { error } = await supabase.auth.updateUser({
         password: newPassword,
       });
