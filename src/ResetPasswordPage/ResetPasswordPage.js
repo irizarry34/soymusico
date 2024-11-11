@@ -8,14 +8,15 @@ function ResetPasswordPage() {
   const [recoveryToken, setRecoveryToken] = useState(null);
 
   useEffect(() => {
-    // Intentar obtener el token desde el query
+    // Captura el token y el tipo desde los parámetros de consulta
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     const type = urlParams.get('type');
 
-    // Verificar si tenemos un token válido
+    // Verifica si tenemos un token y un tipo válido
     if (type === 'recovery' && token) {
       setRecoveryToken(token);
+      // Verificar el token usando `verifyOtp` en lugar de `setSession`
       supabase.auth.verifyOtp({ token, type: 'recovery' })
         .then(({ error }) => {
           if (error) {
@@ -36,6 +37,7 @@ function ResetPasswordPage() {
     }
 
     try {
+      // Actualiza la contraseña del usuario
       const { error } = await supabase.auth.updateUser({
         password: newPassword,
       });
