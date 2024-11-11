@@ -74,7 +74,9 @@ function LoginPage() {
 
   const handlePasswordReset = async () => {
     try {
-      const { data, error } = await supabase.auth.resetPasswordForEmail(email);
+      const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: 'https://master.du5bvw1goxlgn.amplifyapp.com/reset-password'
+      });
       if (error) {
         setErrorMessage('Error al enviar el correo de restablecimiento: ' + error.message);
       } else {
