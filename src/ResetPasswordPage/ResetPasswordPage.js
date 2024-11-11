@@ -16,11 +16,13 @@ function ResetPasswordPage() {
     // Verifica si tenemos un token y un tipo válido
     if (type === 'recovery' && token) {
       setRecoveryToken(token);
-      // Verificar el token usando `verifyOtp` en lugar de `setSession`
+      // Verificar el token y establecer la sesión de autenticación
       supabase.auth.verifyOtp({ token, type: 'recovery' })
-        .then(({ error }) => {
+        .then(({ data, error }) => {
           if (error) {
             setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
+          } else if (data) {
+            console.log("Sesión de autenticación establecida con éxito:", data.session);
           }
         });
     } else {
@@ -37,7 +39,7 @@ function ResetPasswordPage() {
     }
 
     try {
-      // Actualiza la contraseña del usuario
+      // Intenta actualizar la contraseña después de establecer la sesión de autenticación
       const { error } = await supabase.auth.updateUser({
         password: newPassword,
       });
