@@ -11,10 +11,18 @@ function ResetPasswordPage() {
 
   // Detectar el modo de recuperación de contraseña en la URL y obtener el access_token
   useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.hash);
-    if (urlParams.get('type') === 'recovery' && urlParams.get('access_token')) {
+    const hashParams = new URLSearchParams(window.location.hash.substring(1)); // Obtiene parámetros del hash
+    const queryParams = new URLSearchParams(window.location.search); // Obtiene parámetros de consulta
+
+    const tokenFromHash = hashParams.get('access_token');
+    const tokenFromQuery = queryParams.get('access_token');
+    const typeFromHash = hashParams.get('type');
+    const typeFromQuery = queryParams.get('type');
+
+    // Revisar si el token y el tipo están en hash o en los parámetros de consulta
+    if ((typeFromHash === 'recovery' || typeFromQuery === 'recovery') && (tokenFromHash || tokenFromQuery)) {
       setIsRecoveryMode(true);
-      setAccessToken(urlParams.get('access_token'));
+      setAccessToken(tokenFromHash || tokenFromQuery);
     } else {
       setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
     }
@@ -28,8 +36,8 @@ function ResetPasswordPage() {
     }
 
     try {
-      // Utiliza el access_token para cambiar la contraseña
-      const { error } = await supabase.auth.updateUser({ password: newPassword }, { access_token: accessToken });
+      // Autenticación usando el access_token de recuperación
+      const { data, error } = await supabase.auth.updateUser({ password: newPassword }, { access_token: accessToken });
       if (error) {
         setErrorMessage('Error al actualizar la contraseña: ' + error.message);
       } else {
