@@ -6,6 +6,7 @@ function ResetPasswordPage() {
   const [newPassword, setNewPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [message, setMessage] = useState(''); // Definimos `message` y `setMessage`
   const [recoveryToken, setRecoveryToken] = useState(null);
   const [isTokenExpired, setIsTokenExpired] = useState(false);
 
@@ -42,7 +43,7 @@ function ResetPasswordPage() {
       if (error) {
         if (error.message.includes("expired")) {
           setErrorMessage('El enlace de restablecimiento de contraseña ha expirado.');
-          setIsTokenExpired(true); // Permite solicitar un nuevo enlace
+          setIsTokenExpired(true);
         } else {
           setErrorMessage('El enlace de restablecimiento de contraseña no es válido o ha expirado.');
         }
@@ -96,6 +97,7 @@ function ResetPasswordPage() {
       <h2>Cambiar Contraseña</h2>
       {errorMessage && <div>{errorMessage}</div>}
       {successMessage && <div>{successMessage}</div>}
+      {message && <p>{message}</p>} {/* Mostrar mensaje si existe */}
       {!isTokenExpired ? (
         <form onSubmit={handleVerifyToken}>
           <label>Correo Electrónico:</label>
