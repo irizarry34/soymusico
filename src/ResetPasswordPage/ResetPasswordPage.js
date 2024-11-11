@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { supabase } from '../supabaseClient';
 import './ResetPasswordPage.css';
 
@@ -6,43 +6,9 @@ function ResetPasswordPage() {
   const [newPassword, setNewPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Verificar el estado de autenticación al cargar la página
-  useEffect(() => {
-    const checkAuthSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        setIsAuthenticated(true);
-      } else {
-        setErrorMessage('No se encontró una sesión de autenticación activa.');
-      }
-    };
-
-    checkAuthSession();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (session) {
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-          setErrorMessage('No se encontró una sesión de autenticación activa.');
-        }
-      }
-    );
-
-    return () => {
-      authListener.subscription.unsubscribe();
-    };
-  }, []);
 
   const handlePasswordUpdate = async (e) => {
     e.preventDefault();
-    if (!isAuthenticated) {
-      setErrorMessage('Necesitas una sesión activa para cambiar la contraseña.');
-      return;
-    }
 
     try {
       const { error } = await supabase.auth.updateUser({ password: newPassword });
@@ -71,7 +37,7 @@ function ResetPasswordPage() {
             onChange={(e) => setNewPassword(e.target.value)}
             required
           />
-          <button type="submit" disabled={!isAuthenticated}>Actualizar Contraseña</button>
+          <button type="submit">Actualizar Contraseña</button>
         </form>
       </div>
       
