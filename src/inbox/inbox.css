@@ -176,8 +176,8 @@
   top: 50%;            /* Centra verticalmente */
   transform: translateY(-50%);
   cursor: pointer;
-  margin-top: -20px;
-  margin-right: -10px;
+  margin-top: -18px;
+  margin-right: -8px;
 }
 
 /* Texto del mensaje alineado a la izquierda */
@@ -215,8 +215,8 @@
   font-weight: bold;
   color: #f6c90e;
   font-size: 0.8em;
-  margin-top: 10px;
-  margin-right: -10px;
+  margin-top: 8px;
+  margin-right: -8px;
 }
 
 /* Campo de entrada de mensaje */
