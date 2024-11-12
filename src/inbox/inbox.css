@@ -117,13 +117,14 @@
   margin: 5px 0;
   position: relative;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  display: flex;
+  display: block;
   justify-content: space-between;
   align-items: center;
 }
 
-/* Burbujas de mensajes para el usuario actual (sender) */
 
+
+/* Burbujas de mensajes para el usuario actual (sent) */
 .sent {
   align-self: flex-end;
   background-color: #222831;
@@ -136,13 +137,14 @@
   margin-top: 20px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   filter: drop-shadow(2px 4px 4px rgba(255, 201, 100, 0.983));
-  white-space: pre-wrap;        /* Ajusta el texto con saltos de línea */
-  word-wrap: break-word;        /* Ajuste para palabras largas */
-  overflow-wrap: break-word;    /* Asegura que el texto largo se ajuste */
-  height: auto;
+  white-space: normal;           /* Permite el ajuste de las líneas */
+  word-wrap: break-word;         /* Ajuste para palabras largas */
+  overflow-wrap: break-word;     /* Asegura que el texto largo se ajuste */
+  display: block;                /* Asegura que la burbuja expanda hacia abajo */
 }
 
 /* Burbujas de mensajes para el usuario seleccionado (received) */
+
 .received {
   align-self: flex-start;
   background-color: #393e46;
@@ -154,10 +156,10 @@
   margin: 5px 0;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   filter: drop-shadow(4px 4px 2px rgba(255, 201, 100, 0.983));
-  white-space: pre-wrap;        /* Ajusta el texto con saltos de línea */
-  word-wrap: break-word;        /* Ajuste para palabras largas */
-  overflow-wrap: break-word;    /* Asegura que el texto largo se ajuste */
-  height: auto;                 /* Asegura que la burbuja se expanda según el contenido */
+  white-space: normal;           /* Permite el ajuste de las líneas */
+  word-wrap: break-word;         /* Ajuste para palabras largas */
+  overflow-wrap: break-word;     /* Asegura que el texto largo se ajuste */
+  display: block;                /* Asegura que la burbuja expanda hacia abajo */
 }
 
 /* Contenido del mensaje */
