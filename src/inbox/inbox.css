@@ -176,6 +176,7 @@
   top: 50%;            /* Centra verticalmente */
   transform: translateY(-50%);
   cursor: pointer;
+  margin-top: -10px;
 }
 
 /* Texto del mensaje alineado a la izquierda */
