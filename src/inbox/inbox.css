@@ -120,8 +120,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  max-height: 200px;              /* Limita la altura máxima de la burbuja */
-  overflow-y: auto; 
 }
 
 /* Burbujas de mensajes para el usuario actual (sender) */
@@ -141,6 +139,7 @@
   white-space: pre-wrap;        /* Ajusta el texto con saltos de línea */
   word-wrap: break-word;        /* Ajuste para palabras largas */
   overflow-wrap: break-word;    /* Asegura que el texto largo se ajuste */
+  height: auto;
 }
 
 /* Burbujas de mensajes para el usuario seleccionado (received) */
@@ -158,6 +157,7 @@
   white-space: pre-wrap;        /* Ajusta el texto con saltos de línea */
   word-wrap: break-word;        /* Ajuste para palabras largas */
   overflow-wrap: break-word;    /* Asegura que el texto largo se ajuste */
+  height: auto;                 /* Asegura que la burbuja se expanda según el contenido */
 }
 
 /* Contenido del mensaje */
@@ -228,9 +228,7 @@
   resize: none;
   background-color: #393e46;
   color: #eeeeee;
-  min-height: 50px;  /* Asegura que haya suficiente altura para el área de texto */
-  max-height: 150px;  /* Limita la altura máxima */
-  overflow-y: auto;   /* Permite desplazamiento si el contenido excede */
+  min-height: 50px;  /* Asegura que haya suficiente altura para el área de texto */   /* Permite desplazamiento si el contenido excede */
 }
 
 .send-message button {
