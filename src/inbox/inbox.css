@@ -171,10 +171,11 @@
 
 /* Checkbox pequeño y alineado a la derecha */
 .message-checkbox {
-  transform: scale(0.8);
-  margin-left: 25px;
+  position: absolute;
+  right: 10px;         /* Posiciona el checkbox en el borde derecho */
+  top: 50%;            /* Centra verticalmente */
+  transform: translateY(-50%);
   cursor: pointer;
-  margin-top: -25px;
 }
 
 /* Texto del mensaje alineado a la izquierda */
@@ -206,10 +207,12 @@
 
 /* Estilo específico para el texto "Me" */
 .me-label {
+  position: absolute;
+  right: 10px;         /* Posiciona el "Me" en el borde derecho */
+  bottom: 10px;        /* Lo coloca en la parte inferior de la burbuja */
   font-weight: bold;
   color: #f6c90e;
   font-size: 0.8em;
-  margin-right: -40px;
 }
 
 /* Campo de entrada de mensaje */
