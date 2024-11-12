@@ -112,15 +112,20 @@
   max-width: 75%;
   font-size: 18px;
   word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap; /* Mantiene los saltos de línea y ajusta el texto */
   margin: 5px 0;
   position: relative;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-height: 200px;              /* Limita la altura máxima de la burbuja */
+  overflow-y: auto; 
 }
 
 /* Burbujas de mensajes para el usuario actual (sender) */
+
 .sent {
   align-self: flex-end;
   background-color: #222831;
@@ -133,9 +138,12 @@
   margin-top: 20px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   filter: drop-shadow(2px 4px 4px rgba(255, 201, 100, 0.983));
+  white-space: pre-wrap;        /* Ajusta el texto con saltos de línea */
+  word-wrap: break-word;        /* Ajuste para palabras largas */
+  overflow-wrap: break-word;    /* Asegura que el texto largo se ajuste */
 }
 
-/* Burbujas de mensajes para el usuario seleccionado (recipient) */
+/* Burbujas de mensajes para el usuario seleccionado (received) */
 .received {
   align-self: flex-start;
   background-color: #393e46;
@@ -147,6 +155,9 @@
   margin: 5px 0;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   filter: drop-shadow(4px 4px 2px rgba(255, 201, 100, 0.983));
+  white-space: pre-wrap;        /* Ajusta el texto con saltos de línea */
+  word-wrap: break-word;        /* Ajuste para palabras largas */
+  overflow-wrap: break-word;    /* Asegura que el texto largo se ajuste */
 }
 
 /* Contenido del mensaje */
@@ -217,6 +228,9 @@
   resize: none;
   background-color: #393e46;
   color: #eeeeee;
+  min-height: 50px;  /* Asegura que haya suficiente altura para el área de texto */
+  max-height: 150px;  /* Limita la altura máxima */
+  overflow-y: auto;   /* Permite desplazamiento si el contenido excede */
 }
 
 .send-message button {
