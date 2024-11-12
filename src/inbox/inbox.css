@@ -168,6 +168,9 @@
 .message-text {
   text-align: left;
   margin-right: 1px;
+  word-wrap: break-word; /* Habilita el ajuste de palabra */
+  overflow-wrap: break-word; /* Habilita el ajuste de palabra para navegadores modernos */
+  white-space: pre-wrap; /* Conserva los saltos de línea y ajusta el texto */
 }
 
 /* Contenedor de la fecha y el "Me" alineados a los extremos */
